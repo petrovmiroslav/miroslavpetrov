@@ -264,7 +264,7 @@ class Preloader {
     document.body.classList.remove('page_bgLikePreloader');
 
     window.setTimeout(this.deactivation.bind(this),this.cubeSlideOutAnimationDuration+500);
-    window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);
+    /*window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);*/
 	}
 
 	setPreloaderIsOffTrue () {
@@ -283,6 +283,7 @@ class Preloader {
 
     this.rAF(this.cleanUp);
     //window.setTimeout(this.cleanUp.bind(this));
+    this.state.preloaderIsOff = true;
 	}
 
 	cleanUp () {
