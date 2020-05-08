@@ -149,3 +149,6 @@
 .preloader-bottom-cube_slide-up {
   transform: translateX(-12%) translateY(0%) translateZ(0px);
 }
+.test {
+  transform: translateX(-12%) translateY(-100%) translateZ(0px);
+}

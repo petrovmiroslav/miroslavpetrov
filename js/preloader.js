@@ -32,24 +32,13 @@ class Preloader {
 		this.topCubesSlideInIsStart = false;
 		this.endStart = false;
 	}
-	test () {
-		//debugger
-		//Kraken.count();
 
-		let f = function () {
-			window.requestAnimationFrame(this.run.bind(this));
-		};
-		window.requestAnimationFrame(f.bind(this));
-	}
 	run () {
-		
-
 		let f = function () {
 
 			this.rAF(this.init);
 		};
 		window.setTimeout(f.bind(this));
-
 	}
 	rAF (f) {
 		let nextRenderFunc = f;
@@ -86,6 +75,7 @@ class Preloader {
 
 		if (!this.bottomCubeIsSlideUp) {
 			//this.preloaderWrapper.classList.remove('preloader_beforeStart');
+			void(this.bottomCube.offsetHeight);
 			this.bottomCube.classList.add('preloader-bottom-cube_slide-up');
 
 			window.setTimeout(()=>{
@@ -97,6 +87,9 @@ class Preloader {
 			},this.bottomCubeAnimationDuration);
 		}
 	}
+	test() {
+		this.bottomCube.classList.add('test');
+	}
 
 	setPreloaderStartHandlerTimeout () {
 
@@ -104,10 +97,10 @@ class Preloader {
 	}
 
 	startTopCubesSlideIn () {
-		/*this.topCubesSlideInIsStart = true;
-		this.rAF(this.topCubesSlideIn);*/
 		this.topCubesSlideInIsStart = true;
-    this.topCubesSlideIn();
+		this.rAF(this.topCubesSlideIn);
+		/*this.topCubesSlideInIsStart = true;
+    this.topCubesSlideIn();*/
 	}
 
 	topCubesSlideIn () {
@@ -120,8 +113,10 @@ class Preloader {
     window.setTimeout(()=>{
     	
       this.readyToSlideOut = true;
-    }, this.topCubesAnimationDuration);
 
+    }, this.topCubesAnimationDuration);
+console.time(this.topCubesAnimationDuration);
+this.TIMER = Date.now();
 	}
 
 	addWindowLoadListener() {
@@ -185,7 +180,8 @@ class Preloader {
 	}
 
 	cubesSlideOut () {
-
+		document.querySelector('.hiScreen__text_bottom').innerHTML = this.TIMER - Date.now();
+		console.timeEnd(this.topCubesAnimationDuration);
 		//this.preloaderWrapper.classList.add('preloader_end');
 		//this.preloaderWrapper.classList.remove('preloader_bgLikePreloader');
     //this.preloader__leftCube.classList.add('preloader__left-cube_shadow');
