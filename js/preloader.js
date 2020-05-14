@@ -20,7 +20,7 @@ class Preloader {
 		this.main = null;
 
 		this.bottomCubeAnimationDuration = 500+50;
-		this.topCubesAnimationDuration = 1000;
+		this.topCubesAnimationDuration = 1000+200;
 		this.cubeSlideOutAnimationDuration = 500+50;
 
 		this.preloaderStartHandlerTimeout = null;
