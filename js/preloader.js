@@ -115,8 +115,6 @@ class Preloader {
       this.readyToSlideOut = true;
 
     }, this.topCubesAnimationDuration);
-console.time(this.topCubesAnimationDuration);
-this.TIMER = Date.now();
 	}
 
 	addWindowLoadListener() {
@@ -180,8 +178,7 @@ this.TIMER = Date.now();
 	}
 
 	cubesSlideOut () {
-		document.querySelector('.hiScreen__text_bottom').innerHTML = this.TIMER - Date.now();
-		console.timeEnd(this.topCubesAnimationDuration);
+
 		//this.preloaderWrapper.classList.add('preloader_end');
 		//this.preloaderWrapper.classList.remove('preloader_bgLikePreloader');
     //this.preloader__leftCube.classList.add('preloader__left-cube_shadow');

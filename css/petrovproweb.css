@@ -24,12 +24,13 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  /*overflow: hidden;*/
 }
 html {
 	/*scrollbar-width: none;*/
 	/*overflow-y: scroll;*/
 	/*position: fixed;*/
-	/*overflow: hidden;*/
+/*	overflow: hidden;*/
 }
 .forDownload, .forDownload * {
   width: 0px;
