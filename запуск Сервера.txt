@@ -1,1 +1,6 @@
 php -S 127.0.0.1:4000 -t D:\Miramanic\—¿…“\PetrovProWeb\html -c D:\Miramanic\—¿…“\PHP\php.ini
+
+
+
+
+php -S localhost:4000 -t E:\ÃŒ®\MM\—¿…“\PetrovProWeb\html -c E:\Users\petrov_mi\PHP\php.ini
