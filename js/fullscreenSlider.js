@@ -143,18 +143,18 @@ class FullscreenSlider {
   	this.mouseWheelTicking = false;
   }
   wheelHandler (direction) {console.log('wheelHandler');
-    if (this.state.slide1IsActive) {
+    if (this.state.slide1IsActive) {console.log('direction: ',direction);
     	if (direction > 0) {
     		this.slide1SlideOut();
     	}
-    } else {
+    } else {console.log('direction: ',direction);
     	if (direction < 0) {
     		this.slide1SlideIn();
     	}
     }
   }
 
-  slide1SlideOut () {
+  slide1SlideOut () { console.log('slide1SlideOut');
   	this.prepareForSlideOut();
   	this.drawSlider();
 
@@ -233,6 +233,8 @@ class FullscreenSlider {
   prepareForSlideOut () {
   	this.removeFullscreenSliderListeners();
   	this.state.hiBgImageTransformOFF();
+
+    this.state.slide1IsActive = false;
   }
 
   drawSlider () {

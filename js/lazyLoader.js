@@ -115,7 +115,7 @@ class LazyLoader {
 														  type: 'video/mp4'
 														}
 													];
-		this.fullscreenBgVideo = document.querySelector('#bgvid');
+		this.fullscreenBgVideo = document.querySelectorAll('.parallax__bg-fullscreen-video');
 		this.addVideoSource(this.fullscreenBgVideo, this.sourcesBGVideo);
 
 		this.sourcesRainVideo = [
@@ -127,12 +127,24 @@ class LazyLoader {
 		this.addVideoSource(this.rainVideo, this.sourcesRainVideo);
 	}
 	addVideoSource (video, sources) {
-		for (let i = 0; i < sources.length; i++) {
-			let bgvidSource = document.createElement('source');
-	    for (var attr in sources[i]) {
-	      bgvidSource.setAttribute(attr, sources[i][attr]);
-	    }
-	    video.appendChild(bgvidSource);
+		if (video.length) {
+			for (let j = 0; j < video.length; j++) {
+				for (let i = 0; i < sources.length; i++) {
+					let bgvidSource = document.createElement('source');
+			    for (var attr in sources[i]) {
+			      bgvidSource.setAttribute(attr, sources[i][attr]);
+			    }
+			    video[j].appendChild(bgvidSource);
+				}
+			}
+		} else {
+			for (let i = 0; i < sources.length; i++) {
+				let bgvidSource = document.createElement('source');
+		    for (var attr in sources[i]) {
+		      bgvidSource.setAttribute(attr, sources[i][attr]);
+		    }
+		    video.appendChild(bgvidSource);
+			}
 		}
 	}
 
