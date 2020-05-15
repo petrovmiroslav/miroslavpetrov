@@ -20,7 +20,7 @@
 	
 
 </head>
-<body class="page page_position_fixed page_bgLikePreloader">
+<body class="page page_bgLikePreloader">
 	<!--<div id="preloaderWrapper" class="preloader preloader_beforeStart preloader_bgLikePreloader hidden">
 		<div class="preloader__topWrapper opacity0">
 			<div class="preloader__cube preloader__left-cube"></div>
@@ -159,16 +159,16 @@
 			</div>-->
 		</div>
 
-		<div class="slide2 hidden" style="width: 100%;">
+		<div class="slide2 hidden">
 				
-			<div id="wrapperParallax">
+			<div id="wrapperParallax" class="parallax">
 				<div class="debug">
     <label><input type="checkbox"> Debug</label>
   </div>
-				<video poster="img/polina.jpg" id="bgvid" playsinline autoplay muted loop preload="auto">
+				<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_mobile-view" poster="img/polina.jpg" id="bgvid" playsinline autoplay muted loop preload="auto">
 					
 				</video>
-				<div class="parallax">
+				<div class="parallax__content-container">
 				    <div id="group1" class="parallax__group">
 				    	<div class="parallax__layer parallax__layer--base">
 				        	<div class="aboutWrapper" >
@@ -239,7 +239,10 @@
 				        	<div style="width: 100vw;height: 100vh;"></div>
 				      	</div>
 				      	<div class="parallax__layer parallax__layer--back">
-							
+							<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_desktop-view" poster="img/polina.jpg" playsinline="" autoplay="" muted="" loop="" preload="auto">
+								<source src="http://miroslavpetrov.ml/petrovproweb/img/polina.webm" type="video/webm">
+								<source src="http://miroslavpetrov.ml/petrovproweb/img/polina.mp4" type="video/mp4">
+							</video>
 							<button class="bgvidButton">Pause</button>
 				        	<div class="title">Background Layer</div>
 				      	</div>
@@ -390,12 +393,12 @@
 		<div class="test"></div>
 	</div>
 <script>
-    /*var debugInput = document.querySelector("input");
+    var debugInput = document.querySelector(".debug");
     function updateDebugState() {
         document.body.classList.toggle('debug-on', debugInput.checked);
     }
     debugInput.addEventListener("click", updateDebugState);
-    updateDebugState();*/
+    //updateDebugState();
   </script>
   <script src="module/photoswipe.js" type="text/javascript"></script> 
 	<script src="module/photoswipe-ui-default.js" type="text/javascript"></script>

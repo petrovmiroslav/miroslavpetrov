@@ -272,7 +272,7 @@ class FullscreenSlider {
 
   slide1SlideOut1Render () {
 
-  	this.body.classList.add('page_fixed');
+  	//this.body.classList.add('page_fixed');
   	this.menuButton.classList.add('hidden');
   	this.slide1.classList.add('hidden');
   	this.slide2.classList.remove('hidden');
@@ -290,7 +290,7 @@ class FullscreenSlider {
   }
 
   afterSlide1SlideOut () {
-  	this.body.classList.remove('page_fixed');
+  	//this.body.classList.remove('page_fixed');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
   }

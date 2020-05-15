@@ -1,9 +1,7 @@
-#wrapperParallax {
-  width: 100%;
-  /*height: 100%;*/
-  background-color: #212126;
-  overflow: hidden;
-  margin: auto;
+.parallax {
+  /*width: 100%;
+  height: 100%;
+  overflow: hidden;*/
 }
 .title {
     text-align: center;
@@ -14,13 +12,11 @@
     transform: translate(-50%, -50%);
   }
 
-.parallax {
-    height: 500px; /* fallback for older browsers */
+.parallax__content-container {
+  width: 100vw; 
     height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
-    /*-moz-transform: perspective(300px);*/
-    /*-webkit-perspective: 300px;*/
     
     -webkit-perspective: 300;
     perspective: 300px;
@@ -157,19 +153,23 @@
     background: rgb(255,241,100);
   }
 
-  video { 
-    position: fixed;
-    /*top: 50%;
-    left: 50%;*/
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    /*z-index: -100;
-    transform: translateX(-50%) translateY(-50%);*/
-    background: url('../img/polina.jpg') no-repeat;
-    background-size: cover;
-    transition: opacity 1s linear, filter 0.2s linear; 
+video { 
+     
+}
+.parallax__bg-fullscreen-video {
+  background: url('../img/polina.jpg') no-repeat;
+  background-size: cover;
+  /*transition: opacity 1s linear, filter 0.2s linear;*/ 
+}
+.parallax__bg-fullscreen-video_mobile-view {
+  position: fixed;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+}
+.parallax__bg-fullscreen-video_desktop-view {
+
 }
 #bgvid.blur {
   -webkit-filter: blur(50px);

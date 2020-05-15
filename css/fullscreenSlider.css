@@ -30,3 +30,6 @@
 	transform-origin: 100% 0%;
 	transform: translateY(100%) rotate(-20deg) scale(1.2) translateZ(0);
 }
+.slide2 {
+  	position: absolute;
+}
