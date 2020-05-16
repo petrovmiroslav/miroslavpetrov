@@ -8,15 +8,26 @@ class ClientDevice {
 	constructor (State) {
 		this.state = State;
 
+		this.windowResizeHandlerTimeout = null;
+		this.windowOrientationChangeHandlerTimeout = null;
+
+		this.main = null;
+		this.hiScreen = null;
 		this.mobileBGFullscreenVideo = null;
 		this.desktopBGFullscreenVideo = null;
 	}
 	
 	init () {
+		this.main = document.querySelector('.main');
+		this.hiScreen = document.querySelector('.hiScreen');
 		this.mobileBGFullscreenVideo = document.querySelector('.parallax__bg-fullscreen-video_mobile-view');
 		this.desktopBGFullscreenVideo = document.querySelector('.parallax__bg-fullscreen-video_desktop-view');
 
 		this.state.deviceIsTouchscreen = this.detectTouchScreen();
+
+		this.addWindowResizeListener();
+		/*this.addWindowOrientationChangeListener();*/
+
 		this.selectVideoBGFullscreen();
 	}
 
@@ -45,6 +56,32 @@ class ClientDevice {
 			}
 		}
 		return hasTouchScreen;
+	}
+
+	addWindowResizeListener () {
+		window.addEventListener('resize', this.setWindowResizeHandlerTimeout.bind(this));
+	}
+	setWindowResizeHandlerTimeout () {
+		window.clearTimeout(this.windowResizeHandlerTimeout);
+		this.windowResizeHandlerTimeout = window.setTimeout(this.windowResizeHandlerFunc.bind(this), 100);
+	}
+	windowResizeHandlerFunc () {
+		this.state.windowWidth = window.innerWidth;
+  	this.state.windowHeight = window.innerHeight;
+	}
+
+	addWindowOrientationChangeListener () {
+		window.addEventListener('orientationchange', this.setWindowOrientationChangeHandlerTimeout.bind(this));
+	}
+	setWindowOrientationChangeHandlerTimeout () {
+		window.clearTimeout(this.windowOrientationChangeHandlerTimeout);
+		this.windowOrientationChangeHandlerTimeout = window.setTimeout(this.windowOrientationChangeHandlerFunc.bind(this), 100);
+	}
+	windowOrientationChangeHandlerFunc () {
+		void(document.querySelector('html').offsetHeight);
+		void(document.body.offsetHeight);
+		void(this.main.offsetHeight);
+		void(this.hiScreen.offsetHeight);
 	}
 
 	selectVideoBGFullscreen () {
