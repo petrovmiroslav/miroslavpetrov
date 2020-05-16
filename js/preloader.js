@@ -8,19 +8,19 @@ class Preloader {
 	constructor (State) {
 		this.state = State;
 
-		this.preloaderWrapper = null;
-		this.preloader__topWrapper = null;
-		this.preloader__leftCube = null;
-		/*this.side__top = null;
+		//this.preloaderWrapper = null;
+		//this.preloader__topWrapper = null;
+		//this.preloader__leftCube = null;
+		this.side__top = null;
 		this.side__bottom = null;
 		this.leftCube = null;
 		this.rightCube = null;
-		this.bottomCube = null;*/
+		this.bottomCube = null;
 
 		this.main = null;
 
 		this.bottomCubeAnimationDuration = 500+50;
-		this.topCubesAnimationDuration = 1000;
+		this.topCubesAnimationDuration = 1000+200;
 		this.cubeSlideOutAnimationDuration = 500+50;
 
 		this.preloaderStartHandlerTimeout = null;
@@ -32,34 +32,13 @@ class Preloader {
 		this.topCubesSlideInIsStart = false;
 		this.endStart = false;
 	}
-	test () {
-		//debugger
-		//Kraken.count();
 
-		let f = function () {
-			window.requestAnimationFrame(this.run.bind(this));
-		};
-		window.requestAnimationFrame(f.bind(this));
-	}
 	run () {
-		
-
 		let f = function () {
 
 			this.rAF(this.init);
 		};
 		window.setTimeout(f.bind(this));
-		/*let promiseFunc = function(resolve, reject) {
-	    this.resolve = resolve;
-	    this.a = Kraken.str();
-	    this.init();
-	  };
-
-		this.promise = new Promise(promiseFunc.bind(this));
-
-		promiseFunc = null;
-
-	  return this.promise;*/
 	}
 	rAF (f) {
 		let nextRenderFunc = f;
@@ -72,41 +51,32 @@ class Preloader {
 	}
 	init () {
 		
-		this.preloaderWrapper = document.getElementById("preloaderWrapper");
-		this.preloader__topWrapper = this.preloaderWrapper.querySelector('.preloader__topWrapper');
-		this.preloader__leftCube = this.preloader__topWrapper.querySelector('.preloader__left-cube');
-		/*this.side__top = document.querySelector('.preloader-side__top');
+		//this.preloaderWrapper = document.getElementById("preloaderWrapper");
+		//this.preloader__topWrapper = this.preloaderWrapper.querySelector('.preloader__topWrapper');
+		//this.preloader__leftCube = this.preloader__topWrapper.querySelector('.preloader__left-cube');
+		this.side__top = document.querySelector('.preloader-side__top');
 		this.side__bottom = document.querySelector('.preloader-side__bottom');
 		this.leftCube = document.querySelector('.preloader-left-cube');
 		this.rightCube = document.querySelector('.preloader-right-cube');
-		this.bottomCube = document.querySelector('.preloader-bottom-cube');*/
+		this.bottomCube = document.querySelector('.preloader-bottom-cube');
 
 		this.main = document.querySelector('.main');
 
-		this.preloaderWrapper.classList.remove('hidden');
-		/*this.side__top.classList.remove('hidden');
-		this.side__bottom.classList.remove('hidden');*/
+		//this.preloaderWrapper.classList.remove('hidden');
+		this.side__top.classList.remove('hidden');
+		this.side__bottom.classList.remove('hidden');
 
 		this.addWindowLoadListener();
 		this.rAF(this.bottomCubeSlideUp);
 		
-
-		/*
-		let tmFunc = function () {
-			return this.bottomCubeSlideUp();
-		};
-		let tmFuncBind = tmFunc.bind(this);
-		window.setTimeout(tmFuncBind);
-		tmFunc = null;
-		tmFuncBind = null;
-		*/
 	}
 
 	bottomCubeSlideUp () {
 
 		if (!this.bottomCubeIsSlideUp) {
-			this.preloaderWrapper.classList.remove('preloader_beforeStart');
-			/*this.bottomCube.classList.add('preloader-bottom-cube_slide-up');*/
+			//this.preloaderWrapper.classList.remove('preloader_beforeStart');
+			void(this.bottomCube.offsetHeight);
+			this.bottomCube.classList.add('preloader-bottom-cube_slide-up');
 
 			window.setTimeout(()=>{
 				if (!this.bottomCubeIsSlideUp) {
@@ -116,16 +86,9 @@ class Preloader {
 				}
 			},this.bottomCubeAnimationDuration);
 		}
-		/*if (!this.bottomCubeIsSlideUp) {
-			this.preloaderWrapper.classList.remove('preloader_beforeStart');
-
-			window.setTimeout(()=>{
-				if (!this.bottomCubeIsSlideUp) {
-					this.bottomCubeIsSlideUp =  true;
-					this.setPreloaderStartHandlerTimeout();
-				}
-			},this.bottomCubeAnimationDuration);
-		}*/
+	}
+	test() {
+		this.bottomCube.classList.add('test');
 	}
 
 	setPreloaderStartHandlerTimeout () {
@@ -134,31 +97,24 @@ class Preloader {
 	}
 
 	startTopCubesSlideIn () {
-		/*this.topCubesSlideInIsStart = true;
-		this.rAF(this.topCubesSlideIn);*/
 		this.topCubesSlideInIsStart = true;
-    this.topCubesSlideIn();
+		this.rAF(this.topCubesSlideIn);
+		/*this.topCubesSlideInIsStart = true;
+    this.topCubesSlideIn();*/
 	}
 
 	topCubesSlideIn () {
-		this.preloader__topWrapper.classList.remove('opacity0');
-		this.preloaderWrapper.classList.add('preloader_start');
-		/*this.leftCube.classList.add('preloader-left-cube_slide-in');
-		this.rightCube.classList.add('preloader-right-cube_slide-in');*/
+		//this.preloader__topWrapper.classList.remove('opacity0');
+		//this.preloaderWrapper.classList.add('preloader_start');
+		this.leftCube.classList.add('preloader-left-cube_slide-in');
+		this.rightCube.classList.add('preloader-right-cube_slide-in');
 		this.main.classList.remove('hidden');
 
     window.setTimeout(()=>{
     	
       this.readyToSlideOut = true;
-    }, this.topCubesAnimationDuration);
-		/*this.preloader__topWrapper.classList.remove('opacity0');
-		this.preloaderWrapper.classList.add('preloader_start');
-		this.main.classList.remove('hidden');
-    window.scrollTo(0,0);
 
-    window.setTimeout(()=>{
-      this.readyToSlideOut = true;
-    }, this.topCubesAnimationDuration);*/
+    }, this.topCubesAnimationDuration);
 	}
 
 	addWindowLoadListener() {
@@ -180,45 +136,13 @@ class Preloader {
 	    		}
 	    	}
 	    },1000);
-///////////////
-	    /*let windowLoadListener = function (obj) {
-	    	//window.removeEventListener('load', windowLoadListenerBind());
-	    	//
-	    	that = null;
-
-	    };
-	    let that = this;
-	    let windowLoadListenerBind = function () {
-	    	return function () {
-	    		windowLoadListener(that);
-	    	};
-	    }
-	    //let windowLoadListenerBind = windowLoadListener.bind(this);
-	    window.addEventListener('load', windowLoadListenerBind());*/
-	    
-	    //windowLoadListener = null;
-	    //windowLoadListenerBind = null;
 	  } else {
 	    this.end();
 	  }
-
-	  /*if (document.readyState != 'complete'){
-	    window.addEventListener('load', this.end.bind(this));
-	    window.setTimeout(()=>{
-	    	if (document.readyState == 'complete') {
-	    		if(!this.endStart) {
-	    			this.end();
-	    		}
-	    	}
-	    },1000);
-	  } else {
-	    this.end();
-	  }*/
 	}
 
 	end () {
 		this.endStart = true;
-
 
 		this.checkBottomCubeIsSlideUpInterval = window.setInterval(this.continueIfBottomCubeIsSlideUp.bind(this), 300);
 	}
@@ -255,16 +179,16 @@ class Preloader {
 
 	cubesSlideOut () {
 
-		this.preloaderWrapper.classList.add('preloader_end');
-		this.preloaderWrapper.classList.remove('preloader_bgLikePreloader');
-    this.preloader__leftCube.classList.add('preloader__left-cube_shadow');
-    /*this.side__top.classList.add('preloader-side__top-slide-up');
-		this.side__bottom.classList.add('preloader-side__bottom-slide-down');*/
+		//this.preloaderWrapper.classList.add('preloader_end');
+		//this.preloaderWrapper.classList.remove('preloader_bgLikePreloader');
+    //this.preloader__leftCube.classList.add('preloader__left-cube_shadow');
+    this.side__top.classList.add('preloader-side__top-slide-up');
+		this.side__bottom.classList.add('preloader-side__bottom-slide-down');
     this.main.classList.remove('main_darkened');
     document.body.classList.remove('page_bgLikePreloader');
 
     window.setTimeout(this.deactivation.bind(this),this.cubeSlideOutAnimationDuration+500);
-    /*window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);*/
+    window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);
 	}
 
 	setPreloaderIsOffTrue () {
@@ -273,17 +197,16 @@ class Preloader {
 
 	deactivation () {
 		//Kraken.count();
-		this.preloaderWrapper.remove();
-		/*this.side__top.remove();
-		this.side__bottom.remove();*/
-		document.body.classList.remove('page_bgLikePreloader');
-		document.body.classList.remove('page_position_fixed');
-		//document.querySelector('.main').style.overflow = 'unset';
-    //document.querySelector('.main > .slide2 .parallax').classList.toggle('hidden');
+		//this.preloaderWrapper.remove();
+		this.side__top.remove();
+		this.side__bottom.remove();
+		//document.body.classList.remove('page_bgLikePreloader');
+		//document.body.classList.remove('page_position_fixed');
+
 
     this.rAF(this.cleanUp);
-    //window.setTimeout(this.cleanUp.bind(this));
-    this.state.preloaderIsOff = true;
+
+    //this.state.preloaderIsOff = true;
 	}
 
 	cleanUp () {

@@ -9,6 +9,11 @@ class FullscreenSlider {
 		this.state = State;
 
 		this.body = document.body;
+    this.sliderContainer = null;
+    this.slide1 = null;
+    this.slide2 = null;
+    this.parallax = null;
+    this.menuButton = null;
 
 		this.touchStartY = 0;
 	  this.touchEndY = 0;
@@ -29,6 +34,7 @@ class FullscreenSlider {
 		this.sliderContainer = document.querySelector('.fullscreenSlider');
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
+    this.parallax = document.querySelector('.parallax__content-container');
 		this.menuButton = document.querySelector('.menuButton');
 
 		this.setCheckReadyToInitInterval();
@@ -48,7 +54,7 @@ class FullscreenSlider {
 		this.checkReadyToInitInterval = window.setInterval(this.checkReadyToInit.bind(this), 300);
 	}
 
-	checkReadyToInit () {console.log("!");
+	checkReadyToInit () {
 		if (this.state.preloaderIsOff) {
 			window.clearInterval(this.checkReadyToInitInterval);
 			this.addFullscreenSliderListeners();
@@ -142,7 +148,7 @@ class FullscreenSlider {
   setMouseWheelTickingFalse () {
   	this.mouseWheelTicking = false;
   }
-  wheelHandler (direction) {console.log('wheelHandler');
+  wheelHandler (direction) {
     if (this.state.slide1IsActive) {
     	if (direction > 0) {
     		this.slide1SlideOut();
@@ -233,15 +239,17 @@ class FullscreenSlider {
   prepareForSlideOut () {
   	this.removeFullscreenSliderListeners();
   	this.state.hiBgImageTransformOFF();
+
+    this.state.slide1IsActive = false;
   }
 
   drawSlider () {
   	let childrens = this.sliderContainer.children;
 
-  	for (let i = 0, childrens = this.sliderContainer.children; i < childrens.length; i++) {
+  	for (let i = 1, childrens = this.sliderContainer.children; i < childrens.length; i++) {
 			let fullscreenSlider__side = childrens[i],
   				slide1Clone = this.slide1.cloneNode(true);
-  		slide1Clone.classList.remove('slide1');
+  		slide1Clone.classList.remove('slide1');    
   		fullscreenSlider__side.appendChild(slide1Clone);
   		fullscreenSlider__side = null;
   		slide1Clone = null;
@@ -272,7 +280,7 @@ class FullscreenSlider {
 
   slide1SlideOut1Render () {
 
-  	this.body.classList.add('page_fixed');
+  	//this.body.classList.add('page_fixed');
   	this.menuButton.classList.add('hidden');
   	this.slide1.classList.add('hidden');
   	this.slide2.classList.remove('hidden');
@@ -290,7 +298,7 @@ class FullscreenSlider {
   }
 
   afterSlide1SlideOut () {
-  	this.body.classList.remove('page_fixed');
+  	//this.body.classList.remove('page_fixed');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
   }
@@ -301,7 +309,106 @@ class FullscreenSlider {
 
 
   slide1SlideIn () {
+    if(this.parallax.scrollTop <=0) {
 
 
+      this.prepareForSlideIn();
+
+      this.slide1SlideIn1Render_rAF(this.slide1SlideIn1Render);
+      window.requestAnimationFrame(()=>{
+        return this.slide1SlideInGO_rAF(this.slide1SlideInGO);
+      });
+
+      window.setTimeout(this.slide1SlideInAnimationEnd.bind(this), this.slideOutAnimationDuration);
+      window.setTimeout(this.slide1SlideInAnimationEnd2Render_rAF.bind(this, this.makeSliderHidden), this.slideOutAnimationDuration);
+      window.setTimeout(this.afterSlide1SlideIn1Render_rAF.bind(this, this.afterSlide1SlideIn2Render_rAF.bind(this, this.afterSlide1SlideIn)), this.slideOutAnimationDuration);
+    }
+  }
+
+  prepareForSlideIn () {
+    this.removeFullscreenSliderListeners();
+
+    this.state.slide1IsActive = true;
+  }
+
+  slide1SlideIn1Render_rAF (f) {
+    let nextRenderFunc = f;
+    let slide1SlideIn1Render_nextRAF = function(func) {
+      window.requestAnimationFrame(func.bind(this));
+    };
+    window.requestAnimationFrame(slide1SlideIn1Render_nextRAF.bind(this, nextRenderFunc));
+    nextRenderFunc = null;
+    slide1SlideIn1Render_nextRAF = null;
+  }
+  slide1SlideIn1Render () {
+    this.menuButton.classList.add('hidden');
+    this.sliderContainer.classList.remove('hidden');
+  }
+
+  slide1SlideInGO_rAF (f) {
+    let nextRenderFunc = f;
+    let slide1SlideInGO_nextRAF = function(func) {
+      window.requestAnimationFrame(func.bind(this));
+    };
+    window.requestAnimationFrame(slide1SlideInGO_nextRAF.bind(this, nextRenderFunc));
+    nextRenderFunc = null;
+    slide1SlideInGO_nextRAF = null;
+  }
+  slide1SlideInGO () {
+    this.sliderContainer.classList.remove('fullscreenSlider_ON');
+  }
+
+  slide1SlideInAnimationEnd () {
+    this.slide1.classList.remove('hidden');
+    this.slide2.classList.add('hidden');
+  }
+
+  slide1SlideInAnimationEnd2Render_rAF (f) {
+    let nextRenderFunc = f;
+    let slide1SlideInAnimationEnd2Render_nextRAF = function(func) {
+      window.requestAnimationFrame(func.bind(this));
+    };
+    window.requestAnimationFrame(slide1SlideInAnimationEnd2Render_nextRAF.bind(this, nextRenderFunc));
+    nextRenderFunc = null;
+    slide1SlideInAnimationEnd2Render_nextRAF = null;
+  }
+
+  afterSlide1SlideIn1Render_rAF (f) {
+    let nextRenderFunc = f;
+    let afterSlide1SlideIn1Render_nextRAF = function(func) {
+      window.requestAnimationFrame(func.bind(this));
+    };
+    window.requestAnimationFrame(afterSlide1SlideIn1Render_nextRAF.bind(this, nextRenderFunc));
+    nextRenderFunc = null;
+    afterSlide1SlideIn1Render_nextRAF = null;
+  }
+  afterSlide1SlideIn2Render_rAF (f) {
+    let nextRenderFunc = f;
+    let afterSlide1SlideIn2Render_nextRAF = function(func) {
+      window.requestAnimationFrame(func.bind(this));
+    };
+    window.requestAnimationFrame(afterSlide1SlideIn2Render_nextRAF.bind(this, nextRenderFunc));
+    nextRenderFunc = null;
+    afterSlide1SlideIn2Render_nextRAF = null;
+  }
+  afterSlide1SlideIn () {
+    this.menuButton.classList.remove('hidden');
+    this.state.hiBgImageTransformON();
+    this.addFullscreenSliderListeners();
+
+    this.cleanSlider();
+  }
+
+  cleanSlider () {
+    let childrens = this.sliderContainer.children;
+
+    for (let i = 0, childrens = this.sliderContainer.children; i < childrens.length; i++) {
+      let fullscreenSlider__side = childrens[i];
+      while (fullscreenSlider__side.firstChild) {
+        fullscreenSlider__side.firstChild.remove();
+      }
+      
+      fullscreenSlider__side = null;
+    }
   }
 }
