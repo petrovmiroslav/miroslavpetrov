@@ -8,9 +8,12 @@ class State {
 
 		this.preloaderIsOff = false;
 		this.slide1IsActive = false;
+		this.menuIsOpen = false;
 		this.hiBgImageTransformListener = false;
 		this.hiBgImageTransformON = null;
 		this.hiBgImageTransformOFF = null;
+		this.fullscreenSliderON = null;
+    this.fullscreenSliderOFF = null;
 
 		this.hiBgLazyImageIsLoaded = false;
 		this.hiBgLazyImageIsTargetTransform = false;

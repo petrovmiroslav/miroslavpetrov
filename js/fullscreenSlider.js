@@ -7,6 +7,8 @@ export { FullscreenSlider };
 class FullscreenSlider {
 	constructor (State) {
 		this.state = State;
+    this.state.fullscreenSliderON = this.addFullscreenSliderListeners.bind(this);
+    this.state.fullscreenSliderOFF = this.removeFullscreenSliderListeners.bind(this);
 
 		this.body = document.body;
     this.sliderContainer = null;
@@ -160,7 +162,7 @@ class FullscreenSlider {
     }
   }
 
-  slide1SlideOut () {
+  slide1SlideOut () { console.log('slide1SlideOut');
   	this.prepareForSlideOut();
   	this.drawSlider();
 

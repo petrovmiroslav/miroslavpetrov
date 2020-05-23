@@ -7,6 +7,7 @@ import { Preloader as PreloaderModule } from "./preloader.js";
 import { LazyLoader as LazyLoaderModule } from "./lazyLoader.js";
 import { HiBgImageTransform as HiBgImageTransformModule } from "./hiBgImageTransform.js";
 import { FullscreenSlider as FullscreenSliderModule } from "./fullscreenSlider.js";
+import { Menu as MenuModule } from "./menu.js";
 
 const State = new StateModule();
 State.init();
@@ -14,7 +15,8 @@ const ClientDevice = new ClientDeviceModule(State);
 ClientDevice.init();
 let Kraken = new ReleaseTheKraken(),
     HiBgImageTransform = new HiBgImageTransformModule(State),
-    FullscreenSlider = new FullscreenSliderModule(State);
+    FullscreenSlider = new FullscreenSliderModule(State),
+    Menu = new MenuModule(State);;
   
 
 
@@ -40,6 +42,7 @@ const WindowLoaded = function () {
 
   HiBgImageTransform.init();
   FullscreenSlider.init();
+  Menu.init();
 };
 
 
