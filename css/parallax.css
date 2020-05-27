@@ -34,11 +34,12 @@
   height: auto;
   background: url('../img/polina.jpg') no-repeat;
   background-size: cover;
-  
-  /*transition: opacity 1s linear, filter 0.2s linear;*/ 
+}
+.parallax__bg-fullscreen-video_filter-contrast0 {
+  filter: contrast(0);
 }
 .parallax__bg-fullscreen-video_mobile-view {
-  
+  min-height: 100vh;
 }
 .parallax__bg-fullscreen-video_desktop-view {
   top: 50%;
@@ -134,6 +135,7 @@
 
   #group2 {
     z-index: 3; /* slide under groups 1 and 3 */
+    transition: filter .2s, opacity .2s;
   }
   #group2 .parallax__layer--base {
     /*width: 100vw;

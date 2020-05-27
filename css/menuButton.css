@@ -16,7 +16,7 @@
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	transition: 250ms ease-out;
+	transition: transform 250ms ease-out;
 	cursor: pointer;
 }
 .menuButton__lines-wrapper_pointer-events_none {

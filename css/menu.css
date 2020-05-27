@@ -1,5 +1,40 @@
+.fullscreenFlipper {
+	height: 100%;
+	-webkit-perspective: 1200;
+	perspective: 1200px;
+	-moz-transform: perspective(1200px);
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	display: flex;
+	justify-content: center;
+	pointer-events: none;
+}
+.fullscreenFlipper__flipper {
+	transform-style: preserve-3d;
+	transition: 2.7s linear;
+}
+.fullscreenFlipper_rotate .fullscreenFlipper__flipper {
+  transform: rotateY(180deg);
+}
+.fullscreenFlipper__flipperSide {
+	height: 100%;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	overflow: hidden;
+}
+.fullscreenFlipper__flipperSide_front {
+	transform: translateY(0%);
+}
+.fullscreenFlipper__flipperSide_back {
+	transform: rotateY(-180deg) translateY(-100%);
+}
+.fullscreenFlipper__sideInnerWrapper {
+	height: 100%;
+}
+
 .menu {
 	width: 100%;
-	height: 100%; 
+	height: 100vh; 
 	background: rgba(199, 255, 0, 1);
 }

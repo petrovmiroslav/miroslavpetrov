@@ -24,7 +24,9 @@ class State {
 		
 	}
 
-	
+	roundTo (numberToRound, digits) {
+		return +numberToRound.toFixed(digits);
+	}
 
 }
 

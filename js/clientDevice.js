@@ -85,7 +85,7 @@ class ClientDevice {
 	}
 
 	selectVideoBGFullscreen () {
-		if (this.state.deviceIsTouchscreen) {
+		if (1/*this.state.deviceIsTouchscreen*/) {
 			this.mobileBGFullscreenVideo.classList.remove('hidden');
 			this.desktopBGFullscreenVideo.classList.add('hidden');
 		}
