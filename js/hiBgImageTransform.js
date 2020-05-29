@@ -23,12 +23,18 @@ class HiBgImageTransform {
 	}
 
 	init () {
-		this.targetImg = document.querySelector('.hiScreen__bg-image_mini');
-		this.imgLazy = document.querySelector('.hiScreen__bg-image_lazy');
-		this.main = document.querySelector('.main');
+		if (!this.state.deviceIsTouchscreen) {
+			this.targetImg = document.querySelector('.hiScreen__bg-image_mini');
+			this.imgLazy = document.querySelector('.hiScreen__bg-image_lazy');
+			this.main = document.querySelector('.main');
+
+			this.main.querySelectorAll('.hiScreen__bg-image').forEach(function (el) {
+				el.classList.add('hiScreen__bg-image__desktop-view');
+			});
 
 
-		this.setCheckReadyToAddListenerInterval();
+			this.setCheckReadyToAddListenerInterval();
+		}
 	}
 
 	rAF (f) {
@@ -54,20 +60,16 @@ class HiBgImageTransform {
 	}
 
 	addHiBgImageTransformListener () {
-		if ('ontouchstart' in window) {
-
-    } else {
+		if (!this.state.deviceIsTouchscreen) {
     	this.state.hiBgImageTransformListener = true;
       this.main.addEventListener('mousemove', this.hiBgImageTransformListener);
     }
 	}
 	removeHiBgImageTransformListener () {
-		if ('ontouchstart' in window) {
-
-    } else {//debugger
-    	this.state.hiBgImageTransformListener = false;
-      this.main.removeEventListener('mousemove', this.hiBgImageTransformListener);
-    }
+		if (!this.state.deviceIsTouchscreen) {
+			this.state.hiBgImageTransformListener = false;
+    	this.main.removeEventListener('mousemove', this.hiBgImageTransformListener);
+		}
 	}
 
 	tickHiBgImageTransform (event) {console.log('HiBgImageTransform');
@@ -79,10 +81,9 @@ class HiBgImageTransform {
 	}
 
 	hiBgImageTransformFunction () {
-		let mouseX = this.event.clientX / (this.state.windowWidth / 5);
-    let mouseY = this.event.clientY / (this.state.windowHeight / 5);
-    this.targetImg.style.transform = `translate3d(-${mouseX}%, -${mouseY}%, 0)`;
-    this.targetImg.style.transform = `scale(1.2) translate(-${mouseX}%, -${mouseY}%)`;
+    let mouseX = (this.event.clientX - this.state.windowWidth / 2) / (this.state.windowWidth / -5);
+    let mouseY = (this.event.clientY - this.state.windowHeight / 2) / (this.state.windowHeight / -5);
+    this.targetImg.style.transform = `scale(1.2) translate3d(${mouseX}%, ${mouseY}%,0)`;
 
 		this.ticking = false;
 	}

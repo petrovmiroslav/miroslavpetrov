@@ -40,6 +40,7 @@ const WindowLoaded = function () {
   let LazyLoader = new LazyLoaderModule(State);
   LazyLoader.init();
 
+  
   HiBgImageTransform.init();
   FullscreenSlider.init();
   Menu.init();

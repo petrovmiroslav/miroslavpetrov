@@ -1,6 +1,7 @@
 .hiScreen {
+	position: absolute;
 	height: 100%;
-	position: relative;
+	width: 100%;
 }
 .hiScreen__content-block {
 	position: relative;
@@ -53,10 +54,12 @@
 	height: 100%;
 	position: absolute;
 	transition: filter .5s cubic-bezier(0.4, 0.0, 1, 1);
-	transform: scale(1.2) translate(0);
 	background-size: cover;
 	background-position: center 45%;
 	filter: blur(0px);
+}
+.hiScreen__bg-image__desktop-view {
+	transform: scale(1.2) translate3d(0,0,0);
 }
 .hiScreen__bg-image_blurred {
 	filter: blur(20px);

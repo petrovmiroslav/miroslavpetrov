@@ -378,7 +378,7 @@ class Menu {
 	waitFlipperAnimationDone () {//this.TIMER.push('flipperAnimationDoneCheck', Date.now(), '\n');
 		let newFlipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);
 //console.log(this.flipperFirstChildPosition,'---', newFlipperFirstChildPosition, this.flipperFirstChildPosition === newFlipperFirstChildPosition);
-		if (this.flipperFirstChildPosition === newFlipperFirstChildPosition) {
+		if (this.flipperFirstChildPosition === newFlipperFirstChildPosition && newFlipperFirstChildPosition < 0.5) {
 			if (this.state.menuIsOpen) {
 				this.afterFlipperRotate();
 			} else {

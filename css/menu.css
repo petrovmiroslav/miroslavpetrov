@@ -12,7 +12,7 @@
 }
 .fullscreenFlipper__flipper {
 	transform-style: preserve-3d;
-	transition: 2.5s linear;
+	transition: .5s linear;
 	transform: translate3d(0,0,0) rotateY(0deg);
 }
 .fullscreenFlipper_rotate .fullscreenFlipper__flipper {

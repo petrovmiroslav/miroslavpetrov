@@ -27,8 +27,8 @@ class LazyLoader {
 	}
 
 	init () {
-		this.lazyLoadAndReplaceHiBgImage();
-		this.loadVideos();
+		this.rAF(this.lazyLoadAndReplaceHiBgImage);
+		this.rAF(this.loadVideos);
 	}
 
 	lazyLoadAndReplaceHiBgImage () {
@@ -74,7 +74,7 @@ class LazyLoader {
 		this.checkReadyToRemoveMiniImgInterval = window.setInterval(this.checkReadyToRemoveMiniImg.bind(this),50);
 	}
 	checkReadyToRemoveMiniImg () {
-		if (this.state.hiBgLazyImageIsTargetTransform) {
+		if (this.state.hiBgLazyImageIsTargetTransform || this.state.deviceIsTouchscreen) {
 			window.clearInterval(this.checkReadyToRemoveMiniImgInterval);
 			this.imgLazy.classList.add("hiScreen__bg-image_lazy-afterLoad");
 			this.rAF(this.imgLazyRemoveClassBlurred);
