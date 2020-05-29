@@ -27,7 +27,7 @@ class Menu {
 		this.flipperFirstChildPosition = null;
 		this.parallaxScrollValue = null;
 		this.menuButtonAnimationDuration = 250;
-		this.flipperRotationAnimationDuration = 700;
+		this.flipperRotationAnimationDuration = 500;
 
 		this.checkReadyToInitInterval = null;
 		this.drawFlipperDone = null;
@@ -253,14 +253,14 @@ class Menu {
     				 backFlipperSide = this.menuClone.outerHTML; i < n; i++) {
 
     	flipperInnerHTML += '<div class="fullscreenFlipper__flipper" style="width: ' + 100/n +'%;">'+
-    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_front">'+
-    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translateX(-' + 100/n * i + '%);">'+
-    						frontFlipperSide+
+    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_back">'+
+    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translate3d(-' + 100/n * i +  '%,0,0)">'+
+    						backFlipperSide+
     					'</div>'+
     				'</div>'+
-    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_back">'+
-    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translateX(-' + 100/n * i + '%);">'+
-    						backFlipperSide+
+    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_front">'+
+    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translate3d(-' + 100/n * i +  '%,0,0)">'+
+    						frontFlipperSide+
     					'</div>'+
     				'</div>'+
     			'</div>';
@@ -333,11 +333,14 @@ class Menu {
 			});
 		}
 		allContentCloneVideo = null;
+		this.contentClone.querySelectorAll('#group2 .parallax__layer--back').forEach(function (el) {
+			el.classList.remove('parallax__layer--back_desktop-view');
+		});
 	}
 	scrollFlipperBeforeRotate () {
 		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
-		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__content-container'),
-				parallaxScrollValue = this.slide2.querySelector('.parallax__content-container').scrollTop;
+		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container'),
+				parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
 
     allParallaxInFlipper.forEach((el)=>{
       el.scrollTop = parallaxScrollValue;
@@ -393,7 +396,7 @@ class Menu {
 		/*this.flipper.classList.remove('hidden');
 		this.scrollFlipperBeforeRotate();
 		this.flipper.classList.remove('opacity0');//285ms*/
-		
+
 		this.content.classList.add('hidden');///343ms
 		//this.slide2.classList.add('hidden');///343ms
 	}

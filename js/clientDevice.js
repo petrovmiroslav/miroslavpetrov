@@ -29,6 +29,7 @@ class ClientDevice {
 		/*this.addWindowOrientationChangeListener();*/
 
 		this.selectVideoBGFullscreen();
+		this.initParallaxIfClientDeviceIsDesktop();
 	}
 
 	detectTouchScreen () {
@@ -85,9 +86,20 @@ class ClientDevice {
 	}
 
 	selectVideoBGFullscreen () {
-		if (1/*this.state.deviceIsTouchscreen*/) {
+		if (this.state.deviceIsTouchscreen) {
 			this.mobileBGFullscreenVideo.classList.remove('hidden');
 			this.desktopBGFullscreenVideo.classList.add('hidden');
+		}
+	}
+	initParallaxIfClientDeviceIsDesktop () {
+		if (!this.state.deviceIsTouchscreen) {
+			this.main.querySelector('.parallax__scrollable-container').classList.add('parallax__scrollable-container_desktop-view');
+			this.main.querySelectorAll('.parallax__group').forEach(function (el) {
+				el.classList.add('parallax__group_desktop-view');
+			});
+			this.main.querySelectorAll('.parallax__layer--back').forEach(function (el) {
+				el.classList.add('.parallax__layer--back_desktop-view');
+			});
 		}
 	}
 }

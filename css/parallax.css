@@ -12,18 +12,21 @@
     transform: translate(-50%, -50%);
   }
 
-.parallax__content-container {
+.parallax__scrollable-container {
   width: 100vw; 
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+  transform: translate3d(0,0,0);
+}
+
+.parallax__scrollable-container_desktop-view {
   -webkit-perspective: 300;
   perspective: 300px;
   -webkit-perspective-origin: center;
   perspective-origin: center;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  transform: translateZ(0);
 }
 
 .parallax__bg-fullscreen-video {
@@ -37,6 +40,7 @@
 }
 .parallax__bg-fullscreen-video_filter-contrast0 {
   filter: contrast(0);
+      filter: blur(50px);
 }
 .parallax__bg-fullscreen-video_mobile-view {
   min-height: 100vh;
@@ -44,31 +48,35 @@
 .parallax__bg-fullscreen-video_desktop-view {
   top: 50%;
   left: 50%;
-  -ms-transform: translateX(-50%) translateY(-50%);
-  -moz-transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translate3d(-50%,-50%,0);
+  -moz-transform: translate3d(-50%,-50%,0);
+  -webkit-transform: translate3d(-50%,-50%,0);
+  transform: translate3d(-50%,-50%,0);
+  transition: filter .2s;
 }
 
-  .parallax__group {
-    position: relative;
-    /*height: 500px; /* fallback for older browsers */
-    /*height: 100vh;*/
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    transform: translateZ(0);
-  }
+.parallax__group {
+  
+  /*height: 500px; /* fallback for older browsers */
+  /*height: 100vh;*/
+  
+}
+.parallax__group_desktop-view {
+  position: relative;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transform: translate3d(0,0,0);
+}
 
   .parallax__layer {
     /*position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;*/
-    transform-origin-x: 100%;
+    bottom: 0;
     perspective-origin: center;
     -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
+    transform-style: preserve-3d;*/
   }
 
   .parallax__layer--fore {
@@ -77,17 +85,24 @@
     z-index: 1;
   }
 
-  .parallax__layer--base {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    z-index: 4;
-  }
+.parallax__layer--base {
+  -webkit-transform: translate3d(0,0,0);;
+  transform: translate3d(0,0,0);;
+  z-index: 4;
+}
+.parallax__layer--base_desktop-view {
 
-  .parallax__layer--back {
-    -webkit-transform: translateZ(-300px) scale(2.1);
-    transform: translateZ(-300px) scale(2.1);
-    z-index: 3;
-  }
+}
+
+.parallax__layer--back {
+  
+}
+.parallax__layer--back_desktop-view {
+  /*-webkit-transform: translateZ(-300px) scale(2.1);
+  transform: translateZ(-300px) scale(2.1);*/
+  transform: translate3d(0,0,-300px) scale(2.1);
+  z-index: 3;
+}
 
   .parallax__layer--deep {
     -webkit-transform: translateZ(-600px) scale(3);
@@ -135,14 +150,13 @@
 
   #group2 {
     z-index: 3; /* slide under groups 1 and 3 */
-    transition: filter .2s, opacity .2s;
   }
   #group2 .parallax__layer--base {
     /*width: 100vw;
     height: 100vh;*/
   }
   #group2 .parallax__layer--back {
-    position: relative;
+    /*position: relative;*/
     width: 100%;
     height: 100vh;
   }

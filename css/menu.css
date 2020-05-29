@@ -2,38 +2,41 @@
 	height: 100%;
 	-webkit-perspective: 1200;
 	perspective: 1200px;
-	-moz-transform: perspective(1200px);
-	-webkit-transform-style: preserve-3d;
+	/*-moz-transform: perspective(1200px);*/
+	/*-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
-	transform-style: preserve-3d;
+	transform-style: preserve-3d;*/
 	display: flex;
 	justify-content: center;
 	pointer-events: none;
 }
 .fullscreenFlipper__flipper {
 	transform-style: preserve-3d;
-	transition: 2.7s linear;
+	transition: 2.5s linear;
+	transform: translate3d(0,0,0) rotateY(0deg);
 }
 .fullscreenFlipper_rotate .fullscreenFlipper__flipper {
-  transform: rotateY(180deg);
+  transform: translate3d(0,0,0) rotateY(180deg);
 }
 .fullscreenFlipper__flipperSide {
+	width: 100%;
 	height: 100%;
 	backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
 	overflow: hidden;
 }
 .fullscreenFlipper__flipperSide_front {
-	transform: translateY(0%);
+	transform: translate3d(0,-100%,0);
 }
 .fullscreenFlipper__flipperSide_back {
-	transform: rotateY(-180deg) translateY(-100%);
+	transform: translate3d(0,0,0) rotateY(-180deg);
 }
 .fullscreenFlipper__sideInnerWrapper {
 	height: 100%;
 }
 
 .menu {
+	position: absolute;
 	width: 100%;
 	height: 100vh; 
 	background: rgba(199, 255, 0, 1);

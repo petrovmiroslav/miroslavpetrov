@@ -36,7 +36,7 @@ class FullscreenSlider {
 		this.sliderContainer = document.querySelector('.fullscreenSlider');
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
-    this.parallax = document.querySelector('.parallax__content-container');
+    this.parallax = document.querySelector('.parallax__scrollable-container');
 		this.menuButton = document.querySelector('.menuButton');
 
 		this.setCheckReadyToInitInterval();

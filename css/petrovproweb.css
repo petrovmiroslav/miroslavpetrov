@@ -14,6 +14,9 @@
 .body-disable-hover, .body-disable-hover * {
   pointer-events: none !important;
 }
+html > div {
+  display: none !important;
+}
 html{
 	height: 100%;
 	background-color: #212126;
