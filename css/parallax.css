@@ -18,6 +18,8 @@
   overflow-x: hidden;
   overflow-y: auto;
   transform: translate3d(0,0,0);
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: auto;
 }
 
 .parallax__scrollable-container_desktop-view {

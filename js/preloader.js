@@ -20,9 +20,12 @@ class Preloader {
 		this.main = null;
 
 		this.bottomCubeAnimationDuration = 500+50;
-		this.topCubesAnimationDuration = 1000+200;
+		this.topCubesAnimationDuration = 700+50;
 		this.cubeSlideOutAnimationDuration = 500+50;
 
+		this.bottomCubePosition = null;
+		this.rightCubePosition = null;
+		this.topSideCubePosition = null;
 		this.preloaderStartHandlerTimeout = null;
 		this.checkBottomCubeIsSlideUpInterval = null;
 		this.checkReadyToSlideOutInterval = null;
@@ -72,9 +75,11 @@ class Preloader {
 	}
 
 	bottomCubeSlideUp () {
-
-		if (!this.bottomCubeIsSlideUp) {
+		this.bottomCube.classList.add('preloader-bottom-cube_slide-up');
+		this.startWaitBottomCubeSlideUpAnimationDone();
+		/*if (!this.bottomCubeIsSlideUp) {
 			//this.preloaderWrapper.classList.remove('preloader_beforeStart');
+			
 			void(this.bottomCube.offsetHeight);
 			this.bottomCube.classList.add('preloader-bottom-cube_slide-up');
 
@@ -85,14 +90,25 @@ class Preloader {
 					this.setPreloaderStartHandlerTimeout();
 				}
 			},this.bottomCubeAnimationDuration);
+		}*/
+	}
+	startWaitBottomCubeSlideUpAnimationDone () {
+		this.bottomCubePosition = this.state.roundTo(this.bottomCube.getBoundingClientRect().y, 2);
+		window.setTimeout(this.waitBottomCubeSlideUpAnimationDone.bind(this), this.bottomCubeAnimationDuration);
+	}
+	waitBottomCubeSlideUpAnimationDone () {
+		let newbottomCubePosition = this.state.roundTo(this.bottomCube.getBoundingClientRect().y, 2);
+		if (this.bottomCubePosition === newbottomCubePosition) {
+			this.bottomCubeIsSlideUp =  true;
+			this.setPreloaderStartHandlerTimeout();
+		} else {
+			this.bottomCubePosition = newbottomCubePosition;
+			this.rAF(this.waitBottomCubeSlideUpAnimationDone);
 		}
 	}
-	test() {
-		this.bottomCube.classList.add('test');
-	}
+
 
 	setPreloaderStartHandlerTimeout () {
-
 		this.preloaderStartHandlerTimeout = window.setTimeout(this.startTopCubesSlideIn.bind(this), 2500);
 	}
 
@@ -110,11 +126,25 @@ class Preloader {
 		this.rightCube.classList.add('preloader-right-cube_slide-in');
 		this.main.classList.remove('hidden');
 
-    window.setTimeout(()=>{
+		this.startWaitRightCubeSlideUpAnimationDone();
+    /*window.setTimeout(()=>{
     	
       this.readyToSlideOut = true;
 
-    }, this.topCubesAnimationDuration);
+    }, this.topCubesAnimationDuration);*/
+	}
+	startWaitRightCubeSlideUpAnimationDone () {
+		this.rightCubePosition = this.state.roundTo(this.rightCube.getBoundingClientRect().x, 2);
+		window.setTimeout(this.waitRightCubeSlideUpAnimationDone.bind(this), this.topCubesAnimationDuration);
+	}
+	waitRightCubeSlideUpAnimationDone () {
+		let newRightCubePosition = this.state.roundTo(this.rightCube.getBoundingClientRect().x, 2);
+		if (this.rightCubePosition === newRightCubePosition) {
+			this.readyToSlideOut = true;
+		} else {
+			this.rightCubePosition = newRightCubePosition;
+			this.rAF(this.waitRightCubeSlideUpAnimationDone);
+		}
 	}
 
 	addWindowLoadListener() {
@@ -122,7 +152,9 @@ class Preloader {
 	    let that = this;
 	    let f = function (ref) {
 	    	window.removeEventListener('load', preloaderEnd);
-	    	ref.end();
+	    	if(!ref.endStart) {
+	    		ref.end();
+	    	}
 	    	ref = null;
 	    };
 	    let preloaderEnd = function () {
@@ -187,8 +219,23 @@ class Preloader {
     this.main.classList.remove('main_darkened');
     document.body.classList.remove('page_bgLikePreloader');
 
-    window.setTimeout(this.deactivation.bind(this),this.cubeSlideOutAnimationDuration+500);
-    window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);
+    this.startWaitCubeSlideOutAnimationDone();
+    //window.setTimeout(this.deactivation.bind(this),this.cubeSlideOutAnimationDuration+500);
+    //window.setTimeout(this.setPreloaderIsOffTrue.bind(this), this.cubeSlideOutAnimationDuration);
+	}
+	startWaitCubeSlideOutAnimationDone () {
+		this.topSideCubePosition = this.state.roundTo(this.side__top.getBoundingClientRect().y, 2);
+		window.setTimeout(this.waitCubeSlideOutAnimationDone.bind(this), this.cubeSlideOutAnimationDuration);
+	}
+	waitCubeSlideOutAnimationDone () {
+		let newTopSideCubePosition = this.state.roundTo(this.side__top.getBoundingClientRect().y, 2);
+		if (this.topSideCubePosition === newTopSideCubePosition && newTopSideCubePosition < 0) {
+			this.setPreloaderIsOffTrue();
+			this.deactivation();
+		} else {
+			this.topSideCubePosition = newTopSideCubePosition;
+			this.rAF(this.waitCubeSlideOutAnimationDone);
+		}
 	}
 
 	setPreloaderIsOffTrue () {

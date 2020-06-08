@@ -1,0 +1,17 @@
+.aboutSection {
+  height: 80vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 85% 15%;
+  grid-template-areas: "cube content" "header header";
+}
+.aboutSection__aboutText {
+	background: #ff0060;
+	border-radius: 1vmin;
+	font-size: 3vmin;
+	padding: 4vmin;
+	width: 60%;
+	grid-area: content;
+	align-self: center;
+	transform: translate3d(10%, 0vh, 0);
+}

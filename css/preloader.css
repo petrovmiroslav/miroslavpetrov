@@ -105,7 +105,7 @@
   transform: translateY(233.3%);
 }
 .preloader-side__top-slide-up {
-  transform: translateY(-100%);
+  transform: translateY(-130%);
 }
 .preloader-side__bottom-slide-down {
   transform: translateY(450%);

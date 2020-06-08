@@ -21,6 +21,7 @@ class FullscreenSlider {
 	  this.touchEndY = 0;
 	  this.mouseWheelTicking = false;
 	  this.slideOutAnimationDuration = 500+100;
+	  this.sideTopPosition = null;
 
 		this.checkReadyToInitInterval = null;
 
@@ -34,6 +35,7 @@ class FullscreenSlider {
 		this.state.slide1IsActive = true;
 
 		this.sliderContainer = document.querySelector('.fullscreenSlider');
+		this.slider__side_top = this.sliderContainer.querySelector('.fullscreenSlider__side_top');
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
     this.parallax = document.querySelector('.parallax__scrollable-container');
@@ -180,8 +182,9 @@ class FullscreenSlider {
   		return this.slide1SlideOutGO_rAF(this.slide1SlideOutGO);
   	});*/
 
-  	window.setTimeout(this.makeSliderHidden.bind(this), this.slideOutAnimationDuration);
-  	window.setTimeout(this.afterSlide1SlideOut.bind(this), this.slideOutAnimationDuration);
+  	this.startWaitSliderAnimationDone();
+  	//window.setTimeout(this.makeSliderHidden.bind(this), this.slideOutAnimationDuration);
+  	//window.setTimeout(this.afterSlide1SlideOut.bind(this), this.slideOutAnimationDuration);
   	
   	/*let o = {
   		1: {
@@ -295,12 +298,29 @@ class FullscreenSlider {
   slide1SlideOutGO () {
   	this.sliderContainer.classList.add('fullscreenSlider_ON');
   }
-  makeSliderHidden () {
-  	this.sliderContainer.classList.add('hidden');
-  }
+  startWaitSliderAnimationDone () {
+		this.sideTopPosition = this.state.roundTo(this.slider__side_top.getBoundingClientRect().x, 2);
+		window.setTimeout(this.waitSliderAnimationDone.bind(this), this.slideOutAnimationDuration);
+	}
+	waitSliderAnimationDone () {
+		let newSideTopPosition = this.state.roundTo(this.slider__side_top.getBoundingClientRect().x, 2);
+//console.log(this.sideTopPosition,'---', newFlipperFirstChildPosition, this.sideTopPosition === newFlipperFirstChildPosition);
+		if (!this.state.slide1IsActive) {
+			if (this.sideTopPosition === newSideTopPosition && newSideTopPosition < 0) {
+				return this.afterSlide1SlideOut();
+			}
+		} else {
+			if (this.sideTopPosition === newSideTopPosition && newSideTopPosition === 0) {
+				return this.slide1SlideInAnimationEnd();
+			}
+		}
+		this.sideTopPosition = newSideTopPosition;
+		this.rAF(this.waitSliderAnimationDone);
+	}
 
   afterSlide1SlideOut () {
   	//this.body.classList.remove('page_fixed');
+  	this.sliderContainer.classList.add('hidden');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
   }
@@ -321,9 +341,10 @@ class FullscreenSlider {
         return this.slide1SlideInGO_rAF(this.slide1SlideInGO);
       });
 
-      window.setTimeout(this.slide1SlideInAnimationEnd.bind(this), this.slideOutAnimationDuration);
-      window.setTimeout(this.slide1SlideInAnimationEnd2Render_rAF.bind(this, this.makeSliderHidden), this.slideOutAnimationDuration);
-      window.setTimeout(this.afterSlide1SlideIn1Render_rAF.bind(this, this.afterSlide1SlideIn2Render_rAF.bind(this, this.afterSlide1SlideIn)), this.slideOutAnimationDuration);
+      this.startWaitSliderAnimationDone();
+      //window.setTimeout(this.slide1SlideInAnimationEnd.bind(this), this.slideOutAnimationDuration);
+      //window.setTimeout(this.slide1SlideInAnimationEnd2Render_rAF.bind(this, this.makeSliderHidden), this.slideOutAnimationDuration);
+      //window.setTimeout(this.afterSlide1SlideIn1Render_rAF.bind(this, this.afterSlide1SlideIn2Render_rAF.bind(this, this.afterSlide1SlideIn)), this.slideOutAnimationDuration);
     }
   }
 
@@ -363,6 +384,9 @@ class FullscreenSlider {
   slide1SlideInAnimationEnd () {
     this.slide1.classList.remove('hidden');
     this.slide2.classList.add('hidden');
+    this.sliderContainer.classList.add('hidden');
+
+    this.rAF(this.afterSlide1SlideIn);
   }
 
   slide1SlideInAnimationEnd2Render_rAF (f) {
@@ -402,8 +426,6 @@ class FullscreenSlider {
   }
 
   cleanSlider () {
-    let childrens = this.sliderContainer.children;
-
     for (let i = 0, childrens = this.sliderContainer.children; i < childrens.length; i++) {
       let fullscreenSlider__side = childrens[i];
       while (fullscreenSlider__side.firstChild) {
