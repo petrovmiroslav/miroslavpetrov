@@ -13,13 +13,15 @@
   }
 
 .parallax__scrollable-container {
-  width: 100vw; 
+  width: 100vw;
+  min-width: 240px; 
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   transform: translate3d(0,0,0);
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: auto;
+  touch-action: pan-y;
 }
 
 .parallax__scrollable-container_desktop-view {
@@ -145,9 +147,11 @@
 
   #group1 {
     z-index: 5; /* slide over group 2 */
+    pointer-events: none;
   }
   #group1 .parallax__layer--base {
     background: #212126;
+
   }
 
   #group2 {

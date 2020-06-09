@@ -45,7 +45,7 @@ class Menu {
 		this.cube3dLoadingWrapper = this.slide2.querySelector('.cube3dLoadingWrapper');
 		this.bgVideoMobile = this.slide2.querySelector('.parallax__bg-fullscreen-video_mobile-view');
 		this.bgVideoDesktop = this.slide2.querySelector('.parallax__bg-fullscreen-video_desktop-view');
-		this.angleBGGradientAnimationLayer = this.slide2.querySelector('.angleBGGradientAnimationLayer');
+		this.angleBGGradientAnimationLayer = this.slide2.querySelector('.stackSection__gradientBG');
 
 
 		this.setCheckReadyToInitInterval();
@@ -212,8 +212,7 @@ class Menu {
 			this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
 			this.bgVideoDesktop.pause();
 		}*/
-		
-		this.angleBGGradientAnimationLayer.classList.add('animationNone');///////////////////////////////REPLACE CLASSNAME
+		this.state.angleGradientBGOFF();
 	}
 
 	pauseAndBlurBGVideo () {
@@ -492,7 +491,7 @@ class Menu {
 
 		} else {
 			this.cube3dLoadingWrapper.classList.remove('hidden');
-			this.angleBGGradientAnimationLayer.classList.remove('animationNone');
+			this.state.angleGradientBGON();
 			this.playAndClearBGVideo();
 /*			if (this.state.deviceIsTouchscreen) {
 				this.bgVideoMobile.play();

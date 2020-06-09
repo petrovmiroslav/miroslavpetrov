@@ -8,6 +8,7 @@ import { LazyLoader as LazyLoaderModule } from "./lazyLoader.js";
 import { HiBgImageTransform as HiBgImageTransformModule } from "./hiBgImageTransform.js";
 import { FullscreenSlider as FullscreenSliderModule } from "./fullscreenSlider.js";
 import { Menu as MenuModule } from "./menu.js";
+import { ParallaxScroll as ParallaxScrollModule } from "./parallaxScroll.js";
 
 const State = new StateModule();
 State.init();
@@ -16,7 +17,8 @@ ClientDevice.init();
 let Kraken = new ReleaseTheKraken(),
     HiBgImageTransform = new HiBgImageTransformModule(State),
     FullscreenSlider = new FullscreenSliderModule(State),
-    Menu = new MenuModule(State);;
+    Menu = new MenuModule(State),
+    ParallaxScroll = new ParallaxScrollModule(State, ClientDevice);
   
 
 
@@ -44,6 +46,7 @@ const WindowLoaded = function () {
   HiBgImageTransform.init();
   FullscreenSlider.init();
   Menu.init();
+  ParallaxScroll.init();
 };
 
 

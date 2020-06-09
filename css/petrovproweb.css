@@ -19,9 +19,11 @@ html > div {
 }
 html{
   width: 100%;
+  min-width: 240px;
 	height: 100%;
   overflow: hidden;
   overscroll-behavior-y: contain;
+  touch-action: pan-y;
 	background-color: #212126;
   font-family: arial;
 	font-family: Raleway;
@@ -416,7 +418,7 @@ html {
   transform: rotate(0deg) scale(1) !important;
 }
 
-@keyframes gradientBG {
+@keyframes gradientBGOLD {
   0% {
     /*background-position: 0%;*/
     transform: translateX(0%);
@@ -677,7 +679,7 @@ html {
 .aboutContentWrapper p.translateUP {
   /*transform: translateY(-15vh);*/
 }
-.headerBGWrapper {
+.headerBGWrapper {display: none;
   grid-area: header;
   display: flex;
   flex-direction: row;
