@@ -20,6 +20,8 @@ class FullscreenSlider {
 		this.touchStartY = 0;
 	  this.touchEndY = 0;
 	  this.mouseWheelTicking = false;
+	  this.mouseWheelTickingTimeout = null;
+	  this.setMouseWheelTickingFalseBind = this.setMouseWheelTickingFalse.bind(this);
 	  this.slideOutAnimationDuration = 500+100;
 	  this.sideTopPosition = null;
 
@@ -141,12 +143,12 @@ class FullscreenSlider {
     if (false == !!event) event = window.event;
     let direction = ((event.deltaY) ? event.deltaY/120 : event.deltaY/-3) || false;
     if (direction && !!this.wheelHandler && typeof this.wheelHandler == "function") {
+      window.clearTimeout(this.mouseWheelTickingTimeout);
       if (!this.mouseWheelTicking) {
       	this.mouseWheelTicking = true;
         this.wheelHandler(direction);
-
-        window.setTimeout(this.setMouseWheelTickingFalse.bind(this), 1500);
       }
+      this.mouseWheelTickingTimeout = window.setTimeout(this.setMouseWheelTickingFalseBind, 200);
     }
   }
   setMouseWheelTickingFalse () {
@@ -324,6 +326,12 @@ class FullscreenSlider {
   	this.sliderContainer.classList.add('hidden');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
+    
+    if (this.state.drawCube3dDone) {
+      this.state.cube3dStart();
+    } else {
+      this.rAF(this.state.cube3dCreate);
+    }
   }
 
   sliderGeneratorNext () {
@@ -351,6 +359,8 @@ class FullscreenSlider {
 
   prepareForSlideIn () {
     this.removeFullscreenSliderListeners();
+
+    this.state.cube3dStop();
 
     this.state.slide1IsActive = true;
   }

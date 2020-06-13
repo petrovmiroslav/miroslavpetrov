@@ -25,6 +25,7 @@ class ClientDevice {
 		this.desktopBGFullscreenVideo = document.querySelector('.parallax__bg-fullscreen-video_desktop-view');
 
 		this.state.deviceIsTouchscreen = this.detectTouchScreen();
+		this.detectSupportsPassive();
 
 		this.addWindowResizeListener();
 		/*this.addWindowOrientationChangeListener();*/
@@ -58,6 +59,17 @@ class ClientDevice {
 			}
 		}
 		return hasTouchScreen;
+	}
+	detectSupportsPassive () {
+		try {
+		  let opts = Object.defineProperty({}, 'passive', {
+		    get: () => {
+		      		this.state.passiveListener = {passive: true};
+		    		}
+		  });
+		  window.addEventListener("testPassive", null, opts);
+		  window.removeEventListener("testPassive", null, opts);
+		} catch (e) {console.log('SUPPORTSPASSIVE',e)}
 	}
 
 	addWindowResizeListener () {

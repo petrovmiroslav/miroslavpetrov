@@ -1,0 +1,103 @@
+.cube3d {
+	grid-area: cube;
+	width: 40vmin;
+	height: 40vmin;
+	margin: auto;
+
+	transform: translateZ(0);
+	will-change: transform;
+}
+.cube3d__scene {
+	perspective: calc(100vw);
+	width: 100%;
+	height: 100%;
+}
+.cube3d__level {
+	width: 100%;
+	height: calc(100% / 5);
+	position: relative;
+	transform-style: preserve-3d;
+	transform: rotateY(-90deg) translate3d(-50%, 0, 0) rotateY(90deg) rotateY(0deg);
+}
+.cube3d__side {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to right, #468057 0%, #468057 30%, #A67E6F 30%, #A67E6F 70%, #dfc812 70%, #dfc812 100%);
+	overflow: hidden;
+}
+.cube3d__side_front {
+	transform: rotateY(-90deg) translate3d(50%, 0, 0) rotateY(90deg);
+}
+.cube3d__side_back {
+	transform: rotateY(-90deg) translate3d(-50%, 0, 0) rotateY(-90deg);
+}
+.cube3d__side_left {
+	transform: translate3d(-50%, 0, 0) rotateY(-90deg);
+}
+.cube3d__side_right {
+	transform: translate3d(50%, 0, 0) rotateY(90deg);
+}
+.cube3d__side_top {
+	height: calc(100% * 5);
+	transform: translate3d(0, -50%, 0) rotateX(90deg);
+	background: white;
+}
+.cube3d__side_bottom {
+	height: calc(100% * 5);
+	transform: translate3d(0, -30%, 0) rotateX(-90deg);
+	background: blue;
+}
+.cube3d__text {
+	position: absolute;
+	margin: 0;
+	line-height: 70%;
+	color: black;
+	white-space: nowrap;
+}
+.cube3d__text_shift_up {
+	/*transform: translate3d(0%, -55%, 0);*/
+	transform: translateY(-55%);
+}
+.cube3d__text_shift_down {
+	/*transform: translate3d(0%, 55%, 0);*/
+	transform: translateY(55%);
+}
+.cube3d__text_shift_up-left {
+	/*transform: translate3d(-50%, -55%, 0);*/
+	transform: translateX(-50%) translateY(-55%);
+}
+.cube3d__text_shift_down-left {
+	/*transform: translate3d(-50%, 55%, 0);*/
+	transform: translateX(-50%) translateY(55%);
+}
+.cube3d__clickTarget {
+	position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.cube3d__loadingIconContainer {
+	width: 100%;
+	height: 100%;
+}
+.cube3d__loadingIcon {
+	width: 50%;
+	height: 50%;
+	background: #ff0060;
+	border-radius: 50%;
+	animation: cube3dLoadingAnimation 1s linear infinite;
+	transform: translate3d(50%, 50%, 0);
+}
+@keyframes cube3dLoadingAnimation {
+  0% {
+    transform: translate3d(0%, 50%, 0);
+  }
+  50% {
+    transform: translate3d(50%, 50%, 0);
+  }
+  100% {
+    transform: translate3d(100%, 50%, 0);
+  }
+}

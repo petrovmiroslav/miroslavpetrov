@@ -21,7 +21,7 @@
   transform: translate3d(0,0,0);
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: auto;
-  touch-action: pan-y;
+  touch-action: pan-y; 
 }
 
 .parallax__scrollable-container_desktop-view {

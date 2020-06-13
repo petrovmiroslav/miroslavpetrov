@@ -1260,7 +1260,7 @@ function DOMContentLoaded() {
 
     function update() {
         if (md) {
-          gap = averageGaps(mouseX - oldMouseX);
+          gap = averageGaps(mouseX - oldMouseX); //0
           oldMouseX = mouseX;
         }
         gap *= .93//.97;
@@ -1415,18 +1415,18 @@ function DOMContentLoaded() {
         if (isNaN(n)) {
           return 0;
         }
-        let gl = gaps.length;
-        gaps[gapscnt] = n;
+        let gl = gaps.length;//0
+        gaps[gapscnt] = n;   //[n]
         let ave = 0;
         for (var i = 0; i < gl; i++) {
-          ave += gaps[i];
+          ave += gaps[i];    //
         };
-        gapscnt = (gapscnt + 1) % 10;
-        let tmp = ave / gl*0.8;
+        gapscnt = (gapscnt + 1) % 10;//1
+        let tmp = ave / gl*0.8; // nan
         if (isNaN(tmp)) {
           tmp = 0;
         }
-        return tmp;
+        return tmp; //0
     }
     window.requestAnimFrame = function () {
       return window.requestAnimationFrame ||

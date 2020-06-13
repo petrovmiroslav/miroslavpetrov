@@ -4,6 +4,7 @@
 	grid-template-columns: 50% 50%;
 	grid-template-rows: 85% 15%;
 	grid-template-areas: "cube content" "header header";
+	overflow: hidden;
 }
 .aboutSection__aboutText {
 	background: #ff0060;
@@ -13,7 +14,7 @@
 	width: 60%;
 	grid-area: content;
 	align-self: center;
-	transform: translate3d(10%, 0, 0);
+	transform: translateX(10%);
 }
 .aboutSection__header {
 	grid-area: header;
@@ -23,11 +24,17 @@
 	color: #393939;
 	margin: 0 auto;
 	align-self: flex-end;
-	transform: translate3d(0, 140%, 0);
+	/*transform: translateY(140%);*/
+	/*transform: translate3d(0, 140%, 0);*/
+	transform: translateY(140%) translateZ(0);
+	opacity: 0;
 	transition: opacity .1s cubic-bezier(0.4, 0.0, 0.2, 1), transform .2s cubic-bezier(0.4, 0.0, 0.2, 1);
+	/*will-change: transform;*/
 }
 .aboutSection__header_slideUp {
-	transform: translate3d(0, 0%, 0);
+	/*transform: translate3d(0, 0, 0);*/
+	transform: translateY(0%) translateZ(0);
+	opacity: 1;
 }
 .stackSection {
 	position: relative;
@@ -38,36 +45,69 @@
 	height: 100%;
 	position: absolute;
 }
-.stackSection__angleContainer {
+/*.stackSection__angleContainer {
 	height: 100%;
-	transform: translate3d(0, 0, 0) rotate(-10deg) scale3d(1.7, 1, 1);
+	transform: translateZ(0) rotate(-10deg) scale3d(1.7, 1, 1);
 	transform-origin: top right;
 	transition: transform 0.1s linear;
+	will-change: transform;
 }
 .stackSection__gradientBG  {
 	height: 100%;
 	background: linear-gradient(to right, #ee7752, #e73c7e, #23a6d5, #23d5ab );
-	transform: translate3d(100%, 0, 0) scale3d(3, 1, 1);
+	transform: translateX(100%) translateZ(0) scale3d(3, 1, 1);
+	will-change: transform;
 }
 .stackSection__gradientBG_animationON {
-	animation: gradientBG 2s linear infinite alternate;
+	animation: gradientBG 10s linear infinite alternate;
 }
 @keyframes gradientBG {
   0% {
-    transform: translate3d(100%, 0, 0) scale3d(3, 1, 1);
+    transform: translateX(100%) translateZ(0) scale3d(3, 1, 1);
   }
   100% {
-    transform: translate3d(-50%, 0, 0) scale3d(3, 1, 1);
+    transform: translateX(-50%) translateZ(0) scale3d(3, 1, 1);
+  }
+}*/
+.stackSection__angleContainer {
+	height: 100%;
+	width: 140%;
+	position: absolute;
+	right: 0;
+	transform: translateZ(0) rotate(-10deg);
+	transform-origin: top right;
+	transition: transform 0.1s linear;
+	/*will-change: transform;*/
+}
+.stackSection__gradientBG  {
+	width: 300%;
+	height: 100%;
+	background: linear-gradient(to right, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+	transform: translateX(0%) translateZ(0);
+	/*will-change: transform;*/
+}
+.stackSection__gradientBG_animationON {
+	animation: gradientBG 10s linear infinite alternate;
+}
+@keyframes gradientBG {
+  0% {
+    transform: translateX(0%) translateZ(0);
+  }
+  100% {
+    transform: translateX(-66%) translateZ(0);
   }
 }
 .stackSection__stackDescriptionWrapper {
 	padding: 10vh;
-	transform: translate3d(0, 20vh, 0);
+	/*transform: translate3d(0, 20vh, 0);*/
+	transform: translateY(20vh) translateZ(0);
 	transition: .3s cubic-bezier(0.0, 0.0, 0.2, 1);
 	opacity: 0;
+	/*will-change: transform;*/
 }
 .stackSection__stackDescriptionWrapper_slideUp {
-	transform: translate3d(0,0,0);
+	/*transform: translate3d(0,0,0);*/
+	transform: translateY(0%) translateZ(0);
 	opacity: 1;
 }
 .stackSection__stackIcons {

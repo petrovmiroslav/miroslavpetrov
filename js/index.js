@@ -9,6 +9,7 @@ import { HiBgImageTransform as HiBgImageTransformModule } from "./hiBgImageTrans
 import { FullscreenSlider as FullscreenSliderModule } from "./fullscreenSlider.js";
 import { Menu as MenuModule } from "./menu.js";
 import { ParallaxScroll as ParallaxScrollModule } from "./parallaxScroll.js";
+import { Cube3d as Cube3dModule } from "./cube3d.js";
 
 const State = new StateModule();
 State.init();
@@ -18,7 +19,8 @@ let Kraken = new ReleaseTheKraken(),
     HiBgImageTransform = new HiBgImageTransformModule(State),
     FullscreenSlider = new FullscreenSliderModule(State),
     Menu = new MenuModule(State),
-    ParallaxScroll = new ParallaxScrollModule(State, ClientDevice);
+    ParallaxScroll = new ParallaxScrollModule(State, ClientDevice),
+    Cube3d = new Cube3dModule(State, ClientDevice);
   
 
 
@@ -47,6 +49,7 @@ const WindowLoaded = function () {
   FullscreenSlider.init();
   Menu.init();
   ParallaxScroll.init();
+  Cube3d.init();
 };
 
 
