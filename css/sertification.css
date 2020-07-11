@@ -1,0 +1,115 @@
+.certification {
+	background: url('../img/image-from-rawpixel-id-67136-jpeg.jpg');
+	padding: 10% 0 15% 10%;
+	min-height: 80vh;
+}
+.certification__framed-certificate {
+	width: 50%;
+	position: relative;
+}
+.certification__frame {
+	position: absolute;
+	width: 100%;
+	max-height: 100%;
+	margin: auto;
+	transform: scale(1.3, 1.15);
+	pointer-events: none;
+	z-index: 1;
+}
+.certification__carousel {
+	overflow: hidden;
+	background: #3a3b3d;
+}
+.certification__certificates {
+	
+}
+.certification__certificates_desktop-view {
+	width: 600%;
+	display: flex;
+	align-items: center;
+	transform: translateZ(0);
+	will-change: transform;
+}
+.certification__certificates_mobile-view {
+	white-space: nowrap;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
+	scroll-snap-stop: always;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+}
+.certification__certificates_ease {
+	transition: transform 0.1s, opacity 0s;
+}
+.certification__certificates_opacity-delay {
+	transition: transform 0.1s, opacity 0s 0.35s;
+}
+.certification__certificates::-webkit-scrollbar {
+  display: none;
+}
+.certification__certificate {
+	display: inline-block;
+	width: 100%;
+	margin: 0;
+	scroll-snap-align: center;
+	vertical-align: middle;
+}
+.certification__certificate_left {
+	/*margin: 0 0 0 10%;*/
+}
+.certification__certificate_right {
+	/*margin: 0 10% 0 5%;*/
+}
+.certification__button {
+	width: 15%;
+	height: 100%;
+	position: absolute;
+	overflow: hidden;
+
+	display: none;
+}
+.certification__button_right {
+	transform: translateX(567%);
+}
+.certification__certificate-description {
+	display: none;
+}
+.certification__button-bg {
+	background: black;
+	height: 100%;
+	transform: translateX(-100%);
+	transition: .25s cubic-bezier(0.4, 0.0, 0.2, 1);
+	opacity: 0;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.certification__button-bg_right {
+	transform: translateX(100%);
+}
+/*.certification__framed-certificate:hover .certification__button-bg{
+	opacity: 0.5;
+	transform: translateX(0%);
+}
+.certification__button-bg:hover .certification__button-icon {
+	opacity: 0.8;
+}*/
+.header {
+	width: 100%;
+	position: absolute;
+	display: flex;
+}
+.header__text {
+	margin: 0 auto;
+	line-height: 0.69;
+	white-space: pre;
+	color: #888;
+	transition: opacity .1s cubic-bezier(0.4, 0.0, 0.2, 1), transform .2s cubic-bezier(0.4, 0.0, 0.2, 1);
+	transform: translateY(-100%);
+}
+.header__text_certification {
+	font-size: 11.8vw;
+	
+}

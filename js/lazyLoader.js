@@ -129,13 +129,13 @@ class LazyLoader {
 		this.fullscreenBgVideo = document.querySelectorAll('.parallax__bg-fullscreen-video');
 		this.addVideoSource(this.fullscreenBgVideo, this.sourcesBGVideo);
 
-		this.sourcesRainVideo = [
+		/*this.sourcesRainVideo = [
 														  { src: 'https://www.w3schools.com/howto/rain.mp4',
 														    type: 'video/mp4'
 														  }
 														];
 		this.rainVideo = document.querySelector('#rainVideo');
-		this.addVideoSource(this.rainVideo, this.sourcesRainVideo);
+		this.addVideoSource(this.rainVideo, this.sourcesRainVideo);*/
 	}
 	addVideoSource (video, sources) {
 		if (video.length) {

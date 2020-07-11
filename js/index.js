@@ -10,6 +10,9 @@ import { FullscreenSlider as FullscreenSliderModule } from "./fullscreenSlider.j
 import { Menu as MenuModule } from "./menu.js";
 import { ParallaxScroll as ParallaxScrollModule } from "./parallaxScroll.js";
 import { Cube3d as Cube3dModule } from "./cube3d.js";
+import { Certification as CertificationModule } from "./certification.js";
+import { Portfolio as PortfolioModule } from "./portfolio.js";
+import { Form as FormModule } from "./form.js";
 
 const State = new StateModule();
 State.init();
@@ -20,7 +23,10 @@ let Kraken = new ReleaseTheKraken(),
     FullscreenSlider = new FullscreenSliderModule(State),
     Menu = new MenuModule(State),
     ParallaxScroll = new ParallaxScrollModule(State, ClientDevice),
-    Cube3d = new Cube3dModule(State, ClientDevice);
+    Cube3d = new Cube3dModule(State, ClientDevice),
+    Certification = new CertificationModule(State, ClientDevice),
+    Portfolio = new PortfolioModule(State),
+    Form = new FormModule(State);
   
 
 
@@ -50,6 +56,9 @@ const WindowLoaded = function () {
   Menu.init();
   ParallaxScroll.init();
   Cube3d.init();
+  Certification.init();
+  Portfolio.init();
+  Form.init();
 };
 
 

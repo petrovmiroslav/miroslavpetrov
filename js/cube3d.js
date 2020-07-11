@@ -249,20 +249,20 @@ class Cube3d {
 
   addCube3dMoveAndUpListeners () {
     if (this.state.deviceIsTouchscreen) {
-      	document.addEventListener('touchmove', this.cube3dOnTouchMoveBind);
-      	document.addEventListener('touchend', this.cube3dOnTouchEndBind);
+      	document.addEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
+      	document.addEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
     } else {
-  			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind);
-  			document.addEventListener('mouseup', this.cube3dOnMouseUpBind);
+  			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+  			document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
     }
   }
   removeCube3dMoveAndUpListeners () {
     if (this.state.deviceIsTouchscreen) {
-      document.removeEventListener('touchmove', this.cube3dOnTouchMoveBind);
-      document.removeEventListener('touchend', this.cube3dOnTouchEndBind);
+      document.removeEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
+      document.removeEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
     } else {
-      document.removeEventListener('mousemove', this.cube3dOnMouseMoveBind);
-    	document.removeEventListener('mouseup', this.cube3dOnMouseUpBind);
+      document.removeEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+    	document.removeEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
     }
   }
   
@@ -314,16 +314,15 @@ class Cube3d {
     }
   }
   cube3dOnMouseUp (e) {console.log('cube3dOnMouseUp');
-  	console.log("UP");
-
   	if (this.md) {
+      console.log("UP");
       //e.preventDefault();
       this.md = false;
+      this.cube3dRotateYValue = 0;
+      this.waitCube3dStopRotation();
     }
 
     //this.cube3dPauseTimeout = window.setTimeout(this.waitCube3dStopRotationBind, 2000);
-    this.cube3dRotateYValue = 0;
-    this.waitCube3dStopRotation();
   }
   clearClickPositionHistory (event) {
   	if (event) {
@@ -355,6 +354,7 @@ class Cube3d {
   }
 
   cube3dStart () {
+    this.resize();
   	this.cube3d.classList.remove('opacity0');
   }
 

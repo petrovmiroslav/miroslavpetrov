@@ -1,0 +1,142 @@
+.portfolio__projectView {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	background-image: url('https://petrovmiroslav.github.io/static/DD_Wood_Plank_Background.svg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+.portfolio__deviceSlider {
+	width: 200%;
+	height: 90vh;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+	/*transform: translate3d(0,0,0);
+	will-change: transform;*/
+}
+.portfolio__deviceSlider_iphoneChecked {
+	/*transform: translate3d(-50%, 0, 0);*/
+	transform: translateX(-50%);
+}
+.portfolio__deviceContainer {
+	width: 50%;
+	display: flex;
+	justify-content: center;
+}
+.portfolio__device {
+	max-width: 90%;
+	max-height: 90vh;
+	height: 90vh;
+	transition: .2s cubic-bezier(0.4, 0.0, 0.2, 1);
+	opacity: 0;
+}
+.portfolio__device_checked {
+	opacity: 1;
+}
+.portfolio__device_iphone {
+	max-height: 80vh;
+}
+.portfolio__deviceSwitch {
+	height: 10vh;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+.portfolio__switchButton {
+	width: 50%;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid black;
+}
+.portfolio__switchButton_left {
+	border-right: 1px solid black;
+}
+.portfolio__switchButton_right {
+	border-left: 1px solid black;
+}
+.portfolio__switchButtonIcon {
+	display: block;
+	max-width: 80%;
+	max-height: 80%;
+	height: 8vh;
+}
+.portfolio__iconsMakerAttribute{
+	display: none;
+}
+.portfolio__switchButtonBG {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0, 0, 0, 0.8);
+	opacity: .5;
+	cursor: pointer;
+}
+.portfolio__switchButtonBG_checked {
+	opacity: 1;
+	cursor: default;
+}
+.portfolio__switchButtonBG:hover {
+	opacity: .3;
+}
+.portfolio__switchButtonBG_checked:hover {
+	opacity: 1;
+}
+.portfolio__Iframe {
+	position: absolute;
+	border: none;
+	transform: scale(.5);
+	transform-origin: 0% 0%;
+	transition: opacity 0.2s;
+}
+.portfolio__projectGrid {
+	display: grid;
+	/* grid-auto-columns: minmax(200px, 30vh); */
+	grid-auto-rows: minmax(200px, 30vh);
+	grid-gap: 10px;
+	/* grid-auto-flow: dense; */
+	max-width: 80%;
+	margin: auto;
+	/* width: 80%; */
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.portfolio__project {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	overflow: hidden;
+	background-position: center center;
+	background-size: cover;
+	text-decoration: none;
+	color: white;
+	border-radius: 1vmin;
+	background-image: url('https://html5book.ru/wp-content/uploads/2019/03/post-img-3.jpg)');
+}
+.portfolio__projectDescriptionContainer {
+	width: 100%;
+	padding: 5%;
+	display: flex;
+	align-items: flex-end;
+	background: rgba(0,0,0,.5);
+	opacity: 0;
+}
+.portfolio__projectDescriptionContainer:hover {
+	opacity: 1;
+}
+.portfolio__projectDescriptionContainer_projectChecked {
+	opacity: 1;
+	cursor: default;
+}
+.portfolio__projectDescription {
+	margin: 0;
+}
+.header__text_portfolio {
+	font-size: 13.8vw;
+}

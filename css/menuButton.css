@@ -33,6 +33,7 @@
 	height: 100%;
 	display: flex;
 	justify-content: space-between;
+	transform: translateX(0%) translateZ(0px);
 }
 .menuButton__fragment {
 	width: 38%;
@@ -55,7 +56,7 @@
 .menuButton__lines-wrapper:hover .menuButton__fragments-wrapper {
   transition: transform 0.5s;
   transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
-  transform: translateX(-62%);
+  transform: translateX(-62%) translateZ(0px);
 }
 .menuButton__lines-wrapper:hover .menuButton__fragments-wrapper_top {
 	transition-delay: 0.1s;

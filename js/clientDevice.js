@@ -7,6 +7,7 @@ export { ClientDevice };
 class ClientDevice {
 	constructor (State) {
 		this.state = State;
+		this.state.clientDevice = this;
 
 		this.windowResizeHandlerTimeout = null;
 		this.windowResizeHandlersQueue = {};

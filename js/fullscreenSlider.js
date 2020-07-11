@@ -127,14 +127,14 @@ class FullscreenSlider {
 
   addWheelListener () {
     if (window.addEventListener) {
-    	window.addEventListener("wheel", this.mouseWheelBind, false);
+    	window.addEventListener("wheel", this.mouseWheelBind, this.state.passiveListener);
     } else {
     	window.onmousewheel = document.onmousewheel = this.mouseWheelBind;
     }
   }
   removeWheelListener () {
     if (window.addEventListener) {
-    	window.removeEventListener("wheel", this.mouseWheelBind, false);
+    	window.removeEventListener("wheel", this.mouseWheelBind, this.state.passiveListener);
     } else {
     	window.onmousewheel = document.onmousewheel = null;
     }
@@ -326,6 +326,8 @@ class FullscreenSlider {
   	this.sliderContainer.classList.add('hidden');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
+    this.state.certificatesResize();
+    this.state.portfolioResize();
     
     if (this.state.drawCube3dDone) {
       this.state.cube3dStart();
@@ -432,7 +434,7 @@ class FullscreenSlider {
     this.menuButton.classList.remove('hidden');
     this.state.hiBgImageTransformON();
     this.addFullscreenSliderListeners();
-    this.state.angleGradientBGON();
+    this.state.angleGradientBGOFF();
 
     this.cleanSlider();
   }

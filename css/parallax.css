@@ -23,6 +23,9 @@
   -webkit-overflow-scrolling: auto;
   touch-action: pan-y; 
 }
+.parallax__scrollable-container_smoothScroll {
+  scroll-behavior: smooth;
+}
 
 .parallax__scrollable-container_desktop-view {
   -webkit-perspective: 300;
@@ -175,14 +178,14 @@
   }
 
   #group4 {
-    z-index: 2; /* slide under group 3 and 5 */
+    z-index: 4; /* slide under group 3 and 5 */
   }
   #group4 .parallax__layer--deep {
     background: rgb(184,223,101);
   }
 
   #group5 {
-    z-index: 3; /* slide over group 4 and 6 */
+    z-index: 5; /* slide over group 4 and 6 */
   }
   #group5 .parallax__layer--base {
     background: rgb(214,229,100);
@@ -199,7 +202,7 @@
     z-index: 3; /* slide over group 7 */
   }
   #group7 .parallax__layer--base {
-    background: rgb(255,241,100);
+    background: rgb(0,0,0);
   }
 
 video { 
@@ -216,7 +219,7 @@ video {
 .stopfade { 
    opacity: .5;
 }
-button { 
+.bgvidButton { 
   display: block;
   width: 80%;
   padding: .4rem;
@@ -230,7 +233,7 @@ button {
   transition: .3s background;
   display: none;
 }
-#polina button:hover { 
+.bgvidButton:hover { 
    background: rgba(0,0,0,0.5);
 }
 @media screen and (max-width: 500px) { 

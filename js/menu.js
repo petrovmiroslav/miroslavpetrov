@@ -7,6 +7,7 @@ export { Menu };
 class Menu {
 	constructor (State) {
 		this.state = State;
+		this.state.clientDevice.windowResizeHandlersQueue.resizeMenu = this.resize.bind(this);
 
 		this.menuButton = null;
 		this.menuButtonCheckbox = null;
@@ -145,6 +146,7 @@ class Menu {
 		this.doItIn2ndRender(this.makeContentSlideHidden);
 
 		this.startWaitMenuButtonAnimationDone();
+		this.recParallaxScrollValue();
 	}
 
 	validateMenuButtonCheckbox () {
@@ -237,8 +239,13 @@ class Menu {
 	drawFlipper () {
     this.contentClone = this.content.cloneNode(true);
     if (!this.state.slide1IsActive) {
+    	this.removeSmoothScroll();
+    	//this.contentClone.querySelector('.portfolio__Iframe').remove();
+    	this.contentClone.querySelector('.portfolio__deviceSlider').remove();
+    	
     	this.deleteVideoSoucesInContentClone();
     	this.deleteCube3dInContentClone();
+    	this.changeCertsScrollBehavior();
     }
 
     this.menuClone = this.menu.cloneNode(true);
@@ -309,11 +316,17 @@ class Menu {
     if (!this.state.slide1IsActive) {
     	this.scrollFlipperBeforeRotate(); ///311ms
     }
+
+    
     this.flipper.classList.remove('opacity0');
     ////
     this.drawFlipperDone = true;
     this.contentClone = null;
 
+	}
+
+	removeSmoothScroll () {
+		this.contentClone.querySelector('.parallax__scrollable-container').classList.remove('parallax__scrollable-container_smoothScroll');
 	}
 	deleteVideoSoucesInContentClone () {
 		let allContentCloneVideo = this.contentClone.querySelectorAll('video');
@@ -341,19 +354,34 @@ class Menu {
 		let contentCloneCube3d = this.contentClone.querySelector('.cube3d');
 		contentCloneCube3d.innerHTML = '';
 	}
+	changeCertsScrollBehavior () {
+		this.contentClone.querySelector('.certification__certificates').style['scroll-behavior'] = 'unset';
+	}
 	scrollFlipperBeforeRotate () {
 		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
-		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container'),
-				parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
+		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container')/*,
+				parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop*/;
 
-    allParallaxInFlipper.forEach((el)=>{
-      el.scrollTop = parallaxScrollValue;
+    /*allParallaxInFlipper.forEach((el)=>{
+      el.scrollTop = this.parallaxScrollValue;
       el = null;
-    });
+    });*/
+    for (let i = 0; i < allParallaxInFlipper.length; i++) {
+    	allParallaxInFlipper[i].scrollTop = this.parallaxScrollValue;
+    }
+
+    let allcertsInFlipper = this.flipper.querySelectorAll('.certification__certificates');
+    for (let i = 0; i < allcertsInFlipper.length; i++) {
+    	this.state.displayCurrentCertInFlipper(allcertsInFlipper[i]);
+    }
+	}
+
+	recParallaxScrollValue () {
+		this.parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
 	}
 
 	startWaitMenuButtonAnimationDone () {
-		this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
+		/*this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);*/
   	window.setTimeout(this.waitMenuButtonAnimationDone.bind(this), this.menuButtonAnimationDuration);
 	}
 	waitMenuButtonAnimationDone () {
@@ -402,7 +430,8 @@ class Menu {
 		this.flipper.classList.remove('opacity0');//285ms*/
 
 		this.content.classList.add('hidden');///343ms
-		//this.slide2.classList.add('hidden');///343ms
+		//this.content.classList.add('opacity0');
+
 	}
 	startFlipperRotate () {
 		//this.TIMER.push('flipper2Render', Date.now(), '\n');
@@ -475,6 +504,7 @@ class Menu {
 	afterFlipperRotateBack () {
 		//this.slide2.classList.remove('hidden');
 		this.content.classList.remove('hidden');
+		//this.content.classList.remove('opacity0');
 		
 		this.doItIn1stRender(this.afterFlipperRotateBack2Render);
 		//this.rAF(this.afterFlipperRotateBack2Render);
@@ -499,6 +529,8 @@ class Menu {
 			this.state.cube3dStart();
 			this.state.angleGradientBGON();
 			this.playAndClearBGVideo();
+			this.state.certificatesResize();
+			this.state.portfolioResize();
 /*			if (this.state.deviceIsTouchscreen) {
 				this.bgVideoMobile.play();
 				this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
@@ -525,5 +557,9 @@ class Menu {
       
       fullscreenSlider__side = null;
     }*/
+  }
+
+  resize () {
+  	this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
   }
 }

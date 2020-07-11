@@ -57,10 +57,10 @@ class ParallaxScroll {
 	}
 
 	addParallaxScrollListener () {
-		this.parallax.addEventListener('scroll', this.parallaxScrollHandlerBind);
+		this.parallax.addEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
 	}
 	removeParallaxScrollListener () {
-		this.parallax.removeEventListener('scroll', this.parallaxScrollHandlerBind);
+		this.parallax.removeEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
 	}
 
 
@@ -140,4 +140,7 @@ class ParallaxScroll {
 			});
 		}
 	}
+
+	
+	
 }
