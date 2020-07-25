@@ -1,13 +1,13 @@
-#form {
+form {
 	text-align: center;
 	background: #8a0134;
 }
-#form * {
+form * {
 	width: 50%;
 	font-size: 5vmin;
 	margin: auto;
 }
-#form textarea {
+form textarea {
   resize: none;
 }
 #fileLabel {

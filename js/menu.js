@@ -31,6 +31,8 @@ class Menu {
 		this.flipperRotationAnimationDuration = 500;
 
 		this.checkReadyToInitInterval = null;
+		this.parallaxScrollStop = false;
+		this.scrollFlipperBeforeRotateDone = false;
 		this.drawFlipperDone = false;
 
 		this.menuButtonClickHandlerBind = this.menuButtonClickHandler.bind(this);
@@ -43,6 +45,7 @@ class Menu {
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
 		this.flipper = document.querySelector('.fullscreenFlipper');
+		this.parallaxContainer = this.slide2.querySelector('.parallax__scrollable-container');
 		this.cube3dLoadingIcon = this.slide2.querySelector('.cube3d__loadingIconContainer');
 		this.bgVideoMobile = this.slide2.querySelector('.parallax__bg-fullscreen-video_mobile-view');
 		this.bgVideoDesktop = this.slide2.querySelector('.parallax__bg-fullscreen-video_desktop-view');
@@ -120,8 +123,8 @@ class Menu {
 		//this.TIMER.push('openMenu', Date.now(), '\n');
 		this.state.menuIsOpen = true;
 
-		this.disableMenuButton();
-		this.bodyDisableHover();
+		window.requestAnimationFrame(this.disableMenuButton.bind(this));
+		window.requestAnimationFrame(this.bodyDisableHover.bind(this));
 
 		//this.rAF(this.validateMenuButtonCheckbox);
 		this.doItIn1stRender(this.validateMenuButtonCheckbox);
@@ -143,10 +146,14 @@ class Menu {
 
 		this.doItIn1stRender(this.drawFlipper);
 
-		this.doItIn2ndRender(this.makeContentSlideHidden);
+		if (this.state.slide1IsActive) {
+			this.parallaxScrollStop = true;
+			this.scrollFlipperBeforeRotateDone = true;
+			this.doItIn2ndRender(this.makeContentSlideHidden);
+		}
 
-		this.startWaitMenuButtonAnimationDone();
-		this.recParallaxScrollValue();
+		window.requestAnimationFrame(this.startWaitParallaxScrollStop.bind(this));
+		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDone.bind(this));
 	}
 
 	validateMenuButtonCheckbox () {
@@ -179,24 +186,6 @@ class Menu {
 		this.state.fullscreenSliderOFF();
 
 		
-	}
-
-	openMenuIfSlide2IsActive () {
-	//this.TIMER.push('openMenuIfSlide2IsActive', Date.now(), '\n');
-
-		this.prepareForOpenMenuIfSlide2IsActive();
-
-		this.doItIn1stRender(this.drawFlipper);
-		//this.rAF(this.drawFlipper);
-		
-  	this.doItIn2ndRender(this.makeContentSlideHidden);
-/*  	window.requestAnimationFrame(()=>{
-        return this.rAF(this.makeContentSlideHidden);
-      });*/
-  	
-  	this.startWaitMenuButtonAnimationDone();
-/*  	this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-  	window.setTimeout(this.waitMenuButtonAnimationDone.bind(this), this.menuButtonAnimationDuration);*/
 	}
 
 	prepareForOpenMenuIfSlide2IsActive () {
@@ -314,16 +303,36 @@ class Menu {
     ///
 
     this.flipper.classList.remove('hidden');
+    
     if (!this.state.slide1IsActive) {
-    	this.scrollFlipperBeforeRotate(); ///311ms
+    	this.ifScrollStopScrollFlipper();
+    } else {
+    	this.flipper.classList.remove('opacity0');
     }
 
     
-    this.flipper.classList.remove('opacity0');
+    
     ////
     this.drawFlipperDone = true;
     this.contentClone = null;
 
+	}
+	ifScrollStopScrollFlipper () {
+		if (this.parallaxScrollStop) {
+  		this.scrollFlipperBeforeRotate(); ///311ms
+  		this.flipperRemoveOpacity0();
+  		//this.rAF(this.flipperRemoveOpacity0);
+  		//window.requestAnimationFrame(()=>{this.flipper.classList.remove('opacity0');});
+  		//window.requestAnimationFrame(this.makeContentSlideHidden.bind(this));
+  		this.doItIn2ndRender(this.makeContentSlideHidden);
+  	} else {
+  		window.requestAnimationFrame(this.ifScrollStopScrollFlipper.bind(this));
+  	}
+	}
+
+	flipperRemoveOpacity0 () {
+		console.log('OPACITY',this.flipper.classList.contains('opacity0'));
+		this.flipper.classList.remove('opacity0');
 	}
 
 	removeSmoothScroll () {
@@ -361,12 +370,16 @@ class Menu {
 	setFormValue () {
 		let form = document.form,
     		formClone = this.contentClone.querySelector('form');
-    		
+
+    formClone.removeAttribute('id');
+    formClone.file.removeAttribute('id');
+
   	formClone.personName.setAttribute("value", form.personName.value);
   	formClone.phoneNumber.setAttribute("value", form.phoneNumber.value);
   	formClone.email.setAttribute("value", form.email.value);
   	formClone.info.textContent = form.info.value;
 	}
+
 	scrollFlipperBeforeRotate () {
 		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
 		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container')/*,
@@ -384,11 +397,38 @@ class Menu {
     for (let i = 0; i < allcertsInFlipper.length; i++) {
     	this.state.displayCurrentCertInFlipper(allcertsInFlipper[i]);
     }
+
+    this.rAF(this.setScrollFlipperBeforeRotateDone.bind(this));
+	}
+	setScrollFlipperBeforeRotateDone () {
+		/*let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container');
+		for (var i = 0; i < allParallaxInFlipper.length; i++) {
+			void(allParallaxInFlipper[i].scrollTop);
+			console.log(allParallaxInFlipper[i].scrollTop);
+		}*/
+		this.scrollFlipperBeforeRotateDone = true;
+		console.log(this.parallaxScrollValue);
 	}
 
 	recParallaxScrollValue () {
 		this.parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
+
 	}
+	startWaitParallaxScrollStop () {
+		this.parallaxScrollValue = this.parallaxContainer.scrollTop;
+		window.setTimeout(this.waitParallaxScrollStop.bind(this), this.menuButtonAnimationDuration);
+	}
+	waitParallaxScrollStop () {
+		let newParallaxScrollValue = this.parallaxContainer.scrollTop;
+		if (newParallaxScrollValue === this.parallaxScrollValue) {
+			this.parallaxScrollStop = true;
+			console.log("SCROLLSTOP");
+		} else {
+			this.parallaxScrollValue = newParallaxScrollValue;
+			this.doItIn1stRender(this.waitParallaxScrollStop);
+		}
+	}
+
 
 	startWaitMenuButtonAnimationDone () {
 		/*this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);*/
@@ -396,20 +436,24 @@ class Menu {
 	}
 	waitMenuButtonAnimationDone () {
 		//this.TIMER.push('menuButtonAnimationDoneCheck', Date.now(), '\n');
-		let newMenuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-//console.log(this.menuButtonLeftPosition,'---', newMenuButtonLeftPosition, this.menuButtonLeftPosition === newMenuButtonLeftPosition);
-		if (this.menuButtonLeftPosition === newMenuButtonLeftPosition && this.drawFlipperDone) {
-			if (this.state.menuIsOpen) {
-				//this.rAF(this.startFlipperRotate);
-				this.doItIn1stRender(this.startFlipperRotate);
+		if (this.parallaxScrollStop && this.scrollFlipperBeforeRotateDone) {
+			let newMenuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
+	//console.log(this.menuButtonLeftPosition,'---', newMenuButtonLeftPosition, this.menuButtonLeftPosition === newMenuButtonLeftPosition);
+			if (this.menuButtonLeftPosition === newMenuButtonLeftPosition && this.drawFlipperDone) {
+				if (this.state.menuIsOpen) {
+					//this.rAF(this.startFlipperRotate);
+					this.doItIn1stRender(this.startFlipperRotate);
+				} else {
+					//this.rAF(this.flipperRotateBack);
+					this.doItIn1stRender(this.flipperRotateBack);
+				}
 			} else {
-				//this.rAF(this.flipperRotateBack);
-				this.doItIn1stRender(this.flipperRotateBack);
+				this.menuButtonLeftPosition = newMenuButtonLeftPosition;
+				//this.rAF(this.waitMenuButtonAnimationDone);
+				this.doItIn1stRender(this.waitMenuButtonAnimationDone);
 			}
 		} else {
-			this.menuButtonLeftPosition = newMenuButtonLeftPosition;
-			//this.rAF(this.waitMenuButtonAnimationDone);
-			this.doItIn1stRender(this.waitMenuButtonAnimationDone);
+			window.requestAnimationFrame(this.waitMenuButtonAnimationDone.bind(this));
 		}
 	}
 	
@@ -555,7 +599,10 @@ class Menu {
 
 	cleanFlipper () {
 		this.drawFlipperDone = false;
+		this.parallaxScrollStop = false;
+		this.scrollFlipperBeforeRotateDone = false;
 		this.flipper.innerHTML = '';
+		this.flipper.classList.add('opacity0');
 
     /*let childrens = this.sliderContainer.children;
 
