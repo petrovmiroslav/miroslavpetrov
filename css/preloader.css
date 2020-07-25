@@ -89,7 +89,7 @@
 .preloader-side {
   width: 100%;
   position: absolute;
-  z-index: 999;
+  z-index: 99;
   background: #002126;
   transition: .5s cubic-bezier(0.4, 0.0, 1, 1);
   pointer-events: none;

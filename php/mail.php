@@ -8,34 +8,58 @@
 	require 'PHPMailer/src/PHPMailer.php';
 	require 'PHPMailer/src/SMTP.php';
 
-	require_once $_SERVER['DOCUMENT_ROOT']."\\cnf\\cnf.php";
+	// require_once $_SERVER['DOCUMENT_ROOT']."\\cnf\\cnf.php";
+	require_once $_SERVER['DOCUMENT_ROOT']."/cnf/cnf.php";
+	//ИСПРАВИТЬ
 
 	$formData = [
-		'error' => []
+		'error' => [],
+		'send' => false
 	];
+
+	$checkList = [
+		'ok' => true,
+		'nameIsCorrect' => false,
+		'phoneNumberIsCorrect' => false,
+		'emailIsCorrect' => false,
+		'infoIsCorrect' => false,
+		'fileIsCorrect' => false
+	];
+	
 
 	if (isset($_POST['submit']) || isset($_POST['hidden'])) {
 		if (isset($_POST['personName'])) {
-			personNameHandler($formData);
+			personNameHandler($formData, $checkList);
 		}
 		if (isset($_POST['phoneNumber'])) {
-			phoneNumberHandler($formData);
+			phoneNumberHandler($formData, $checkList);
 		}
 		if (isset($_POST['email'])) {
-			emailHandler($formData);
+			emailHandler($formData, $checkList);
 		}
 		if (isset($_POST['info'])) {
-			infoHandler($formData);
+			infoHandler($formData, $checkList);
 		}
 		if (isset($_FILES['file'])) {
-			fileHandler($formData);
+			fileHandler($formData, $checkList);
 		}
+		/*убрать это*/
 		$formData['POST'] = $_POST;
 		$formData['FILES'] = $_FILES;
 		$formData['SCRIPT'] = $_SERVER;
 		$formData['PSWRD'] = $gml;
+		/*убрать это*/
 		
-		sendEmail($formData, $gml);
+		foreach ($checkList as &$ck) {
+			if ($ck == false) {
+				$checkList['ok'] = false;
+				break;
+			}
+		}
+
+		if ($checkList['ok']) {
+			sendEmail($formData, $gml);
+		}
 		
 		sendJSON($formData);
 	} else { 
@@ -46,22 +70,26 @@
 		echo json_encode($formData, JSON_UNESCAPED_UNICODE);
 	}
 
-	function personNameHandler (&$formData) {
+	function personNameHandler (&$formData, &$checkList) {
 		$formData['personName'] = trim(filter_input(INPUT_POST, 'personName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 
-		if(mb_strlen($formData['personName']) == 0) {
+		$personNameLength = mb_strlen($formData['personName']);
+		if($personNameLength == 0) {
 			array_push($formData['error'], 'nameIsNull');
 		} else {
-			if(mb_strlen($formData['personName']) <= 2) {
+			if($personNameLength < 2) {
 				array_push($formData['error'], 'nameIsTooShort');
-			}
-			if(mb_strlen($formData['personName']) >= 500) {
-				array_push($formData['error'], 'nameIsTooLong');
+			} else {
+				if($personNameLength >= 100) {
+					array_push($formData['error'], 'nameIsTooLong');
+				} else {
+					$checkList['nameIsCorrect'] = true;
+				}
 			}
 		}
 	}
 
-	function phoneNumberHandler (&$formData) {
+	function phoneNumberHandler (&$formData, &$checkList) {
 		$formData['phoneNumber'] = filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$phoneNumberArr = preg_split('//', $formData['phoneNumber'], -1, PREG_SPLIT_NO_EMPTY);
 		$phoneNumberArr = array_filter($phoneNumberArr, function($k) {
@@ -73,49 +101,59 @@
 						['options' => ['regexp' => "/^\d{11,20}$/"]
 						]
 						)) {
-
-				if(mb_strlen($formData['phoneNumber']) < 11) {
+			$phoneNumberLenght = mb_strlen($formData['phoneNumber']);
+			if($phoneNumberLenght > 0) {
+				if($phoneNumberLenght < 11) {
 					array_push($formData['error'], 'phoneNumberIsTooShort');
 				} else {
-					if(mb_strlen($formData['phoneNumber']) > 20) {
+					if($phoneNumberLenght > 20) {
 						array_push($formData['error'], 'phoneNumberIsTooLong');
 					} else {
 						array_push($formData['error'], 'Incorrect phoneNumber');
 					}
 				}
-
+			} else {
+				$checkList['phoneNumberIsCorrect'] = true;
+			}
 		} else {
-
+			$checkList['phoneNumberIsCorrect'] = true;
 		}
 	}
 
-	function emailHandler (&$formData) {
+	function emailHandler (&$formData, &$checkList) {
 		$formData['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		if (!filter_var(trim($formData['email']), FILTER_VALIDATE_EMAIL)) {
 			array_push($formData['error'], 'Incorrect email');
-
 		} else {
 			$formData['email'] = trim($formData['email']);
+			$checkList['emailIsCorrect'] = true;
 		}
 	}
 
-	function infoHandler (&$formData) {
+	function infoHandler (&$formData, &$checkList) {
 		$formData['info'] = trim(filter_input(INPUT_POST, 'info', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 
-		if(mb_strlen($formData['info']) == 0) {
+		$infoLength = mb_strlen($formData['info']);
+
+		$checkList['infoIsCorrect'] = true;
+
+		if($infoLength == 0) {
 			array_push($formData['error'], 'infoIsNull');
 		} else {
-			if(mb_strlen($formData['info']) <= 2) {
+			if($infoLength <= 2) {
 				array_push($formData['error'], 'infoIsTooShort');
-			}
-			if(mb_strlen($formData['info']) >= 2000) {
-				array_push($formData['error'], 'infoIsTooLong');
+			} else {
+				if($infoLength >= 2000) {
+					array_push($formData['error'], 'infoIsTooLong');
+					$checkList['infoIsCorrect'] = false;
+				} else {
+				}
 			}
 		}
 	}
 
-	function fileHandler (&$formData) {
+	function fileHandler (&$formData, &$checkList) {
 		$data = $_FILES['file'];
 		$tmp = $data['tmp_name'];
 		if (is_uploaded_file($tmp)) {
@@ -128,6 +166,7 @@
 				} else {
 					$formData['fileName'] = $data['name'];
 					$formData['filePath'] = $tmp;
+					$checkList['fileIsCorrect'] = true;
 				}
 			}
 		} else {
@@ -135,6 +174,7 @@
 				array_push($formData['error'], 'fileIsTooBig');
 			} else {
 				array_push($formData['error'], 'fileIsNotUploads');
+				$checkList['fileIsCorrect'] = true;
 			}
 		}
 	}
@@ -167,10 +207,11 @@
 		} else {
 			$mailData['info'] = false;
 		}
-		if ($formData['filePath']) {
+		if (isset($formData['filePath'])) {
 
-			$file = "C:\\Users\\mir19\\AppData\\Local\\Temp\\uploadFiles\\".$formData['fileName'];
-				/*ОТНОСИТЕЛЬНЫЙ ПУТЬ В ПАПКУ СКРИПТА $file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];*/
+			/*$file = "C:\\Users\\mir19\\AppData\\Local\\Temp\\uploadFiles\\".$formData['fileName'];*/
+			/*ОТНОСИТЕЛЬНЫЙ ПУТЬ В ПАПКУ СКРИПТА */
+			$file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];
 
 			if (move_uploaded_file($formData['filePath'], $file)) {
 				$mailData['file'] = $file;
@@ -188,7 +229,7 @@
 		// SMTP::DEBUG_OFF = off (for production use)
 		// SMTP::DEBUG_CLIENT = client messages
 		// SMTP::DEBUG_SERVER = client and server messages
-		$mail->SMTPDebug = SMTP::DEBUG_OFF;
+		$mail->SMTPDebug = SMTP::DEBUG_SERVER;
 		$mail->Host = 'smtp.gmail.com';
 		$mail->Port = 587;
 		//Set the encryption mechanism to use - STARTTLS or SMTPS
@@ -209,21 +250,34 @@
 		$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'\img\IMG_9951.JPG', 'my-photo');
 		$mail->addAttachment($mailData['file']);
 
-		function tryToSendMail(&$mail) {
-			try {
-		        $mail->send();
-		        //echo 'Message sent!';
-		        
-		    } catch (Exception $e) {
-		    	//echo 'Mailer Error: '. $mail->ErrorInfo;
-		    	array_push($formData['error'], 'mailIsNotSend');
-		        $mail->getSMTPInstance()->reset();
-		    }
+		try {
+			
+		} catch (Exception $e) {
+			
 		}
-		tryToSendMail($mail);
+
+		function tryToSendMail(&$mail, &$formData) {
+			try {
+				if ($mail->send()) {
+					$formData['send'] = true;
+				} else {
+					array_push($formData['error'], 'Mailer Error: '. $mail->ErrorInfo);
+					$formData['send'] = false;
+				}
+        /*$mail->send();
+        $formData['send'] = true;*/
+	    } catch (Exception $e) {
+	    	//echo 'Mailer Error: '. $mail->ErrorInfo;
+	    	array_push($formData['error'], 'mailIsNotSend');
+	    	array_push($formData['error'], 'Mailer Error: '. $mail->ErrorInfo);
+	    	$formData['send'] = false;
+	      $mail->getSMTPInstance()->reset();
+	    }
+		}
+		tryToSendMail($mail, $formData);
 		$mail->clearAddresses();
-    	$mail->addAddress($mail->Username, $mailData['personName']);
-    	tryToSendMail($mail);
+  	$mail->addAddress($mail->Username, $mailData['personName']);
+  	tryToSendMail($mail, $formData);
 
 		
 		/*if (!$mail->send()) {

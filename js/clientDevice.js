@@ -81,14 +81,21 @@ class ClientDevice {
 		this.windowResizeHandlerTimeout = window.setTimeout(this.windowResizeHandlerFunc.bind(this), 100);
 	}
 	windowResizeHandlerFunc () {
-		this.state.windowWidth = document.documentElement.clientWidth;//window.innerWidth;
-  	this.state.windowHeight = document.documentElement.clientHeight;//window.innerHeight;
+		window.requestAnimationFrame(this.windowResize.bind(this));
+	}
+	windowResize () {
+		try {
+			this.state.windowWidth = document.documentElement.clientWidth;//window.innerWidth;
+	  	this.state.windowHeight = document.documentElement.clientHeight;//window.innerHeight;
 
-  	for (let func in this.windowResizeHandlersQueue) {
-  		if (typeof this.windowResizeHandlersQueue[func] === 'function') {
-  			this.windowResizeHandlersQueue[func]();
-  		}
-  	}
+	  	for (let func in this.windowResizeHandlersQueue) {
+	  		if (typeof this.windowResizeHandlersQueue[func] === 'function') {
+	  			this.windowResizeHandlersQueue[func]();
+	  		}
+	  	}
+		} catch (e) {
+			this.state.errHandler(e);
+		}
 	}
 
 	addWindowOrientationChangeListener () {

@@ -13,7 +13,7 @@ class Cube3d {
 		this.state.cube3dStop = this.cube3dStop.bind(this);
 
 		this.clientDevice = ClientDevice;
-    this.clientDevice.windowResizeHandlersQueue.resizeCube3d = this.resize.bind(this);
+    this.clientDevice.windowResizeHandlersQueue.resizeCube3d = this.resizeRAF.bind(this);
 
 		this.cube3d = null;
 		this.cube3dScene = null;
@@ -267,7 +267,7 @@ class Cube3d {
   }
   
 	cube3dOnTouchStart (e) { console.log('cube3dOnTouchStart');
-		e.preventDefault();
+		/*e.preventDefault();*/
 
   	window.clearTimeout(this.cube3dPauseTimeout);
   	if (this.cube3dPause) {
@@ -282,7 +282,7 @@ class Cube3d {
   	this.md = true;
 	}
 	cube3dOnTouchMove (e) {
-		e.preventDefault(); 
+		/*e.preventDefault(); */
     this.mouseX = e.touches[0].clientX; console.log(event.touches[0].clientX);
 	}
 	cube3dOnTouchEnd (e) {console.log('cube3dOnTouchEnd');
@@ -435,6 +435,10 @@ class Cube3d {
   	for (let i = 0; i < this.cube3dLevels.length; ++i) {
 		  this.cube3dLevels[i].style.transform = 'translateZ(-' + this.translateZValue + 'px) rotateY(' + this.px[i+1] + 'deg)';
 		}
+  }
+
+  resizeRAF () {
+    window.requestAnimationFrame(this.resize.bind(this));
   }
 }
 //Twisty thing - more cross browser - in CSS/JS by dehash.com released under MIT License https://opensource.org/licenses/MIT 

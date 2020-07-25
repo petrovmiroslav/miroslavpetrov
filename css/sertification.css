@@ -2,6 +2,7 @@
 	background: url('../img/image-from-rawpixel-id-67136-jpeg.jpg');
 	padding: 10% 0 15% 10%;
 	min-height: 80vh;
+	transform: translateZ(0);
 }
 .certification__framed-certificate {
 	width: 50%;

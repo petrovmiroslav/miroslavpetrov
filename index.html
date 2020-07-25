@@ -22,9 +22,12 @@
 	<link href="css/sertification.css" type="text/css" rel="stylesheet">
 	<link href="css/portfolio.css" type="text/css" rel="stylesheet">
 	<link href="css/form.css" type="text/css" rel="stylesheet">
+	<link href="css/toasts.css" type="text/css" rel="stylesheet">
 
 </head>
 <body class="page page_bgLikePreloader">
+	<div class="toasts toasts_out">
+	</div>
 	<!--<div id="preloaderWrapper" class="preloader preloader_beforeStart preloader_bgLikePreloader hidden">
 		<div class="preloader__topWrapper opacity0">
 			<div class="preloader__cube preloader__left-cube"></div>
@@ -164,7 +167,7 @@
 				<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_mobile-view hidden" poster="img/polina.jpg" id="bgvid" disablePictureInPicture playsinline autoplay muted loop preload="auto">
 					
 				</video>
-				<div class="parallax__scrollable-container parallax__scrollable-container_smoothScroll">
+				<div id="parallax__scrollable-container" class="parallax__scrollable-container parallax__scrollable-container_smoothScroll">
 			    <div id="group1" class="parallax__group">
 			    	<div class="parallax__layer parallax__layer--base">
 			        <div class="aboutSection">
@@ -825,7 +828,7 @@
 												</g>
 												</svg>
 											</div>
-											<iframe id="portfolioIframe" class="portfolio__Iframe" src="http://miroslavpetrov.ml/ChoroplethMap/">
+											<iframe id="portfolioIframe" class="portfolio__Iframe" src="http://miroslavpetrov.ml/ChoroplethMap/" loading=lazy>
 										    Ваш браузер не поддерживает плавающие фреймы!
 										 </iframe>
 										</figure>
@@ -926,7 +929,8 @@
 			      	<div class="parallax__layer parallax__layer--base">
 			       		<section class="form">
 			       			<form id="form" name="form" action="/php/mail.php" method="POST" enctype="multipart/form-data">
-										<input type="text" name="personName" value="<?= $name?>" required><br />
+										<!--<input type="text" name="personName" value="<?= $name?>" required><br />-->
+										<input type="text" name="personName" value="" required><br />
 										<input type="tel" name="phoneNumber" placeholder="+7 (123) 456-78-90" minlength="18" maxlength="27" value="" aria-label="Мобильный телефон" tabindex="0" inputmode="tel"><br />
 										<!--// изменить на EMAIL и вставить в JS validate; -->
 										<input type="text" name="email" value="<?= $email?>" required><br />

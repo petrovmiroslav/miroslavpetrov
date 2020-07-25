@@ -20,8 +20,8 @@ html > div {
 html{
   width: 100%;
   min-width: 240px;
-	height: 100%;
-  overflow: hidden;
+	height: 100vh;
+  /*overflow: hidden;*/
   overscroll-behavior-y: contain;
   touch-action: pan-y;
 	background-color: #212126;
@@ -32,9 +32,10 @@ html{
 }
 body {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   margin: 0;
   overflow: hidden;
+  position: fixed;
 }
 html {
 	/*scrollbar-width: none;*/

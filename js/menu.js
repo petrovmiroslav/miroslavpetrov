@@ -246,6 +246,7 @@ class Menu {
     	this.deleteVideoSoucesInContentClone();
     	this.deleteCube3dInContentClone();
     	this.changeCertsScrollBehavior();
+    	this.setFormValue();
     }
 
     this.menuClone = this.menu.cloneNode(true);
@@ -356,6 +357,15 @@ class Menu {
 	}
 	changeCertsScrollBehavior () {
 		this.contentClone.querySelector('.certification__certificates').style['scroll-behavior'] = 'unset';
+	}
+	setFormValue () {
+		let form = document.form,
+    		formClone = this.contentClone.querySelector('form');
+    		
+  	formClone.personName.setAttribute("value", form.personName.value);
+  	formClone.phoneNumber.setAttribute("value", form.phoneNumber.value);
+  	formClone.email.setAttribute("value", form.email.value);
+  	formClone.info.textContent = form.info.value;
 	}
 	scrollFlipperBeforeRotate () {
 		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
@@ -560,6 +570,9 @@ class Menu {
   }
 
   resize () {
+  	window.requestAnimationFrame(this.setMenuButtonLeftPosition.bind(this));
+  }
+  setMenuButtonLeftPosition () {
   	this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
   }
 }

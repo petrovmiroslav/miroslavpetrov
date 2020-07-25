@@ -136,8 +136,13 @@ class ParallaxScroll {
 			this.angleContainer.classList.add('hidden');
 			window.requestAnimationFrame(()=>{
 				this.angleContainer.classList.remove('hidden');
+				this.angleContainerWrapperRECT = null;
 				this.setAngleToGradientBG();
 			});
+			/*window.requestAnimationFrame(()=>{
+				this.angleContainerWrapperRECT = null;
+				this.setAngleToGradientBG();
+			});*/
 		}
 	}
 

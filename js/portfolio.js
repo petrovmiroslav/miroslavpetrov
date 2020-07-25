@@ -136,6 +136,10 @@ class Portfolio {
 		}
 	}
 
+	resizeRAF () {
+		window.requestAnimationFrame(this.resize.bind(this));
+	}
+
 	startWaitDeviceSliderAnimationDone () {
 		window.setTimeout(()=>{
 			return window.requestAnimationFrame(this.waitDeviceSliderAnimationDoneBind);
