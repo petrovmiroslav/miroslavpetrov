@@ -211,12 +211,15 @@
 
 			/*$file = "C:\\Users\\mir19\\AppData\\Local\\Temp\\uploadFiles\\".$formData['fileName'];*/
 			/*ОТНОСИТЕЛЬНЫЙ ПУТЬ В ПАПКУ СКРИПТА */
-			$file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];
+			/*$file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];*/
+			$file = $_SERVER['DOCUMENT_ROOT']."/php/uploadFiles/".$formData['fileName'];
 
 			if (move_uploaded_file($formData['filePath'], $file)) {
 				$mailData['file'] = $file;
+				$formData['fileGDEEE'] = $file;
 			} else {
 				$mailData['file'] = false;
+				$formData['fileGDEEE'] = 'VPIZDE'.$file;
 			}
 		} else {
 			$mailData['file'] = false;
@@ -247,14 +250,8 @@
 		$mail->isHTML(true);
 		$mail->Body    = 'This is the HTML message body <b>in bold!</b> <img src="cid:my-photo" alt="my-photo">';
 		$mail->AltBody = 'This is a plain-text message body';
-		$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'\img\IMG_9951.JPG', 'my-photo');
+		/*$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'\img\IMG_9951.JPG', 'my-photo');*/
 		$mail->addAttachment($mailData['file']);
-
-		try {
-			
-		} catch (Exception $e) {
-			
-		}
 
 		function tryToSendMail(&$mail, &$formData) {
 			try {

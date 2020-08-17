@@ -187,6 +187,7 @@ class Form {
 	resetFileInputButtonClick (e) {
 		e.preventDefault();
 		this.filePreview.textContent = '';
+		this.fileInput.value = '';
 		this.disableResetFileInputButton();
 	}
 

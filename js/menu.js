@@ -24,8 +24,8 @@ class Menu {
 		this.angleBGGradientAnimationLayer = null;
 		this.allParallaxInFlipper = null;
 
-		this.menuButtonLeftPosition = null;
-		this.flipperFirstChildPosition = null;
+		this.menuButtonLeftPosition = -999999;
+		this.flipperFirstChildPosition = -999999;
 		this.parallaxScrollValue = null;
 		this.menuButtonAnimationDuration = 250;
 		this.flipperRotationAnimationDuration = 500;
@@ -171,16 +171,6 @@ class Menu {
 		}
 	}
 
-	/*openMenuIfSlide1IsActive () {
-		this.prepareForOpenMenuIfSlide1IsActive();
-
-		this.doItIn1stRender(this.drawFlipper);
-
-		this.doItIn2ndRender(this.makeContentSlideHidden);
-
-		this.startWaitMenuButtonAnimationDone();
-	}*/
-
 	prepareForOpenMenuIfSlide1IsActive () {
 		this.state.hiBgImageTransformOFF();
 		this.state.fullscreenSliderOFF();
@@ -324,7 +314,8 @@ class Menu {
   		//this.rAF(this.flipperRemoveOpacity0);
   		//window.requestAnimationFrame(()=>{this.flipper.classList.remove('opacity0');});
   		//window.requestAnimationFrame(this.makeContentSlideHidden.bind(this));
-  		this.doItIn2ndRender(this.makeContentSlideHidden);
+  		//this.doItIn2ndRender(this.makeContentSlideHidden);
+  		this.makeContentSlideHidden();
   	} else {
   		window.requestAnimationFrame(this.ifScrollStopScrollFlipper.bind(this));
   	}
@@ -398,7 +389,8 @@ class Menu {
     	this.state.displayCurrentCertInFlipper(allcertsInFlipper[i]);
     }
 
-    this.rAF(this.setScrollFlipperBeforeRotateDone.bind(this));
+    //this.rAF(this.setScrollFlipperBeforeRotateDone.bind(this));
+    this.setScrollFlipperBeforeRotateDone();
 	}
 	setScrollFlipperBeforeRotateDone () {
 		/*let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container');
@@ -431,7 +423,7 @@ class Menu {
 
 
 	startWaitMenuButtonAnimationDone () {
-		/*this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);*/
+		// this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
   	window.setTimeout(this.waitMenuButtonAnimationDone.bind(this), this.menuButtonAnimationDuration);
 	}
 	waitMenuButtonAnimationDone () {
@@ -450,7 +442,8 @@ class Menu {
 			} else {
 				this.menuButtonLeftPosition = newMenuButtonLeftPosition;
 				//this.rAF(this.waitMenuButtonAnimationDone);
-				this.doItIn1stRender(this.waitMenuButtonAnimationDone);
+				//this.doItIn1stRender(this.waitMenuButtonAnimationDone);
+				window.requestAnimationFrame(this.waitMenuButtonAnimationDone.bind(this));
 			}
 		} else {
 			window.requestAnimationFrame(this.waitMenuButtonAnimationDone.bind(this));
@@ -458,7 +451,8 @@ class Menu {
 	}
 	
 	startWaitFlipperAnimationDone () {
-		this.flipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);
+		/*this.flipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);*/
+		this.flipperFirstChildPosition = -999999;
 		window.setTimeout(this.waitFlipperAnimationDone.bind(this), this.flipperRotationAnimationDuration);
 	}
 	waitFlipperAnimationDone () {//this.TIMER.push('flipperAnimationDoneCheck', Date.now(), '\n');
@@ -468,7 +462,8 @@ class Menu {
 			if (this.state.menuIsOpen) {
 				this.afterFlipperRotate();
 			} else {
-				this.afterFlipperRotateBack();
+				//this.afterFlipperRotateBack();
+				window.requestAnimationFrame(this.afterFlipperRotateBack.bind(this));
 			}
 		} else {
 			this.flipperFirstChildPosition = newFlipperFirstChildPosition;
@@ -483,8 +478,8 @@ class Menu {
 		this.scrollFlipperBeforeRotate();
 		this.flipper.classList.remove('opacity0');//285ms*/
 
-		this.content.classList.add('hidden');///343ms
-		//this.content.classList.add('opacity0');
+		//this.content.classList.add('hidden');///343ms
+		this.content.classList.add('opacity0');
 
 	}
 	startFlipperRotate () {
@@ -499,7 +494,8 @@ class Menu {
 	afterFlipperRotate () {
 		//this.TIMER.push('flipper3Render', Date.now(), '\n');
 		this.menu.classList.remove('hidden');
-		this.flipper.classList.add('hidden');
+		//this.flipper.classList.add('hidden');
+		this.flipper.classList.add('opacity0');
 		this.menuButton.classList.remove('opacity0');
 
 		this.enableMenuButton();
@@ -512,21 +508,18 @@ class Menu {
 	closeMenu () {
 		this.state.menuIsOpen = false;
 
-		this.disableMenuButton();
-		this.bodyDisableHover();
+		//this.disableMenuButton();
+		window.requestAnimationFrame(this.disableMenuButton.bind(this));
+		//this.bodyDisableHover();
+		window.requestAnimationFrame(this.bodyDisableHover.bind(this));
 
 		this.doItIn1stRender(this.validateMenuButtonCheckbox);
-		//this.rAF(this.validateMenuButtonCheckbox);
 
-		/*if (this.state.slide1IsActive) {
-			this.closeMenuIfSlide1IsActive();
-		} else {
-			this.closeMenuIfSlide2IsActive();
-		}*/
 		this.prepareForCloseMenu();
 
 		this.doItIn1stRender(this.beforeFlipperRotateBack);
-		this.startWaitMenuButtonAnimationDone();
+		//this.startWaitMenuButtonAnimationDone();
+		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDone.bind(this));
 	}
 
 	closeMenuIfSlide2IsActive () {
@@ -545,7 +538,8 @@ class Menu {
 	}
 	beforeFlipperRotateBack () {
 		this.menu.classList.add('hidden');
-		this.flipper.classList.remove('hidden');
+		//this.flipper.classList.remove('hidden');
+		this.flipper.classList.remove('opacity0');
 	}
 	flipperRotateBack () {
 		this.menuButton.classList.add('opacity0');
@@ -556,12 +550,11 @@ class Menu {
 		// window.setTimeout(this.waitFlipperAnimationDone.bind(this), this.flipperRotationAnimationDuration);
 	}
 	afterFlipperRotateBack () {
-		//this.slide2.classList.remove('hidden');
-		this.content.classList.remove('hidden');
-		//this.content.classList.remove('opacity0');
+		//this.content.classList.remove('hidden');
+		this.content.classList.remove('opacity0');
 		
-		this.doItIn1stRender(this.afterFlipperRotateBack2Render);
-		//this.rAF(this.afterFlipperRotateBack2Render);
+		//this.doItIn1stRender(this.afterFlipperRotateBack2Render);
+		window.requestAnimationFrame(this.afterFlipperRotateBack2Render.bind(this));
 	}
 	afterFlipperRotateBack2Render () {
 		this.flipper.classList.add('hidden');

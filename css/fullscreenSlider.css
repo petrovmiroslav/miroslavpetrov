@@ -40,4 +40,7 @@
 }
 .slide2 {
   	position: absolute;
+  	opacity: 1;
+  	transform: translateZ(0);
+  	will-change: opacity;
 }

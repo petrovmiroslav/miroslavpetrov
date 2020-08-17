@@ -28,8 +28,6 @@ class ParallaxScroll {
 		this.parallaxScrollHandlerBind = this.parallaxScrollHandler.bind(this);
 		this.parallaxScrollHandlerTicking = false;
 		this.angle = 0;
-
-		this.date = Date.now();
 	}
 
 	init () {
@@ -58,6 +56,7 @@ class ParallaxScroll {
 
 	addParallaxScrollListener () {
 		this.parallax.addEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
+		this.aaa = this.angleContainerWrapper.getBoundingClientRect().top;
 	}
 	removeParallaxScrollListener () {
 		this.parallax.removeEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
@@ -82,9 +81,9 @@ class ParallaxScroll {
 
 		if (this.state.deviceIsTouchscreen) {
 			if (((this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height)-this.state.windowHeight) / this.state.windowHeight > 0.5) {
-				this.bgVideoMobile.classList.add('hidden');
+				//this.bgVideoMobile.classList.add('hidden');
 			} else {
-				this.bgVideoMobile.classList.remove('hidden');
+				//this.bgVideoMobile.classList.remove('hidden');
 			}
 		}
 
@@ -97,6 +96,9 @@ class ParallaxScroll {
 			this.angleContainerWrapperRECT = this.angleContainerWrapper.getBoundingClientRect();
 		}
 		this.angle = (this.angleContainerWrapperRECT.top - this.state.windowHeight/2)/this.state.windowHeight/2*-100;
+		console.log(this.angleContainerWrapperRECT.top);
+		console.log(this.aaa - this.parallax.scrollTop);
+
 
 		if (this.angle > -0.5) {
 			/*this.angleContainer.style.transform = 'translate3d(0, 0, 0) rotate(0deg) scale3d(1.7, 1, 1)';*/
