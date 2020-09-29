@@ -7,6 +7,7 @@ export { FullscreenSlider };
 class FullscreenSlider {
 	constructor (State) {
 		this.state = State;
+    this.state.slide1IsActive = true;
     this.state.fullscreenSliderON = this.addFullscreenSliderListeners.bind(this);
     this.state.fullscreenSliderOFF = this.removeFullscreenSliderListeners.bind(this);
 
@@ -34,7 +35,6 @@ class FullscreenSlider {
 	}
 
 	init () {
-		this.state.slide1IsActive = true;
 
 		this.sliderContainer = document.querySelector('.fullscreenSlider');
 		this.slider__side_top = this.sliderContainer.querySelector('.fullscreenSlider__side_top');
@@ -326,6 +326,7 @@ class FullscreenSlider {
   	this.sliderContainer.classList.add('hidden');
   	this.menuButton.classList.remove('hidden');
   	this.addFullscreenSliderListeners();
+    this.state.parallaxScrollUPDATE();
     this.state.certificatesResize();
     this.state.portfolioResize();
     
@@ -334,6 +335,8 @@ class FullscreenSlider {
     } else {
       this.rAF(this.state.cube3dCreate);
     }
+
+    this.state.bubblesPauseOFF();
   }
 
   sliderGeneratorNext () {
@@ -363,6 +366,7 @@ class FullscreenSlider {
     this.removeFullscreenSliderListeners();
 
     this.state.cube3dStop();
+    this.state.bubblesPauseON();
 
     this.state.slide1IsActive = true;
   }

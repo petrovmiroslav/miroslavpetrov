@@ -114,8 +114,12 @@ class ClientDevice {
 
 	selectVideoBGFullscreen () {
 		if (this.state.deviceIsTouchscreen) {
-			this.mobileBGFullscreenVideo.classList.remove('hidden');
-			this.desktopBGFullscreenVideo.classList.add('hidden');
+			/*this.mobileBGFullscreenVideo.classList.remove('hidden');
+			this.desktopBGFullscreenVideo.classList.add('hidden');*/
+			this.mobileBGFullscreenVideo.classList.remove('hidden')
+			this.desktopBGFullscreenVideo.remove();
+		} else {
+			this.mobileBGFullscreenVideo.remove();
 		}
 	}
 	initParallaxIfClientDeviceIsDesktop () {
@@ -125,8 +129,24 @@ class ClientDevice {
 				el.classList.add('parallax__group_desktop-view');
 			});
 			this.main.querySelectorAll('.parallax__layer--back').forEach(function (el) {
-				el.classList.add('.parallax__layer--back_desktop-view');
+				el.classList.add('parallax__layer--back_desktop-view');
 			});
+			this.main.querySelectorAll('.parallax__layer--fore').forEach(function (el) {
+				el.classList.add('parallax__layer--fore_desktop-view');
+			});
+			this.main.querySelector('.menu__emailSection').classList.remove('menu__emailSection_menuBarFix');
+			
+
+			let plantContainerBase = this.main.querySelector('.certification__plantParallaxImgContainerBase'),
+					plantContainerFore = this.main.querySelector('.certification__plantParallaxImgContainerFore');
+			plantContainerBase.classList.remove('hidden');		
+			plantContainerBase.classList.add('certification__plantParallaxImgContainer', 'certification__plantParallaxImgContainerBase_desktop-view');
+			plantContainerBase.firstElementChild.setAttribute('src', '../img/plant-base.png');
+
+			plantContainerFore.classList.remove('hidden');
+			plantContainerFore.classList.add('certification__plantParallaxImgContainer', 'certification__plantParallaxImgContainerFore_desktop-view');
+			plantContainerFore.firstElementChild.setAttribute('src', '../img/plant-fore.png');
+			plantContainerBase = plantContainerFore = null;
 		}
 	}
 }

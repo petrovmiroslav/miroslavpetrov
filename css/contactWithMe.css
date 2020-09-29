@@ -1,0 +1,109 @@
+.contactWithMe {
+  height: 100vh;
+  min-height: 340px;
+  background: linear-gradient(180deg, #373740, #212126);
+}
+.header_contactWithMe {
+  position: static;
+  transform: translateY(100%);
+}
+.header__text_contactWithMe {
+  font-size: 8.7vw;
+}
+.header__text_contactWithMeSlideDown {
+  opacity: 0;
+  transform: translate3d(0, 40%, 0);
+}
+.bubbles {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.bubbles__canvas {
+  width: 100%;
+  height: 100%;
+}
+.bubbles__canvas_grab {
+  cursor: grab;
+}
+.bubbles__canvas_grabbing {
+  cursor: grabbing;
+}
+.form {
+  transform: translateZ(0);
+}
+.form__form {
+  height: 0;
+  border-top: 1px solid transparent;
+}
+.form__input {
+  display: block;
+  box-sizing: content-box;
+  width: 40%;
+  font-size: 3vmin;
+  margin: 8px auto;
+  padding: 8px 16px;
+  background: #F2F2F2;
+  border: 1px solid #021226;
+  border-radius: 1vmin;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  color: #021226;
+  font-family: 'Rubik', sans-serif;
+  outline: none;
+}
+/*form {
+	text-align: center;
+}*/
+/*form * {
+	width: 50%;
+	font-size: 5vmin;
+	margin: auto;
+}*/
+.form__input_top {
+  margin-top: 20vh;
+}
+.form__input_textarea {
+  resize: none;
+}
+.form__button {
+  cursor: pointer;
+  text-align: center;
+  border: none;
+}
+.form__button_submit {
+  margin-top: 8vh;
+  background-color: #F24B59;
+}
+.form__button:hover {
+  background-color: #F24B59;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+.form__button_submit:hover {
+  opacity: .8;
+}
+.form__fileInput {
+  width: 0;
+  height: 0;
+  border: none;
+  padding: 0;
+  display: block;
+}
+.form__filePreview {
+  width: 84%;
+  height: 4vmin;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 3vmin;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #F2F2F2;
+}
+.clearFileInput {
+  width: 20px;
+  height: 20px;
+  background: red;
+}

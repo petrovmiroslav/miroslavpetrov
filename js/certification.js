@@ -7,6 +7,7 @@ export { Certification };
 class Certification {
 	constructor (State, ClientDevice) {
 		this.state = State;
+		this.state.certificationUserStart = false;
 		this.state.certificatesResize = this.resize.bind(this);
 		this.state.displayCurrentCertInFlipper = this.displayCurrentCertInFlipper.bind(this);
 
@@ -39,6 +40,8 @@ class Certification {
 		this.certificatesOnMouseMoveBind = this.certificatesOnMouseMove.bind(this);
 		this.certificatesOnMouseUpBind = this.certificatesOnMouseUp.bind(this);
 		this.certificatesOnMouseOutBind = this.certificatesOnMouseOut.bind(this);
+		this.certificatesHintOnMouseOverBind = this.certificatesHintOnMouseOver.bind(this);
+		this.certificatesHintOnMouseOutBind = this.certificatesHintOnMouseOut.bind(this);
 		this.certificatesOnTouchstartBind = this.certificatesOnTouchstart.bind(this);
 		this.certificatesOnTouchEndBind = this.certificatesOnTouchEnd.bind(this);
 		this.certificatesOnScrollBind = this.certificatesOnScroll.bind(this);
@@ -59,14 +62,15 @@ class Certification {
 		this.certificationCarousel = document.querySelector('.certification__framed-certificate .certification__carousel');//УТОЧНИТЬ
 		this.certificates = this.certificationCarousel.querySelector('.certification__certificates');
 		this.certsLength = this.certificates.children.length;	
+		this.certificationHint = document.querySelector('.userHint_cert');
 
 		if (this.state.deviceIsTouchscreen) {
 			this.certificates.classList.add('certification__certificates_mobile-view');
-			this.addCertificatesMouseDownListener();
 		} else {
 			this.certificates.classList.add('certification__certificates_desktop-view');
-			this.addCertificatesMouseDownListener();
+			this.addCertificationHintListeners();
 		}
+		this.addCertificatesMouseDownListener();
 		this.initPhotoSwipeFromDOM('.certification__certificates');
 	}
 
@@ -100,6 +104,29 @@ class Certification {
 		document.removeEventListener('touchend', this.certificatesOnTouchEndBind, this.passiveListener);
 	}
 
+	addCertificationHintListeners () {
+		this.addCertificationMouseOverListener();
+		this.addCertificationMouseOutListener();
+	}
+	removeCertificationHintListeners () {
+		if (!this.state.deviceIsTouchscreen) {
+			this.removeCertificationMouseOverListener();
+			this.removeCertificationMouseOutListener();
+		}
+	}
+	addCertificationMouseOverListener () {
+		this.certificationCarousel.addEventListener('mouseover', this.certificatesHintOnMouseOverBind, false);
+	}
+	addCertificationMouseOutListener () {
+		this.certificationCarousel.addEventListener('mouseout', this.certificatesHintOnMouseOutBind, false);
+	}
+	removeCertificationMouseOverListener () {
+		this.certificationCarousel.removeEventListener('mouseover', this.certificatesHintOnMouseOverBind, false);
+	}
+	removeCertificationMouseOutListener () {
+		this.certificationCarousel.removeEventListener('mouseout', this.certificatesHintOnMouseOutBind, false);
+	}
+
 	certificatesOnMouseDown (e) {
 		e.preventDefault();
 		this.addCertificatesSwipeListeners();
@@ -111,6 +138,8 @@ class Certification {
 		this.startMousePosition = this.oldMousePosition;
 		this.oldScrollLeft = this.lastScrollStep;
 		this.certificates.classList.remove('certification__certificates_ease');
+
+		this.hideUserHint();
 	}
 	certificatesOnMouseMove (e) {
 		if(this.md) {
@@ -142,18 +171,32 @@ class Certification {
 		this.removeCertificatesSwipeListeners();
 		this.scrollSnap(e);
 	}
+	certificatesHintOnMouseOver () {
+		this.certificationHint.classList.add('opacity0');
+	}
+	certificatesHintOnMouseOut () {
+		this.certificationHint.classList.remove('opacity0');
+	}
 
 	certificatesOnTouchstart (e) {
 		this.mm = false;
 		this.addCertificatesScrollListener();
 		this.addCertificatesTouchEndListener();
+
+		this.hideUserHint();
 	}
 	certificatesOnTouchEnd (e) {
 		this.removeCertificatesTouchEndListener();
 		this.removeCertificatesScrollListener();
 	}
 
-
+	hideUserHint () {
+		if (!this.state.certificationUserStart) {
+			this.state.certificationUserStart = true;
+			this.certificationHint.classList.add('hidden');
+			this.removeCertificationHintListeners();
+		}
+	}
 	scrollSnap (e) {
 		window.cancelAnimationFrame(this.rAFid);
 		let scrollValue = this.startMousePosition - (this.getMousePositionInFrame(e));
@@ -240,26 +283,28 @@ class Certification {
 	}
 
 	resize () {
-		if (this.state.deviceIsTouchscreen) {
-			this.certificatesScrollWidth = this.certificates.scrollWidth;
-			this.certificatesRECT = this.certificates.getBoundingClientRect();
-			this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
+		if (!this.state.slide1IsActive) {
+			if (this.state.deviceIsTouchscreen) {
+				this.certificatesScrollWidth = this.certificates.scrollWidth;
+				this.certificatesRECT = this.certificates.getBoundingClientRect();
+				this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
 
-			this.certificates.classList.add('hidden');
-			this.certificates.style['scroll-behavior'] = 'unset';
-			window.requestAnimationFrame(()=>{
-				this.certificates.classList.remove('hidden');
-				this.certificates.scrollLeft = Math.round(this.scrollStepValue * this.currentCert);
-				this.rAF(this.setScrollBehaviorSmooth);
-				/*this.rAF(this.waitScrollCurCert);*/
-			});
-			document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'resize---WIDTH--' + this.certificatesScrollWidth+' scrollStepValue--'+this.scrollStepValue;
-		} else {
-			this.certificationCarouselRECT = this.certificationCarousel.getBoundingClientRect();
-			this.certificatesRECT = this.certificates.getBoundingClientRect();
-			this.scrollStepValue = this.certificatesRECT.width / this.certsLength;
-			this.certificatesScrollMax = -(this.certificatesRECT.width - this.scrollStepValue);
-			this.lastScrollStep = (-this.certificatesRECT.width / this.certsLength) * this.currentCert;
+				this.certificates.classList.add('hidden');
+				this.certificates.style['scroll-behavior'] = 'unset';
+				window.requestAnimationFrame(()=>{
+					this.certificates.classList.remove('hidden');
+					this.certificates.scrollLeft = Math.round(this.scrollStepValue * this.currentCert);
+					this.rAF(this.setScrollBehaviorSmooth);
+					/*this.rAF(this.waitScrollCurCert);*/
+				});
+				document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'resize---WIDTH--' + this.certificatesScrollWidth+' scrollStepValue--'+this.scrollStepValue;
+			} else {
+				this.certificationCarouselRECT = this.certificationCarousel.getBoundingClientRect();
+				this.certificatesRECT = this.certificates.getBoundingClientRect();
+				this.scrollStepValue = this.certificatesRECT.width / this.certsLength;
+				this.certificatesScrollMax = -(this.certificatesRECT.width - this.scrollStepValue);
+				this.lastScrollStep = (-this.certificatesRECT.width / this.certsLength) * this.currentCert;
+			}
 		}
 	}
 

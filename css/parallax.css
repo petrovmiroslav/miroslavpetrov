@@ -35,11 +35,22 @@
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-
+.scrollcoverTop {
+  width: 100%;
+  height: 50vh;
+  position: absolute;
+  transform: translateY(-100%);
+  background: #454C59;
+}
+.parallax__videoCover {
+  width: 100%;
+  height: 100vh;
+}
 .parallax__bg-fullscreen-video {
   position: fixed;
   min-width: 100%;
   min-height: 100%;
+  max-height: 100vmax;
   width: auto;
   height: auto;
   background: url('../img/polina.jpg') no-repeat;
@@ -51,6 +62,7 @@
 }
 .parallax__bg-fullscreen-video_mobile-view {
   min-height: 100vh;
+  /*right: -40%;*/
 }
 .parallax__bg-fullscreen-video_desktop-view {
   top: 50%;
@@ -61,12 +73,41 @@
   transform: translate3d(-50%,-50%,0);
   transition: filter .2s;
 }
+.videoDescription {
+  position: relative;
+  padding: 0 0 0 10vmin;
+}
+.videoDescription__bg {
+  position: absolute;
+  width: calc(100% - 10vmin);
+  height: 100%;
+  background-color: #F2F2F2;
+  border-radius: 1vmin;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  opacity: .9;
+}
+.videoDescription__text {
+  max-width: 50vw;
+  margin: 0;
+  padding: 4vmin;
+  transform: translateZ(0);
+  font-size: 3vmin;
+  color: #021226;
+}
 
 .parallax__group {
   
   /*height: 500px; /* fallback for older browsers */
   /*height: 100vh;*/
   
+}
+
+.parallax__layer--fore_videoForeground {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
 }
 .parallax__group_desktop-view {
   position: relative;
@@ -86,15 +127,16 @@
     transform-style: preserve-3d;*/
   }
 
-  .parallax__layer--fore {
-    -webkit-transform: translateZ(90px) scale(.7);
-    transform: translateZ(90px) scale(.7);
-    z-index: 1;
-  }
-
+.parallax__layer--fore {
+  z-index: 1;
+}
+.parallax__layer--fore_desktop-view {
+  -webkit-transform: translateZ(90px) scale(.71);
+  transform: translateZ(90px) scale(.71);
+}
 .parallax__layer--base {
-  -webkit-transform: translate3d(0,0,0);;
-  transform: translate3d(0,0,0);;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
   z-index: 4;
 }
 .parallax__layer--base_desktop-view {
@@ -151,9 +193,11 @@
   #group1 {
     z-index: 5; /* slide over group 2 */
     pointer-events: none;
+    background: #454C59;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }
   #group1 .parallax__layer--base {
-    background: #212126;
+    /*background: #212126;*/
 
   }
 
@@ -166,43 +210,44 @@
   }
   #group2 .parallax__layer--back {
     /*position: relative;*/
-    width: 100%;
-    height: 100vh;
+    /*width: 100%;
+    height: 100vh;*/
   }
 
-  #group3 {
-    z-index: 4; /* slide over group 2 and 4 */
-  }
+#group3 {
+  z-index: 4; /* slide over group 2 and 4 */
+  background: #454C59;
+}
   #group3 .parallax__layer--base {
-    background: rgb(153,216,101);
+
   }
 
   #group4 {
     z-index: 4; /* slide under group 3 and 5 */
   }
   #group4 .parallax__layer--deep {
-    background: rgb(184,223,101);
+
   }
 
   #group5 {
-    z-index: 5; /* slide over group 4 and 6 */
+    z-index: 3;
   }
   #group5 .parallax__layer--base {
-    background: rgb(214,229,100);
+ 
   }
 
   #group6 {
     z-index: 2; /* slide under group 5 and 7 */
   }
   #group6 .parallax__layer--back {
-    background: rgb(245,235,100);
+
   }
 
   #group7 {
     z-index: 3; /* slide over group 7 */
   }
   #group7 .parallax__layer--base {
-    background: rgb(0,0,0);
+
   }
 
 video { 

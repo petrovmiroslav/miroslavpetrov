@@ -14,6 +14,7 @@ import { Cube3d as Cube3dModule } from "./cube3d.js";
 import { Certification as CertificationModule } from "./certification.js";
 import { Portfolio as PortfolioModule } from "./portfolio.js";
 import { Form as FormModule } from "./form.js";
+import { Bubbles as BubblesModule } from "./bubbles.js";
 
 const State = new StateModule();
 State.init();
@@ -29,7 +30,8 @@ let Kraken = new ReleaseTheKraken(),
     Cube3d = new Cube3dModule(State, ClientDevice),
     Certification = new CertificationModule(State, ClientDevice),
     Portfolio = new PortfolioModule(State),
-    Form = new FormModule(State);
+    Form = new FormModule(State),
+    Bubbles = new BubblesModule(State, ClientDevice);
   
 
 
@@ -62,6 +64,7 @@ const WindowLoaded = function () {
   Certification.init();
   Portfolio.init();
   Form.init();
+  Bubbles.init();
 };
 
 

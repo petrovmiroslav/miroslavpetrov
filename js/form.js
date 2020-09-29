@@ -49,7 +49,8 @@ class Form {
 		this.form = document.getElementById('form');
 		this.phoneNumInput = this.form.phoneNumber;
 		this.fileInput =  this.form.file;
-		this.filePreview = this.form.querySelector('.filePreview');
+		this.fileInputButton = this.form.file.labels[0];
+		this.filePreview = this.form.querySelector('.form__filePreview');
 		this.resetFileInputButton = this.form.resetFileInput;
 		this.submitButton = this.form.submit;
 
@@ -61,7 +62,7 @@ class Form {
 
 		this.addSubmitListener();
 
-		//this.form.addEventListener('click', ()=>{this.state.errHandler();});
+		this.form.reset();
 	}
 
 	addPhoneNumberListeners () {
@@ -167,12 +168,14 @@ class Form {
 	}
 
 	enableResetFileInputButton () {
-		this.resetFileInputButton.disabled = false;
-		this.resetFileInputButton.classList.remove('opacity0');
+		// this.resetFileInputButton.disabled = false;
+		// this.resetFileInputButton.classList.remove('opacity0');
+		this.fileInputButton.textContent = 'Удалить файл';
 	}
 	disableResetFileInputButton () {
-		this.resetFileInputButton.disabled = true;
-		this.resetFileInputButton.classList.add('opacity0');
+		/*this.resetFileInputButton.disabled = true;
+		this.resetFileInputButton.classList.add('opacity0');*/
+		this.fileInputButton.textContent = 'Прикрепить файл';
 	}
 	enableSubmitFileInputButton () {
 		this.submitButton.disabled = false;
@@ -182,13 +185,17 @@ class Form {
 	}
 
 	addResetFileInputButtonClickListener () {
-		this.resetFileInputButton.addEventListener('click', this.resetFileInputButtonClickBind);
+		/*this.resetFileInputButton.addEventListener('click', this.resetFileInputButtonClickBind);*/
+		this.fileInputButton.addEventListener('click', this.resetFileInputButtonClickBind);
 	}
 	resetFileInputButtonClick (e) {
-		e.preventDefault();
-		this.filePreview.textContent = '';
-		this.fileInput.value = '';
-		this.disableResetFileInputButton();
+		if (this.fileInput.files.length > 0) {
+			e.preventDefault();
+			console.log('RESET');
+			this.filePreview.textContent = '';
+			this.fileInput.value = '';
+			this.disableResetFileInputButton();
+		}
 	}
 
 	addSubmitListener () {

@@ -7,8 +7,8 @@ export { HiBgImageTransform };
 class HiBgImageTransform {
 	constructor (State) {
 		this.state = State;
-		this.state.hiBgImageTransformON = this.addHiBgImageTransformListener.bind(this);
-		this.state.hiBgImageTransformOFF = this.removeHiBgImageTransformListener.bind(this);
+		this.state.hiBgImageTransformON = this.hiBgImageTransformON.bind(this);
+		this.state.hiBgImageTransformOFF = this.hiBgImageTransformOFF.bind(this);
 
 		this.imgLazy = null;
 		this.targetImg = null;
@@ -35,6 +35,8 @@ class HiBgImageTransform {
 
 			this.setCheckReadyToAddListenerInterval();
 		}
+		
+		this.scrollIconSection = document.querySelector('.hiScreen__scrollIconSection');
 	}
 
 	rAF (f) {
@@ -105,5 +107,14 @@ class HiBgImageTransform {
 	}
 	setImgLazyAsTargetImg () {
 		this.targetImg = this.imgLazy;
+	}
+
+	hiBgImageTransformON () {
+		this.addHiBgImageTransformListener();
+	}
+	hiBgImageTransformOFF () {
+		this.removeHiBgImageTransformListener();
+
+		this.scrollIconSection.classList.add('hidden');
 	}
 }

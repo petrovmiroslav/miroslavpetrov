@@ -35,6 +35,9 @@ class Cube3d {
 		this.cube3dOnTouchEndBind = this.cube3dOnTouchEnd.bind(this);
 		this.loopBind = this.loop.bind(this);
 		this.waitCube3dStopRotationBind = this.waitCube3dStopRotation.bind(this);
+    this.hideUserHintBind = this.hideUserHint.bind(this);
+    this.userHintOpacity0Bind = this.userHintOpacity0.bind(this);
+    this.userHintOpacity1Bind = this.userHintOpacity1.bind(this);
 
 		this.lev = 5;
 		this.text = 'MiroslavPetrov';
@@ -50,18 +53,19 @@ class Cube3d {
 
 		this.cube3dWidth = null;
 		this.cube3dPause = true;
+    this.userStartPlay = false;
 		this.cube3dRotateYValue = 0;
 		this.activateLevelCount = 0;
 	}
 	
 	init () {
 		this.cube3d = document.querySelector('.cube3d');
-		this.cube3dScene = document.querySelector('.cube3d__scene');
-		this.cube3dLoadingIcon = document.querySelector('.cube3d__loadingIconContainer');
-
-
-		
+		this.cube3dScene = this.cube3d.querySelector('.cube3d__scene');
+		this.cube3dLoadingIcon = this.cube3d.querySelector('.cube3d__loadingIconContainer');
+    this.userHint = this.cube3d.querySelector('.userHint_cube3d');
+    this.cubeBG = document.querySelector('.aboutSection__cubeBG');
 	}
+
 	rAF (f) {
 		let nextRenderFunc = f,
 				nextRAF = function(func) {
@@ -254,6 +258,8 @@ class Cube3d {
     } else {
   			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
   			document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
+
+        this.addUserHintListeners();
     }
   }
   removeCube3dMoveAndUpListeners () {
@@ -263,6 +269,23 @@ class Cube3d {
     } else {
       document.removeEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
     	document.removeEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
+    }
+  }
+
+  addUserHintListeners () {
+    if (!this.userStartPlay) {
+      this.cube3d.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+      this.cube3d.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
+      this.cubeBG.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+      this.cubeBG.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
+    }
+  }
+  removeUserHintListeners () {
+    if (!this.state.deviceIsTouchscreen) {
+      this.cube3d.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+      this.cube3d.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
+      this.cubeBG.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+      this.cubeBG.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
     }
   }
   
@@ -280,6 +303,11 @@ class Cube3d {
 
   	this.gaps.length = 0;
   	this.md = true;
+
+    if (!this.userStartPlay) {
+      this.removeUserHintListeners();
+      this.hideUserHint();
+    }
 	}
 	cube3dOnTouchMove (e) {
 		/*e.preventDefault(); */
@@ -306,8 +334,14 @@ class Cube3d {
 
   	this.gaps.length = 0;
   	this.md = true;
+
+    if (!this.userStartPlay) {
+      this.removeUserHintListeners();
+      this.hideUserHint();
+    }
   }
-  cube3dOnMouseMove (e) {console.log(event.clientX);
+  cube3dOnMouseMove (e) {
+    /*console.log(event.clientX);*/
     //e.preventDefault();
     if (this.md) {
     	this.mouseX = e.clientX;  
@@ -346,6 +380,10 @@ class Cube3d {
   cube3dPauseON () {console.log('cube3dPauseON');
   	this.cube3dPause = true;
   	this.removeCube3dMoveAndUpListeners();
+
+    if (!this.userStartPlay) {
+      this.rAF(this.displayUserHint);
+    }
   }
   cube3dPauseOFF (event) {console.log('cube3dPauseOFF');
   	this.cube3dPause = false;
@@ -439,6 +477,28 @@ class Cube3d {
 
   resizeRAF () {
     window.requestAnimationFrame(this.resize.bind(this));
+  }
+
+  displayUserHint () {
+    this.userHint.classList.remove('hidden');
+  }
+  hideUserHint () {
+    //this.rAF(this.hideUserHintRAF);
+    this.userStartPlay = true;
+    this.userHint.classList.add('hidden');
+    console.log('HIDE');
+  }
+  hideUserHintRAF () {
+    this.userHint.classList.add('hidden');
+    
+  }
+  userHintOpacity0 () {
+    this.userHint.classList.add('opacity0');
+    console.log('IN');
+  }
+  userHintOpacity1 () {
+    this.userHint.classList.remove('opacity0');
+    console.log('OUT');
   }
 }
 //Twisty thing - more cross browser - in CSS/JS by dehash.com released under MIT License https://opensource.org/licenses/MIT 

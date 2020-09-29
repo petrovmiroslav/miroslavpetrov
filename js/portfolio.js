@@ -14,8 +14,10 @@ class Portfolio {
 		this.deviceSlider = null;
 		this.imacButton = null;
 		this.iphoneButton = null;
-		this.imacButtonBG = null;
-		this.iphoneButtonBG = null;
+		this.imacButtonBG_back = null;
+		this.imacButtonBG_highlight = null;
+		this.iphoneButtonBG_back = null;
+		this.iphoneButtonBG_highlight = null;
 		this.imacSVG = null;
 		this.iphoneSVG = null;
 		this.portfolioIframe = null;
@@ -48,8 +50,10 @@ class Portfolio {
 		this.deviceSlider = document.querySelector('.portfolio__deviceSlider');
 		this.imacButton = document.getElementById('iMacButton');
 		this.iphoneButton = document.getElementById('iPhoneButton');
-		this.imacButtonBG = this.imacButton.querySelector('.portfolio__switchButtonBG');
-		this.iphoneButtonBG = this.iphoneButton.querySelector('.portfolio__switchButtonBG');
+		this.imacButtonBG_back = this.imacButton.querySelector('.portfolio__switchButtonBG_back');
+		this.imacButtonBG_highlight = this.imacButton.querySelector('.portfolio__switchButtonBG_highlight');
+		this.iphoneButtonBG_back = this.iphoneButton.querySelector('.portfolio__switchButtonBG_back');
+		this.iphoneButtonBG_highlight = this.iphoneButton.querySelector('.portfolio__switchButtonBG_highlight');
 		this.imacSVG = document.getElementById('iMacSVG');
 		this.iphoneSVG = document.getElementById('iPhoneSVG');
 		this.portfolioIframe = document.getElementById('portfolioIframe');
@@ -68,8 +72,12 @@ class Portfolio {
 	imacButtonClickHandler () {
 		if (!this.imacIsActive) {
 			this.imacIsActive = true;
-			this.imacButtonBG.classList.add('portfolio__switchButtonBG_checked');
-			this.iphoneButtonBG.classList.remove('portfolio__switchButtonBG_checked');
+			this.imacButton.classList.add('portfolio__switchButton_checked');
+			this.imacButtonBG_back.classList.add('opacity0');
+			this.imacButtonBG_highlight.classList.add('portfolio__switchButtonBG_checked');
+			this.iphoneButton.classList.remove('portfolio__switchButton_checked');
+			this.iphoneButtonBG_back.classList.remove('opacity0');
+			this.iphoneButtonBG_highlight.classList.remove('portfolio__switchButtonBG_checked');
 			this.deviceSlider.classList.remove('portfolio__deviceSlider_iphoneChecked');
 			this.imacSVG.classList.add('portfolio__device_checked');
 			this.iphoneSVG.classList.remove('portfolio__device_checked');
@@ -81,8 +89,12 @@ class Portfolio {
 	iphoneButtonClickHandler () {
 		if (this.imacIsActive) {
 			this.imacIsActive = false;
-			this.imacButtonBG.classList.remove('portfolio__switchButtonBG_checked');
-			this.iphoneButtonBG.classList.add('portfolio__switchButtonBG_checked');
+			this.imacButton.classList.remove('portfolio__switchButton_checked');
+			this.imacButtonBG_back.classList.remove('opacity0');
+			this.imacButtonBG_highlight.classList.remove('portfolio__switchButtonBG_checked');
+			this.iphoneButton.classList.add('portfolio__switchButton_checked');
+			this.iphoneButtonBG_back.classList.add('opacity0');
+			this.iphoneButtonBG_highlight.classList.add('portfolio__switchButtonBG_checked');
 			this.deviceSlider.classList.add('portfolio__deviceSlider_iphoneChecked');
 			this.imacSVG.classList.remove('portfolio__device_checked');
 			this.iphoneSVG.classList.add('portfolio__device_checked');
@@ -93,34 +105,36 @@ class Portfolio {
 	}
 
 	resize () {
-		let imacDisplayRECT = this.imacDisplay.getBoundingClientRect();
-		let iphoneDisplayRECT = this.iphoneDisplay.getBoundingClientRect();
-		let deviceSliderRECT = this.deviceSlider.getBoundingClientRect();
-		this.iframePosition.scrollTopPos = deviceSliderRECT.top + this.parallax.scrollTop;
+		if (!this.state.slide1IsActive) {
+			let imacDisplayRECT = this.imacDisplay.getBoundingClientRect();
+			let iphoneDisplayRECT = this.iphoneDisplay.getBoundingClientRect();
+			let deviceSliderRECT = this.deviceSlider.getBoundingClientRect();
+			this.iframePosition.scrollTopPos = deviceSliderRECT.top + this.parallax.scrollTop;
 
-		this.iframePosition.iMac.top = imacDisplayRECT.top - deviceSliderRECT.top + "px";
-		this.iframePosition.iMac.width = imacDisplayRECT.width * 2 + "px";
-		this.iframePosition.iMac.height = imacDisplayRECT.height * 2 + "px";
+			this.iframePosition.iMac.top = imacDisplayRECT.top - deviceSliderRECT.top + "px";
+			this.iframePosition.iMac.width = imacDisplayRECT.width * 2 + "px";
+			this.iframePosition.iMac.height = imacDisplayRECT.height * 2 + "px";
 
-		this.iframePosition.iPhone.top = iphoneDisplayRECT.top - deviceSliderRECT.top + "px";
-		this.iframePosition.iPhone.width = iphoneDisplayRECT.width * 2 + "px";
-		this.iframePosition.iPhone.height = iphoneDisplayRECT.height * 2 + "px";
-		
-		if (this.imacIsActive) {
-			this.iframePosition.iMac.left = imacDisplayRECT.left + "px";
-			this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left);
+			this.iframePosition.iPhone.top = iphoneDisplayRECT.top - deviceSliderRECT.top + "px";
+			this.iframePosition.iPhone.width = iphoneDisplayRECT.width * 2 + "px";
+			this.iframePosition.iPhone.height = iphoneDisplayRECT.height * 2 + "px";
+			
+			if (this.imacIsActive) {
+				this.iframePosition.iMac.left = imacDisplayRECT.left + "px";
+				this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left);
 
-			this.iframePosition.iPhone.left = iphoneDisplayRECT.left + "px";
-			this.iframePosition.iPhone.animDonePos = Math.round(-deviceSliderRECT.width / 2);
-		} else {
-			this.iframePosition.iMac.left = imacDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
-			this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left + deviceSliderRECT.width / 2);
+				this.iframePosition.iPhone.left = iphoneDisplayRECT.left + "px";
+				this.iframePosition.iPhone.animDonePos = Math.round(-deviceSliderRECT.width / 2);
+			} else {
+				this.iframePosition.iMac.left = imacDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
+				this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left + deviceSliderRECT.width / 2);
 
-			this.iframePosition.iPhone.left = iphoneDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
-			this.iframePosition.iPhone.animDonePos = Math.round(deviceSliderRECT.left);
+				this.iframePosition.iPhone.left = iphoneDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
+				this.iframePosition.iPhone.animDonePos = Math.round(deviceSliderRECT.left);
+			}
+			
+			this.setIframePosition();
 		}
-		
-		this.setIframePosition();
 	}
 	setIframePosition () {
 		if (this.imacIsActive) {

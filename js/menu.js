@@ -8,6 +8,7 @@ class Menu {
 	constructor (State) {
 		this.state = State;
 		this.state.clientDevice.windowResizeHandlersQueue.resizeMenu = this.resize.bind(this);
+		this.state.clientDevice.windowResizeHandlersQueue.resizeHero = this.resizeHero.bind(this);
 
 		this.menuButton = null;
 		this.menuButtonCheckbox = null;
@@ -50,6 +51,7 @@ class Menu {
 		this.bgVideoMobile = this.slide2.querySelector('.parallax__bg-fullscreen-video_mobile-view');
 		this.bgVideoDesktop = this.slide2.querySelector('.parallax__bg-fullscreen-video_desktop-view');
 		this.angleBGGradientAnimationLayer = this.slide2.querySelector('.stackSection__gradientBG');
+		this.hero = this.menu.querySelector('.hero');
 
 
 		this.setCheckReadyToInitInterval();
@@ -194,6 +196,8 @@ class Menu {
 			this.bgVideoDesktop.pause();
 		}*/
 		this.state.angleGradientBGOFF();
+
+		this.state.bubblesPauseON();
 	}
 
 	pauseAndBlurBGVideo () {
@@ -226,10 +230,12 @@ class Menu {
     	this.deleteCube3dInContentClone();
     	this.changeCertsScrollBehavior();
     	this.setFormValue();
+
     }
 
     this.menuClone = this.menu.cloneNode(true);
     this.menuClone.classList.remove('hidden');
+    this.menuClone.querySelector('.hero').remove();
 
     /////
     let flipperInnerHTML = '';
@@ -296,6 +302,7 @@ class Menu {
     
     if (!this.state.slide1IsActive) {
     	this.ifScrollStopScrollFlipper();
+    	this.cloneCanvas();
     } else {
     	this.flipper.classList.remove('opacity0');
     }
@@ -369,6 +376,14 @@ class Menu {
   	formClone.phoneNumber.setAttribute("value", form.phoneNumber.value);
   	formClone.email.setAttribute("value", form.email.value);
   	formClone.info.textContent = form.info.value;
+	}
+	cloneCanvas () {
+		let allCanvasInFlipper = this.flipper.querySelectorAll('.bubbles__canvas'),
+		sourceCanvas = document.getElementById('canvas');
+		for (let i = 0; i < allCanvasInFlipper.length; i++) {
+    	
+    	allCanvasInFlipper[i].getContext('2d').drawImage(sourceCanvas, 0, 0);
+    }
 	}
 
 	scrollFlipperBeforeRotate () {
@@ -501,6 +516,8 @@ class Menu {
 		this.enableMenuButton();
 		this.bodyEnableHover();
 
+		this.hero.classList.remove('hidden');
+
 		//alert(this.TIMER);
 	}
 
@@ -534,7 +551,7 @@ class Menu {
 	}
 
 	prepareForCloseMenu () {
-
+		this.hero.classList.add('hidden');
 	}
 	beforeFlipperRotateBack () {
 		this.menu.classList.add('hidden');
@@ -578,6 +595,7 @@ class Menu {
 			this.playAndClearBGVideo();
 			this.state.certificatesResize();
 			this.state.portfolioResize();
+			this.state.bubblesPauseOFF();
 /*			if (this.state.deviceIsTouchscreen) {
 				this.bgVideoMobile.play();
 				this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
@@ -613,6 +631,25 @@ class Menu {
   	window.requestAnimationFrame(this.setMenuButtonLeftPosition.bind(this));
   }
   setMenuButtonLeftPosition () {
-  	this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
+  	if (this.menuButton) {
+  		this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
+  	}
   }
+
+  heroAnimationOn () {
+		this.hero.classList.add('hero_animationON');
+	}
+	heroAnimationOff () {
+		this.hero.classList.remove('hero_animationON');
+	}
+	resizeHero () {
+		if (this.state.deviceIsTouchscreen) {
+			if (this.state.menuIsOpen) {
+				this.heroAnimationOff();
+				window.requestAnimationFrame(()=>{
+					this.heroAnimationOn();
+				});
+			}
+		}
+	}
 }

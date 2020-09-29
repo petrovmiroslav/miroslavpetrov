@@ -110,20 +110,11 @@ class LazyLoader {
 
 	loadVideos () {
 		this.sourcesBGVideo = [	
-														{ src: 'https://petrovmiroslav.github.io/static/polina.mp4',
-														  type: 'video/mp4'
-														},
-														{ src: 'https://r3---sn-8ph2xajvh-2xxe.googlevideo.com/videoplayback?expire=1590334486&ei=tj_KXtR12oHzArqpt6gL&ip=212.60.22.52&id=o-AJZ7ksXEjTHgsBEHarcTvQRL4g1j4yih4Gl6ifD4r8Sl&itag=22&source=youtube&requiressl=yes&vprv=1&mime=video%2Fmp4&ratebypass=yes&dur=25.077&lmt=1574000296348480&fvip=3&c=WEB&txp=2216222&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRQIhANNCn_cUCcrL8lF76lPjM6KAkk_GgmyYACJVqBVeEgtfAiBt1Ps7AzKTSLZU5I9pf2OvsJaFo9faL27DBU-36CvmlQ%3D%3D&cms_redirect=yes&mh=K4&mip=46.42.144.126&mm=31&mn=sn-8ph2xajvh-2xxe&ms=au&mt=1590312810&mv=m&mvi=2&pcm2cms=yes&pl=19&lsparams=mh,mip,mm,mn,ms,mv,mvi,pcm2cms,pl&lsig=AG3C_xAwRQIhAKgdyyjITrHOt0gb7E_z-XKsPPFfrmyTVxqaXMAqX3uMAiByqH47DK-N8mbTwJrkwLlYdURxRWFlwfsjjhohUemZAw%3D%3D',
-														  type: 'video/mp4'
-														},
-														{ src: 'https://gdurl.com/V7m2',
+														{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.webm',
 														  type: 'video/webm'
 														},
-														{ src: 'http://miroslavpetrov.ml/petrovproweb/img/polina.webm',
+														{ src: 'https://petrovmiroslav.github.io/static/videoBG-1280.webm',
 														  type: 'video/webm'
-														},
-														{ src: 'http://miroslavpetrov.ml/petrovproweb/img/polina.mp4',
-														  type: 'video/mp4'
 														}
 													];
 		this.fullscreenBgVideo = document.querySelectorAll('.parallax__bg-fullscreen-video');
