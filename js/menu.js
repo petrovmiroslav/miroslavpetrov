@@ -195,12 +195,13 @@ class Menu {
 			this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
 			this.bgVideoDesktop.pause();
 		}*/
-		this.state.angleGradientBGOFF();
+		//this.state.angleGradientBGOFF();
 
 		this.state.bubblesPauseON();
 	}
 
 	pauseAndBlurBGVideo () {
+		this.state.bgVideoIsOFF = true;
 		if (this.state.deviceIsTouchscreen) {
 			this.bgVideoMobile.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
 			this.bgVideoMobile.pause();
@@ -211,10 +212,10 @@ class Menu {
 	}
 	playAndClearBGVideo () {
 		if (this.state.deviceIsTouchscreen) {
-			this.bgVideoMobile.play();
+			//this.bgVideoMobile.play();
 			this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
 		} else {
-			this.bgVideoDesktop.play();
+			//this.bgVideoDesktop.play();
 			this.bgVideoDesktop.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
 		}
 	}
@@ -591,7 +592,7 @@ class Menu {
 		} else {
 			this.state.parallaxScrollUPDATE();
 			this.state.cube3dStart();
-			this.state.angleGradientBGON();
+			//this.state.angleGradientBGON();
 			this.playAndClearBGVideo();
 			this.state.certificatesResize();
 			this.state.portfolioResize();

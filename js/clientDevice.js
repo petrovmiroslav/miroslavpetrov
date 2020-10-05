@@ -59,6 +59,7 @@ class ClientDevice {
 		    }
 			}
 		}
+		console.log('TOUCHSCEEN?---',hasTouchScreen);
 		return hasTouchScreen;
 	}
 	detectSupportsPassive () {

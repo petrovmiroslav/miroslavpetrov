@@ -238,28 +238,28 @@ class Cube3d {
 
   addCube3dClickListener () {
   	if (this.state.deviceIsTouchscreen) {
-      this.cube3d.addEventListener('touchstart', this.cube3dOnTouchStartBind);
+      this.cube3d.addEventListener('touchstart', this.cube3dOnTouchStartBind, this.state.passiveListener);
     } else {
-      this.cube3d.addEventListener('mousedown', this.cube3dOnMouseDownBind);
+      this.cube3d.addEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
     }
   }
   removeCube3dClickListener() {
     if (this.state.deviceIsTouchscreen) {
-      this.cube3d.removeEventListener('touchmove', this.cube3dOnMouseMoveBind);
+      this.cube3d.removeEventListener('touchstart', this.cube3dOnMouseMoveBind, this.state.passiveListener);
     } else {
-      this.cube3d.removeEventListener('mousedown', this.cube3dOnMouseDownBind);
+      this.cube3d.removeEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
     }
   }
 
   addCube3dMoveAndUpListeners () {
     if (this.state.deviceIsTouchscreen) {
-      	document.addEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
-      	document.addEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
+    	document.addEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
+    	document.addEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
     } else {
-  			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
-  			document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
+			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+			document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
 
-        this.addUserHintListeners();
+      this.addUserHintListeners();
     }
   }
   removeCube3dMoveAndUpListeners () {
@@ -311,7 +311,7 @@ class Cube3d {
 	}
 	cube3dOnTouchMove (e) {
 		/*e.preventDefault(); */
-    this.mouseX = e.touches[0].clientX; console.log(event.touches[0].clientX);
+    this.mouseX = e.touches[0].clientX; /*console.log(event.touches[0].clientX);*/
 	}
 	cube3dOnTouchEnd (e) {console.log('cube3dOnTouchEnd');
     if (this.md) {
@@ -322,7 +322,7 @@ class Cube3d {
     }
 	}
   cube3dOnMouseDown (e) {console.log('cube3dOnMouseDown');
-  	e.preventDefault();
+  	/*e.preventDefault();*/
 
   	window.clearTimeout(this.cube3dPauseTimeout);
   	if (this.cube3dPause) {

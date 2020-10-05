@@ -11,14 +11,14 @@ class ParallaxScroll {
     // this.state.parallaxScrollOFF = this.removeParallaxScrollListener.bind(this);
     this.state.angleGradientBGIsActive = false;
     this.state.parallaxScrollUPDATE = this.parallaxScrollUpdate.bind(this);
-    this.state.angleGradientBGON = this.angleGradientBGEnable.bind(this);
-    this.state.angleGradientBGOFF = this.angleGradientBGDisable.bind(this);
+    
 
     this.clientDevice = ClientDevice;
     this.clientDevice.windowResizeHandlersQueue.resizeParallax = this.parallaxScrollUpdate.bind(this);
-    this.clientDevice.windowResizeHandlersQueue.resizeGradientBG = this.resizeGradientBG.bind(this);
+    //this.clientDevice.windowResizeHandlersQueue.resizeGradientBG = this.resizeGradientBG.bind(this);
 
 		this.parallax = null;
+		this.parallaxScrollPosition = 0;
 		this.angleContainerWrapper = null;
 		this.angleContainerWrapperRECT = {};
 		this.certificationRECT = {};
@@ -33,6 +33,8 @@ class ParallaxScroll {
 		this.parallaxScrollHandlerBind = this.parallaxScrollHandler.bind(this);
 		this.parallaxScrollHandler1RenderBind = this.parallaxScrollHandler1Render.bind(this);
 		this.setAngleToGradientBGRAFBind = this.setAngleToGradientBGRAF.bind(this);
+		this.angleGradientBGEnableRAFBind = this.angleGradientBGEnableRAF.bind(this);
+		this.angleGradientBGDisableRAFBind = this.angleGradientBGDisableRAF.bind(this);
 		this.certification__headerSlideUpRAFBind = this.certification__headerSlideUpRAF.bind(this);
 		this.certification__headerSlideDownRAFBind = this.certification__headerSlideDownRAF.bind(this);
 		this.certificationHintDisplayRAFBind = this.certificationHintDisplayRAF.bind(this);
@@ -47,6 +49,8 @@ class ParallaxScroll {
 
 		this.parallaxScrollHandlerTicking = false;
 		this.angle = 0;
+		this.gradientBGTransformValue = 0;
+		this.gradientBGIsActive = false;
 		this.parallaxScrollCallbackCount = 0;
 		this.certification__headerSlideUp = false;
 		this.portfolio__headerSlideUp = false;
@@ -69,9 +73,16 @@ class ParallaxScroll {
 		this.portfolio__header = this.parallax.querySelector('.header__text_portfolio');
 		this.contactWithMe__header = this.parallax.querySelector('.header__text_contactWithMe');
 		this.canvas = document.querySelector('.bubbles');
-		if (this.state.deviceIsTouchscreen) {
-			this.bgVideoMobile = document.querySelector('.parallax__bg-fullscreen-video_mobile-view');
-		}
+		this.bgVideo = document.querySelector(this.state.deviceIsTouchscreen ? 
+			'.parallax__bg-fullscreen-video_mobile-view' :
+			'.parallax__bg-fullscreen-video_desktop-view');
+
+		this.WC = {
+			angle: {
+				arr: [this.gradientBG, this.angleContainer, this.stackDescriptionWrapper, this.aboutSection__header],
+				state: "gradientBGIsActive"
+			}
+		};
 
 		this.addParallaxScrollListener();
 	}
@@ -88,7 +99,6 @@ class ParallaxScroll {
 
 	addParallaxScrollListener () {
 		this.parallax.addEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
-		// this.aaa = this.angleContainerWrapper.getBoundingClientRect().top;
 	}
 	removeParallaxScrollListener () {
 		this.parallax.removeEventListener('scroll', this.parallaxScrollHandlerBind, this.state.passiveListener);
@@ -96,22 +106,26 @@ class ParallaxScroll {
 
 	parallaxScrollUpdate () {
 		if (!this.state.slide1IsActive) {
+			this.parallaxScrollPosition = this.parallax.scrollTop;
 			this.angleContainerWrapperRECTobj = this.angleContainerWrapper.getBoundingClientRect();
-			this.angleContainerWrapperRECT.top = this.angleContainerWrapperRECTobj.top + this.parallax.scrollTop;
+			this.angleContainerWrapperRECT.top = this.angleContainerWrapperRECTobj.top + this.parallaxScrollPosition;
 			this.angleContainerWrapperRECT.height = this.angleContainerWrapperRECTobj.height;
+			this.angleContainerWrapperRECT.bottom = this.angleContainerWrapperRECTobj.bottom + this.parallaxScrollPosition;
 
-
+			this.gradientBGScrollHeight = (this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top))*2;
+//console.log((1 - (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition)/(this.angleContainerWrapperRECT.height*2)));
+/*console.log('h--  ', this.angleContainerWrapperRECT.height, 't--  ', this.angleContainerWrapperRECT.top, 'h - WH - t --  ', (this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top)), '% -- ', (1 - (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition)/((this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top))*2)));*/
 			let certificationRECTobj = this.certification.getBoundingClientRect();
 			this.certificationRECT.top = certificationRECTobj.top + this.parallax.scrollTop;
 			this.certificationRECT.height = certificationRECTobj.height;
-			this.certificationRECT.bottom = certificationRECTobj.bottom;
+			this.certificationRECT.bottom = certificationRECTobj.bottom + this.parallaxScrollPosition;
 
 			let portfolioRECTobj = this.portfolio.getBoundingClientRect();
-			this.portfolioRECT.top = portfolioRECTobj.top + this.parallax.scrollTop;
+			this.portfolioRECT.top = portfolioRECTobj.top + this.parallaxScrollPosition;
 			this.portfolioRECT.height = portfolioRECTobj.height;
 
 			let bubblesRECTobj = this.canvas.getBoundingClientRect();
-			this.bubblesRECT.top = bubblesRECTobj.top + this.parallax.scrollTop;
+			this.bubblesRECT.top = bubblesRECTobj.top + this.parallaxScrollPosition;
 			this.bubblesRECT.height = bubblesRECTobj.height;
 
 			this.parallaxScrollHandler();
@@ -121,19 +135,34 @@ class ParallaxScroll {
 	parallaxScrollHandler () {
 		if (!this.parallaxScrollHandlerTicking) {
 			this.parallaxScrollHandlerTicking = true;
-			//this.rAF(this.parallaxScrollHandlerRAF);
 			window.requestAnimationFrame(this.parallaxScrollHandler1RenderBind);
 		}
 	}
 	setParallaxScrollHandlerTickingFalse () {
 		this.parallaxScrollHandlerTicking = false;
 	}
-
 	parallaxScrollHandler1Render () {
+		if (this.state.menuIsOpen) 
+			return this.parallaxScrollHandlerTicking = false;
+
+		this.parallaxScrollPosition = this.parallax.scrollTop;
+
+		if (this.parallaxScrollPosition < 0) 
+			return this.parallaxScrollHandlerTicking = false;
+
+		this.checkAndUpdateAngle();
+
+		this.parallaxScrollCallbackCount === 0 && (this.parallaxScrollHandlerTicking = false);
+	}
+	parallaxScrollHandler1RenderTEST () {
 		if (!this.state.menuIsOpen) {
-			this.parallaxScrollPosition = this.parallax.scrollTop;
+			this.parallaxScrollPosition = 0/*this.parallax.scrollTop*/;
+			if (this.parallaxScrollPosition < 0) {
+				return this.parallaxScrollHandlerTicking = false;
+			}
 
 	    console.log('1render');
+
 
 			/*new Promise((resolve)=>{
 				window.requestAnimationFrame(this.promise2renderFunc.bind(this, resolve));
@@ -143,7 +172,7 @@ class ParallaxScroll {
 				console.log('finally');});*/
 //////////////////////////////////////
 
-			if (this.certificationRECTBottomBelowDisplay()) {
+			/*if (this.certificationRECTBottomBelowDisplay()) {
 				if (!this.checkAndUpdateCerts()) {
 					this.checkAndUpdateAngle();
 				}
@@ -151,17 +180,21 @@ class ParallaxScroll {
 				if (!this.checkAndUpdateBubbles()) {
 					this.checkAndUpdatePortfolio();
 				}
-			}
+			}*/
+			/*this.checkAndUpdateAngle();
+			this.checkAndUpdateCerts();
+			this.checkAndUpdatePortfolio();
+			this.checkAndUpdateBubbles();
 
-
-
-			/*if (this.state.deviceIsTouchscreen) {
-				if (((this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height - this.parallaxScrollPosition) - this.state.windowHeight) / this.state.windowHeight > 0.5) {
-					this.bgVideoMobile.classList.add('opacity0');
+			if (1) {
+				if ((this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height - this.parallaxScrollPosition)/this.state.windowHeight < 0.5 && (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight > -0.5) {
+					console.log("VIDEO");
+					this.bgVideoON();
 				} else {
-					this.bgVideoMobile.classList.remove('opacity0');
+					this.bgVideoOFF();
 				}
 			}*/
+
 
 
 			if (this.parallaxScrollCallbackCount === 0) {
@@ -173,33 +206,85 @@ class ParallaxScroll {
 		}
 	}
 
-	certificationRECTBottomBelowDisplay () {
+	doItInNextRafAndCallbackCountPlus (f) {
+		window.requestAnimationFrame(f);
+		this.parallaxScrollCallbackCount++;
+		f = null;
+	}
+
+	bgVideoON () {
+		if (this.state.bgVideoIsOFF) {
+			this.state.bgVideoIsOFF = false;
+			this.bgVideo.play();
+			//this.bgVideo.classList.remove('opacity0');
+		}
+	}
+	bgVideoOFF () {
+		if (!this.state.bgVideoIsOFF) {
+			this.state.bgVideoIsOFF = true;
+			this.bgVideo.pause();
+			//this.bgVideo.classList.add('opacity0');
+		}
+	}
+/*	certificationRECTBottomBelowDisplay () {
+		console.log((this.certificationRECT.bottom - this.parallaxScrollPosition - this.state.windowHeight) > 0);
 		if ((this.certificationRECT.bottom - this.parallaxScrollPosition - this.state.windowHeight) > 0) {
 			return true;
 		}
 		return false;
+	}*/
+	checkAndUpdateAngle () {
+		this.angleContainerWrapperRECT.bottomOnDisplay = this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition;
+
+		this.angleContainerWrapperRECT.bottomOnDisplay > 0 && this.doItInNextRafAndCallbackCountPlus(this.setAngleToGradientBGRAFBind);
+
+		if (this.angleContainerWrapperRECT.bottomOnDisplay / this.state.windowHeight > -0.2)
+			return !this.gradientBGIsActive && this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGEnableRAFBind);
+
+		this.gradientBGIsActive && this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGDisableRAFBind);
 	}
 
-	checkAndUpdateAngle () {
-		if (this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height - this.parallaxScrollPosition > 0) {
-			window.requestAnimationFrame(this.setAngleToGradientBGRAFBind);
-			this.parallaxScrollCallbackCount++;
+	/*checkAndUpdateAngleTEST () {console.log((this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition));
+		this.angleContainerWrapperRECT.bottomOnDisplay = this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition;
+
+		if (this.angleContainerWrapperRECT.bottomOnDisplay > 0) {
+			this.doItInNextRafAndCallbackCountPlus(this.setAngleToGradientBGRAFBind);
 		}
+
+		if (this.angleContainerWrapperRECT.bottomOnDisplay / this.state.windowHeight > -0.2) {
+			if (!this.gradientBGIsActive) {
+				this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGEnableRAFBind);
+			}
+		} else {
+			if (this.gradientBGIsActive) {
+				this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGDisableRAFBind);
+			}
+		}
+	}*/
+
+	angleGradientBGEnableRAF () {
+		this.classWC(!0, this.WC.angle);
+		this.parallaxScrollFinish();
+	}
+	angleGradientBGDisableRAF () {
+		this.classWC(!1, this.WC.angle);
+		this.parallaxScrollFinish();
 	}
 
 	checkAndUpdateCerts () {
 		let certificationDisplayProportion = 1 - (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight,
 		returnVal = false;
-		if (certificationDisplayProportion > 0.1) {
+		if (certificationDisplayProportion > 0.5) {
 			returnVal = true;
+		}
+
+		if (certificationDisplayProportion > 0.1) {
 			if (!this.certification__headerSlideUp) {
-				window.requestAnimationFrame(this.certification__headerSlideUpRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideUpRAFBind);
 			}
 		} else {
 			if (this.certification__headerSlideUp) {
-				window.requestAnimationFrame(this.certification__headerSlideDownRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideDownRAFBind);
 			}
 		}
 
@@ -207,8 +292,7 @@ class ParallaxScroll {
 		if (!this.state.certificationUserStart) {
 			if (!this.certificationHintDisplay) {
 				if (certificationDisplayProportion > 0.9) {
-					window.requestAnimationFrame(this.certificationHintDisplayRAFBind);
-					this.parallaxScrollCallbackCount++;
+					this.doItInNextRafAndCallbackCountPlus(this.certificationHintDisplayRAFBind);
 				}
 			}
 		}
@@ -236,13 +320,11 @@ class ParallaxScroll {
 		let portfolioDisplayProportion = 1 - (this.portfolioRECT.top - this.parallaxScrollPosition) / this.state.windowHeight;
 		if (portfolioDisplayProportion > 0.1) {
 			if (!this.portfolio__headerSlideUp) {
-				window.requestAnimationFrame(this.portfolio__headerSlideUpRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideUpRAFBind);
 			}
 		} else {
 			if (this.portfolio__headerSlideUp) {
-				window.requestAnimationFrame(this.portfolio__headerSlideDownRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideDownRAFBind);
 			}
 		}
 	}
@@ -262,13 +344,11 @@ class ParallaxScroll {
 
 		if (bubblesDisplayProportion > 0.1) {
 			if (!this.contactWithMe__headerSlideUp) {
-				window.requestAnimationFrame(this.bubbles__headerSlideUpRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideUpRAFBind);
 			}
 		} else {
 			if (this.contactWithMe__headerSlideUp) {
-				window.requestAnimationFrame(this.bubbles__headerSlideDownRAFBind);
-				this.parallaxScrollCallbackCount++;
+				this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideDownRAFBind);
 			}
 		}
 
@@ -276,8 +356,7 @@ class ParallaxScroll {
 		if (this.bubblesStart) {
 			if (bubblesDisplayProportion > 0) {
 				if (this.state.bubblesPause) {
-					window.requestAnimationFrame(this.bubblesPauseOFFRAFBind);
-					this.parallaxScrollCallbackCount++;
+					this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
 				}
 			} else {
 				if (!this.state.bubblesPause) {
@@ -287,9 +366,9 @@ class ParallaxScroll {
 		} else {
 			if (bubblesDisplayProportion > 0.8) {
 				if (this.state.bubblesPause) {
+					this.state.bubblesStart = true;
 					window.requestAnimationFrame(this.setBubblesStartRAFBind);
-					window.requestAnimationFrame(this.bubblesPauseOFFRAFBind);
-					this.parallaxScrollCallbackCount++;
+					this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
 				}
 			} else {
 				if (!this.state.bubblesPause) {
@@ -335,92 +414,60 @@ class ParallaxScroll {
 	}
 
 	parallaxScrollFinish () {
-		this.parallaxScrollCallbackCount--;
-		console.log('parallaxScrollFinish---', this.parallaxScrollCallbackCount);
-		if (this.parallaxScrollCallbackCount === 0) {
-			this.parallaxScrollHandlerTicking = false;
-		}
-	}
-
-	parallaxScrollHandlerRAF () {
-		this.angleContainerWrapperRECT = this.angleContainerWrapper.getBoundingClientRect();
-		if (this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height > 0) {
-
-			this.setAngleToGradientBG();
-		}
-
-		if (this.state.deviceIsTouchscreen) {
-			if (((this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height)-this.state.windowHeight) / this.state.windowHeight > 0.5) {
-				//this.bgVideoMobile.classList.add('hidden');
-			} else {
-				//this.bgVideoMobile.classList.remove('hidden');
-			}
-		}
-
-		this.angleContainerWrapperRECT = null;
-		this.parallaxScrollHandlerTicking = false;
+		--this.parallaxScrollCallbackCount === 0 && (this.parallaxScrollHandlerTicking = false);
 	}
   
   setAngleToGradientBG () {
   	this.angle = (this.angleContainerWrapperRECT.top - this.parallaxScrollPosition - this.state.windowHeight/2)/this.state.windowHeight/2*-100;
 
   	if (this.angle > -0.5) {
-  		this.angleContainer.style.transform = 'translateZ(0) rotate(0deg)';
+  		this.angleContainer.style.transform = 'rotate(0deg) translateZ(0)';
 			this.aboutSectionElementsSlideUp();
   	} else {
   		this.aboutSectionElementsSlideDown();
 
   		if (this.angle > -10 && this.angle <= -0.5) {
-				this.angleContainer.style.transform = 'translateZ(0) rotate(' + this.state.roundTo(this.angle, 1) + 'deg)';
+				this.angleContainer.style.transform = 'rotate(' + this.state.roundTo(this.angle, 1) + 'deg) translateZ(0)';
 			} else {
-				this.angleContainer.style.transform = 'translateZ(0) rotate(-10deg)';
+				this.angleContainer.style.transform = 'rotate(-10deg) translateZ(0)';
+				return this.setTransformGradientBG(0);
 			}
   	}
+  	this.setTransformGradientBG();
   }
 
-	setAngleToGradientBGOLD () {
-		if (!this.angleContainerWrapperRECT) {
-			this.angleContainerWrapperRECT = this.angleContainerWrapper.getBoundingClientRect();
-		}
-		this.angle = (this.angleContainerWrapperRECT.top - this.state.windowHeight/2)/this.state.windowHeight/2*-100;
-		console.log(this.angleContainerWrapperRECT.top);
-		console.log(this.aaa - this.parallax.scrollTop);
-
-
-		if (this.angle > -0.5) {
-			/*this.angleContainer.style.transform = 'translate3d(0, 0, 0) rotate(0deg) scale3d(1.7, 1, 1)';*/
-			this.angleContainer.style.transform = 'translateZ(0) rotate(0deg)';
-			this.aboutSectionElementsSlideUp();
-		} else {
-			this.aboutSectionElementsSlideDown();
-			if (this.angle > -10 && this.angle <= -0.5) {
-				/*this.angleContainer.style.transform = 'translate3d(0, 0, 0) rotate(' + Math.round(this.angle) + 'deg) scale3d(1.7, 1, 1)';*/
-				this.angleContainer.style.transform = 'translateZ(0) rotate(' + Math.round(this.angle) + 'deg)';
-			} else {
-				/*this.angleContainer.style.transform = 'translate3d(0, 0, 0) rotate(-10deg) scale3d(1.7, 1, 1)';*/
-				this.angleContainer.style.transform = 'translateZ(0) rotate(-10deg)';
-			}
-		}
-	}
-
 	aboutSectionElementsSlideUp () {
-		this.aboutSection__header.classList.add('aboutSection__header_slideUp');
-		this.stackDescriptionWrapper.classList.add('stackSection__stackDescriptionWrapper_slideUp');
+		this.aboutSection__header.classList.remove('aboutSection__header_slideDown');
+		this.stackDescriptionWrapper.classList.remove('stackSection__stackDescriptionWrapper_slideDown');
 	}
 	aboutSectionElementsSlideDown () {
-		this.aboutSection__header.classList.remove('aboutSection__header_slideUp');
-		this.stackDescriptionWrapper.classList.remove('stackSection__stackDescriptionWrapper_slideUp');
+		this.aboutSection__header.classList.add('aboutSection__header_slideDown');
+		this.stackDescriptionWrapper.classList.add('stackSection__stackDescriptionWrapper_slideDown');
 	}
 
-	angleGradientBGEnable () {
-		this.state.angleGradientBGIsActive = true;
-		this.gradientBG.classList.add('stackSection__gradientBG_animationON');
+	setTransformGradientBG (value) {
+		if (value !== undefined)
+			return this.gradientBG.style.transform = 'translateX(0%)';
+
+		this.gradientBGTransformValue = -66 * (1 - this.angleContainerWrapperRECT.bottomOnDisplay / this.gradientBGScrollHeight);
+
+		this.gradientBGTransformValue < -66 && (this.gradientBGTransformValue = -66);
+
+		this.gradientBG.style.transform = 'translateX(' + this.state.roundTo(this.gradientBGTransformValue, 1) + '%)';
 	}
-	angleGradientBGDisable () {
-		this.state.angleGradientBGIsActive = false;
-		this.gradientBG.classList.remove('stackSection__gradientBG_animationON');
+	classWC (add, target) {
+		if (add) {
+			this[target.state] = true;
+			for (var i = target.arr.length - 1; i >= 0; i--)
+				target.arr[i].classList.add('will-change');
+			return;
+		}
+		
+		this[target.state] = false;
+		for (var i = target.arr.length - 1; i >= 0; i--)
+			target.arr[i].classList.remove('will-change');
 	}
-	resizeGradientBG () {
+/*	resizeGradientBG () {
 		if (this.state.angleGradientBGIsActive) { console.log('resizeGradientBG');
 			//this.angleContainer.classList.add('hidden');
 			this.angleGradientBGDisable();
@@ -431,5 +478,5 @@ class ParallaxScroll {
 				this.angleGradientBGEnable();
 			});
 		}
-	}
+	}*/
 }

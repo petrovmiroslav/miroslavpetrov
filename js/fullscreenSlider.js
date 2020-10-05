@@ -248,7 +248,7 @@ class FullscreenSlider {
   	this.state.hiBgImageTransformOFF();
 
     this.state.slide1IsActive = false;
-    this.state.angleGradientBGON();
+    //this.state.angleGradientBGON();
   }
 
   drawSlider () {
@@ -438,7 +438,7 @@ class FullscreenSlider {
     this.menuButton.classList.remove('hidden');
     this.state.hiBgImageTransformON();
     this.addFullscreenSliderListeners();
-    this.state.angleGradientBGOFF();
+    //this.state.angleGradientBGOFF();
 
     this.cleanSlider();
   }

@@ -18,7 +18,7 @@
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  transform: translate3d(0,0,0);
+  /*transform: translate3d(0,0,0);!!*/
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: auto;
   touch-action: pan-y; 
@@ -41,6 +41,7 @@
   position: absolute;
   transform: translateY(-100%);
   background: #454C59;
+  z-index: -1;
 }
 .parallax__videoCover {
   width: 100%;
@@ -63,6 +64,8 @@
 .parallax__bg-fullscreen-video_mobile-view {
   min-height: 100vh;
   /*right: -40%;*/
+  will-change: opacity;
+  transform: translateZ(0);
 }
 .parallax__bg-fullscreen-video_desktop-view {
   top: 50%;

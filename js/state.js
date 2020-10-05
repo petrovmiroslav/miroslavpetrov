@@ -24,7 +24,7 @@ class State {
 
 		this.hiBgLazyImageIsLoaded = false;
 		this.hiBgLazyImageIsTargetTransform = false;
-
+		this.bgVideoIsOFF = true;
 	}
 
 	init () {

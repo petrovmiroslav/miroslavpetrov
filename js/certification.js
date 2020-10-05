@@ -76,16 +76,16 @@ class Certification {
 
 	addCertificatesMouseDownListener () {
 		if (this.state.deviceIsTouchscreen) {
-			this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.passiveListener);
+			this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.state.passiveListener);
 		} else {
 			this.certificationCarousel.addEventListener('mousedown', this.certificatesOnMouseDownBind, false);
 		}
 	}
 	addCertificatesScrollListener () {
-		this.certificates.addEventListener('scroll', this.certificatesOnScrollBind, this.passiveListener);
+		this.certificates.addEventListener('scroll', this.certificatesOnScrollBind, this.state.passiveListener);
 	}
 	removeCertificatesScrollListener () {
-		this.certificates.removeEventListener('scroll', this.certificatesOnScrollBind, this.passiveListener);
+		this.certificates.removeEventListener('scroll', this.certificatesOnScrollBind, this.state.passiveListener);
 	}
 	addCertificatesSwipeListeners () {
 		this.certificationCarousel.addEventListener('mousemove', this.certificatesOnMouseMoveBind, false);
@@ -98,10 +98,10 @@ class Certification {
 		document.removeEventListener('mouseup', this.certificatesOnMouseUpBind, false);
 	}
 	addCertificatesTouchEndListener () {
-		document.addEventListener('touchend', this.certificatesOnTouchEndBind, this.passiveListener);
+		document.addEventListener('touchend', this.certificatesOnTouchEndBind, this.state.passiveListener);
 	}
 	removeCertificatesTouchEndListener () {
-		document.removeEventListener('touchend', this.certificatesOnTouchEndBind, this.passiveListener);
+		document.removeEventListener('touchend', this.certificatesOnTouchEndBind, this.state.passiveListener);
 	}
 
 	addCertificationHintListeners () {
@@ -297,7 +297,7 @@ class Certification {
 					this.rAF(this.setScrollBehaviorSmooth);
 					/*this.rAF(this.waitScrollCurCert);*/
 				});
-				document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'resize---WIDTH--' + this.certificatesScrollWidth+' scrollStepValue--'+this.scrollStepValue;
+				//document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'resize---WIDTH--' + this.certificatesScrollWidth+' scrollStepValue--'+this.scrollStepValue;
 			} else {
 				this.certificationCarouselRECT = this.certificationCarousel.getBoundingClientRect();
 				this.certificatesRECT = this.certificates.getBoundingClientRect();

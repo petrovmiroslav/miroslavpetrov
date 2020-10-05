@@ -9,6 +9,7 @@ class Bubbles {
 		this.state = State;
 		this.bubblesCreated = false;
 		this.state.bubblesUpdate = this.bubblesUpdate.bind(this);
+		this.state.bubblesStart = false;
 		this.state.bubblesPause = true;
 		this.state.bubblesPauseON = this.bubblesPause.bind(this);
 		this.state.bubblesPauseOFF = this.bubblesStart.bind(this);
@@ -389,12 +390,14 @@ class Bubbles {
 
   bubblesStart () {
   	if (!this.bubblesCreated) {
-  		this.bubblesUpdate();
-  	} else {
-  		this.state.bubblesPause = false;
-  		Matter.Render.run(this.render);
-			Matter.Runner.run(this.runner, this.engine);
-  	}
+	  	this.bubblesUpdate();
+	  } else {
+	  	if (this.state.bubblesStart) {
+	  		this.state.bubblesPause = false;
+				Matter.Render.run(this.render);
+				Matter.Runner.run(this.runner, this.engine);
+	  	}
+	  }
   }
   bubblesPause () {
   	this.state.bubblesPause = true;
