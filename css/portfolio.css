@@ -83,7 +83,7 @@
   -webkit-border-image: none;
 }
 .portfolio__switchButton {
-	width: calc(50% - 1px);
+	width: calc(100% / 3 - 2px);
   display: grid;
   grid-template: "a" 100% / 100%;
   justify-items: center;
@@ -181,6 +181,7 @@
   text-decoration: none;
   color: #021226;
   border-radius: 1vmin;
+  cursor: pointer;
   transform: translateZ(0);
   appearance: none;
   text-align: start;

@@ -49,7 +49,9 @@ class Portfolio {
 		this.parallax = document.querySelector('.parallax__scrollable-container');
 		this.portfolioSection = this.parallax.querySelector('.portfolio');
 		this.deviceSlider = this.parallax.querySelector('.portfolio__deviceContainer');
+		this.imacButtonInput = document.getElementById('iMacView');
 		this.imacButton = document.getElementById('iMacButton');
+		this.iphoneButtonInput = document.getElementById('iPhoneView');
 		this.iphoneButton = document.getElementById('iPhoneButton');
 		this.imacSVG = document.getElementById('iMacSVG');
 		this.iphoneSVG = document.getElementById('iPhoneSVG');
@@ -57,13 +59,15 @@ class Portfolio {
 		this.imacDisplay = document.getElementById('iMacDisplay');
 		this.iphoneDisplay = document.getElementById('iPhoneDisplay');
 		this.curProject = this.parallax.querySelector('.portfolio__project');
+		this.externalLink = document.getElementById('externalLinkView');
 
 		this.addDeviceSwitchListener();
 		this.addProjectsClickListeners();
 	}
 
 	addDeviceSwitchListener () {
-		this.imacButton.parentNode.addEventListener('change', this.deviceSwitchHandlerBind, false);
+		this.imacButtonInput.addEventListener('click', this.deviceSwitchHandlerBind, false);
+		this.iphoneButtonInput.addEventListener('click', this.deviceSwitchHandlerBind, false);
 	}
 
 	deviceSwitchHandler (e) {
@@ -199,6 +203,7 @@ class Portfolio {
 		if (this.sameProject(project))
 			return;
 
+		this.externalLink.href = project.value;
 		this.portfolioIframe.src = project.value;
 		this.curProject.classList.remove('portfolio__project_projectChecked');
 		this.curProject.firstElementChild.classList.remove('portfolio__projectDescriptionContainer_projectChecked');

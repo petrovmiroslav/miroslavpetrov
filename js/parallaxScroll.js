@@ -186,6 +186,7 @@ class ParallaxScroll {
 	}
 	bgVideoON () {
 		this.state.bgVideoIsOFF && (this.state.bgVideoIsOFF = false,
+			this.bgVideo.classList.remove('opacity0'),
 			this.bgVideo.play());
 		/*if (this.state.bgVideoIsOFF) {
 			this.state.bgVideoIsOFF = false;
@@ -195,6 +196,7 @@ class ParallaxScroll {
 	}
 	bgVideoOFF () {
 		this.state.bgVideoIsOFF || (this.state.bgVideoIsOFF = true,
+			this.bgVideo.classList.add('opacity0'),
 			this.bgVideo.pause());
 
 		/*if (!this.state.bgVideoIsOFF) {

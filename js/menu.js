@@ -157,7 +157,7 @@ class Menu {
 		this.state.fullscreenSliderOFF();
 		this.state.cube3dStop();
 		this.pauseAndBlurBGVideo();
-		this.state.bubblesPauseON();
+		this.bubblesPause = this.state.bubblesPause, this.state.bubblesPauseON();
 	}
 
 	pauseAndBlurBGVideo () {
@@ -255,8 +255,8 @@ class Menu {
     this.flipper.classList.remove('hidden');
     
     if (!this.state.slide1IsActive) {
-    	this.ifScrollStopScrollFlipper();
     	this.cloneCanvas();
+    	this.ifScrollStopScrollFlipper();
     } else {
     	this.flipper.classList.remove('opacity0');
     }
@@ -332,6 +332,7 @@ class Menu {
   	formClone.info.textContent = form.info.value;
 	}
 	cloneCanvas () {
+		if (this.bubblesPause) return;
 		let allCanvasInFlipper = this.flipper.querySelectorAll('.bubbles__canvas'),
 		sourceCanvas = document.getElementById('canvas');
 		for (let i = 0; i < allCanvasInFlipper.length; i++) {
@@ -342,33 +343,18 @@ class Menu {
 
 	scrollFlipperBeforeRotate () {
 		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
-		let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container')/*,
-				parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop*/;
-
-    /*allParallaxInFlipper.forEach((el)=>{
-      el.scrollTop = this.parallaxScrollValue;
-      el = null;
-    });*/
-    for (let i = 0; i < allParallaxInFlipper.length; i++) {
-    	allParallaxInFlipper[i].scrollTop = this.parallaxScrollValue;
+    for (let i = 0, p = this.flipper.querySelectorAll('.parallax__scrollable-container'); i < p.length; i++) {
+    	p[i].scrollTop = this.parallaxScrollValue;
     }
 
-    let allcertsInFlipper = this.flipper.querySelectorAll('.certification__certificates');
-    for (let i = 0; i < allcertsInFlipper.length; i++) {
-    	this.state.displayCurrentCertInFlipper(allcertsInFlipper[i]);
+    for (let i = 0, c = this.flipper.querySelectorAll('.certification__certificates'); i < c.length; i++) {
+    	this.state.displayCurrentCertInFlipper(c[i]);
     }
 
-    //this.rAF(this.setScrollFlipperBeforeRotateDone.bind(this));
     this.setScrollFlipperBeforeRotateDone();
 	}
 	setScrollFlipperBeforeRotateDone () {
-		/*let allParallaxInFlipper = this.flipper.querySelectorAll('.parallax__scrollable-container');
-		for (var i = 0; i < allParallaxInFlipper.length; i++) {
-			void(allParallaxInFlipper[i].scrollTop);
-			console.log(allParallaxInFlipper[i].scrollTop);
-		}*/
 		this.scrollFlipperBeforeRotateDone = true;
-		console.log(this.parallaxScrollValue);
 	}
 
 	recParallaxScrollValue () {
@@ -456,8 +442,6 @@ class Menu {
 		this.flipper.classList.add('fullscreenFlipper_rotate');
 
 		this.startWaitFlipperAnimationDone();
-/*		this.flipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);
-		window.setTimeout(this.waitFlipperAnimationDone.bind(this), this.flipperRotationAnimationDuration);*/
 	}
 	afterFlipperRotate () {
 		//this.TIMER.push('flipper3Render', Date.now(), '\n');

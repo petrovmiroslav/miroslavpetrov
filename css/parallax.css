@@ -21,7 +21,7 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: auto;
-  touch-action: pan-y;
+  /*touch-action: pan-y;*/
 }
 .parallax__scrollable-container_smoothScroll {
   scroll-behavior: smooth;
