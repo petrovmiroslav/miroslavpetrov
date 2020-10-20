@@ -32,11 +32,6 @@ let Kraken = new ReleaseTheKraken(),
     Portfolio = new PortfolioModule(State),
     Form = new FormModule(State),
     Bubbles = new BubblesModule(State, ClientDevice);
-  
-
-
-
-
 
 
 
@@ -46,8 +41,6 @@ const DOMContentLoaded = function (state) {
   let Preloader = new PreloaderModule(State);
   Preloader.run();
   Preloader = null;
-
-
 };
 const WindowLoaded = function () {
   window.removeEventListener('load', WindowLoaded);

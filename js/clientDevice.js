@@ -136,17 +136,30 @@ class ClientDevice {
 				el.classList.add('parallax__layer--fore_desktop-view');
 			});
 			this.main.querySelector('.menu__emailSection').classList.remove('menu__emailSection_menuBarFix');
+
+			document.getElementById('group1').classList.add('group1_desktop-view');
+			document.getElementById('group1').classList.remove('parallax__group_desktop-view');
+			this.main.querySelector('.cube3d').classList.remove('cube3d_mobileView');
+			document.getElementById('group2').classList.add('parallax__videoContainer');
+			document.getElementById('group2').classList.remove('parallax__group_desktop-view');
+			this.main.querySelector('.videoDescription').classList.add('videoDescription_desktop-view');
+			//document.getElementById('group3').classList.remove('parallax__group_desktop-view');
+			//this.main.querySelector('.header__text_certification').classList.add('will-change');
+
+			document.getElementById('group4').classList.remove('parallax__group_desktop-view');
+			//this.main.querySelector('.header__text_portfolio').classList.add('will-change');
+
+			this.main.querySelector('.contactWithMe').classList.remove('contactWithMe_mobileView');
+			document.getElementById('wrapperMenuButton').classList.add('menuButton_desktop-view');
 			
 
-			let plantContainerBase = this.main.querySelector('.certification__plantParallaxImgContainerBase'),
-					plantContainerFore = this.main.querySelector('.certification__plantParallaxImgContainerFore');
+			let plantContainerBase = this.main.querySelector('.certification__plantParallaxImg_base'),
+					plantContainerFore = this.main.querySelector('.certification__plantParallaxImg_fore');
 			plantContainerBase.classList.remove('hidden');		
-			plantContainerBase.classList.add('certification__plantParallaxImgContainer', 'certification__plantParallaxImgContainerBase_desktop-view');
-			plantContainerBase.firstElementChild.setAttribute('src', '../img/plant-base.png');
+			plantContainerBase.setAttribute('src', '../img/plant-base.png');
 
 			plantContainerFore.classList.remove('hidden');
-			plantContainerFore.classList.add('certification__plantParallaxImgContainer', 'certification__plantParallaxImgContainerFore_desktop-view');
-			plantContainerFore.firstElementChild.setAttribute('src', '../img/plant-fore.png');
+			plantContainerFore.setAttribute('src', '../img/plant-fore.png');
 			plantContainerBase = plantContainerFore = null;
 		}
 	}

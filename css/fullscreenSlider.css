@@ -39,8 +39,10 @@
 	transform: translateY(100%) rotate(-20deg) scale(1.2) translateZ(0);
 }
 .slide2 {
-  	position: absolute;
-  	opacity: 1;
-  	transform: translateZ(0);
-  	will-change: opacity;
+	width: 100%;
+	position: absolute;
+	background-color: #454C59;
+	opacity: 1;
+	transform: translateZ(0);
+	will-change: opacity;
 }

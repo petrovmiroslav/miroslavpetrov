@@ -9,9 +9,9 @@
 .hiScreen__content-block {
 	position: relative;
 	display: grid;
-	grid-template-columns: 45vmin 15vmin;
-	grid-template-rows: auto 20vmin;
-	padding: 20vmin 0 0 30vmin;
+	grid-template-columns: 44vmin 8vmin;
+  grid-template-rows: auto 8vmin;
+  padding: 18vh 0 0 20vw;
 }
 .hiScreen__text-block {
 	border-radius: 1vmin;
@@ -195,7 +195,7 @@
 	}
 }
 
-@media (max-width: 414px) {
+@media (max-width: 414px), (max-height: 414px) {
   .hiScreen__bgGradientFilter_top {
 		background: radial-gradient(circle, transparent 0%, #021226 100%);
 	}
@@ -209,17 +209,8 @@
 		display: none;
 	}
 }
-@media (max-height: 414px) {
-  .hiScreen__bgGradientFilter_top {
-		background: radial-gradient(circle, transparent 0%, #021226 100%);
-	}
-	.hiScreen__bgGradientFilter_bottom {
-		display: none;
-	}
-	.hiScreen__bgGradientFilter_right {
-		display: none;
-	}
-	.hiScreen__bgGradientFilter_left {
-		display: none;
-	}
+@media (max-width: 414px), (width: 768px) and (height: 1024px), (width: 1024px) and (height: 1366px) {
+	.hiScreen__content-block {
+    padding: 12vh 0 0 22vw;
+  }
 }

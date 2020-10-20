@@ -35,6 +35,8 @@ class ParallaxScroll {
 		this.setAngleToGradientBGRAFBind = this.setAngleToGradientBGRAF.bind(this);
 		this.angleGradientBGEnableRAFBind = this.angleGradientBGEnableRAF.bind(this);
 		this.angleGradientBGDisableRAFBind = this.angleGradientBGDisableRAF.bind(this);
+		this.certsEnableRAFBind = this.certsEnableRAF.bind(this);
+		this.certsDisableRAFBind = this.certsDisableRAF.bind(this);
 		this.certification__headerSlideUpRAFBind = this.certification__headerSlideUpRAF.bind(this);
 		this.certification__headerSlideDownRAFBind = this.certification__headerSlideDownRAF.bind(this);
 		this.certificationHintDisplayRAFBind = this.certificationHintDisplayRAF.bind(this);
@@ -51,6 +53,7 @@ class ParallaxScroll {
 		this.angle = 0;
 		this.gradientBGTransformValue = 0;
 		this.gradientBGIsActive = false;
+		this.certsIsActive = false;
 		this.parallaxScrollCallbackCount = 0;
 		this.certification__headerSlideUp = false;
 		this.portfolio__headerSlideUp = false;
@@ -65,10 +68,15 @@ class ParallaxScroll {
 		this.angleContainer = this.parallax.querySelector('.stackSection__angleContainer');
 		this.gradientBG = this.parallax.querySelector('.stackSection__gradientBG');
 		this.aboutSection__header = this.parallax.querySelector('.aboutSection__header');
+		this.cube3dScene = this.parallax.querySelector('.cube3d__scene');
+		this.cube3dUserHint = this.parallax.querySelector('.userHint_cube3d');
 		this.stackDescriptionWrapper = this.parallax.querySelector('.stackSection__stackDescriptionWrapper');
 		this.certification = this.parallax.querySelector('.certification');
+		this.certificates = this.certification.querySelector('.certification__certificates');
 		this.certificationHint = this.certification.querySelector('.userHint_cert');
+		this.certification__headerContentLayer = this.parallax.querySelector('.header__contentLayer');
 		this.certification__header = this.parallax.querySelector('.header__text_certification');
+		this.certification__frame = this.certification.querySelector('.certification__frame');
 		this.portfolio = this.parallax.querySelector('.portfolio');
 		this.portfolio__header = this.parallax.querySelector('.header__text_portfolio');
 		this.contactWithMe__header = this.parallax.querySelector('.header__text_contactWithMe');
@@ -79,8 +87,12 @@ class ParallaxScroll {
 
 		this.WC = {
 			angle: {
-				arr: [this.gradientBG, this.angleContainer, this.stackDescriptionWrapper, this.aboutSection__header],
+				arr: [this.gradientBG, this.angleContainer, this.stackDescriptionWrapper, this.aboutSection__header, this.cube3dUserHint],
 				state: "gradientBGIsActive"
+			},
+			certs: {
+				arr: [this.certification__header, this.certificates, this.certification__frame, this.certificationHint, this.certification__headerContentLayer],
+				state: "certsIsActive"
 			}
 		};
 
@@ -105,42 +117,37 @@ class ParallaxScroll {
 	}
 
 	parallaxScrollUpdate () {
-		if (!this.state.slide1IsActive) {
-			this.parallaxScrollPosition = this.parallax.scrollTop;
-			this.angleContainerWrapperRECTobj = this.angleContainerWrapper.getBoundingClientRect();
-			this.angleContainerWrapperRECT.top = this.angleContainerWrapperRECTobj.top + this.parallaxScrollPosition;
-			this.angleContainerWrapperRECT.height = this.angleContainerWrapperRECTobj.height;
-			this.angleContainerWrapperRECT.bottom = this.angleContainerWrapperRECTobj.bottom + this.parallaxScrollPosition;
+		if (this.state.slide1IsActive)
+			return;
 
-			this.gradientBGScrollHeight = (this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top))*2;
-//console.log((1 - (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition)/(this.angleContainerWrapperRECT.height*2)));
-/*console.log('h--  ', this.angleContainerWrapperRECT.height, 't--  ', this.angleContainerWrapperRECT.top, 'h - WH - t --  ', (this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top)), '% -- ', (1 - (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition)/((this.angleContainerWrapperRECT.height - (this.state.windowHeight - this.angleContainerWrapperRECT.top))*2)));*/
-			let certificationRECTobj = this.certification.getBoundingClientRect();
-			this.certificationRECT.top = certificationRECTobj.top + this.parallax.scrollTop;
-			this.certificationRECT.height = certificationRECTobj.height;
-			this.certificationRECT.bottom = certificationRECTobj.bottom + this.parallaxScrollPosition;
+		this.parallaxScrollPosition = this.parallax.scrollTop;
+		this.angleContainerWrapperRECTobj = this.angleContainerWrapper.getBoundingClientRect();
+		this.angleContainerWrapperRECT.top = this.angleContainerWrapperRECTobj.top + this.parallaxScrollPosition;
+		this.angleContainerWrapperRECT.height = this.angleContainerWrapperRECTobj.height;
+		this.angleContainerWrapperRECT.bottom = this.angleContainerWrapperRECTobj.bottom + this.parallaxScrollPosition;
 
-			let portfolioRECTobj = this.portfolio.getBoundingClientRect();
-			this.portfolioRECT.top = portfolioRECTobj.top + this.parallaxScrollPosition;
-			this.portfolioRECT.height = portfolioRECTobj.height;
+		this.gradientBGScrollHeight = this.angleContainerWrapperRECT.bottom;
 
-			let bubblesRECTobj = this.canvas.getBoundingClientRect();
-			this.bubblesRECT.top = bubblesRECTobj.top + this.parallaxScrollPosition;
-			this.bubblesRECT.height = bubblesRECTobj.height;
+		let certificationRECTobj = this.certification.getBoundingClientRect();
+		this.certificationRECT.top = certificationRECTobj.top + this.parallax.scrollTop;
+		this.certificationRECT.height = certificationRECTobj.height;
+		this.certificationRECT.bottom = certificationRECTobj.bottom + this.parallaxScrollPosition;
 
-			this.parallaxScrollHandler();
-		}
+		let portfolioRECTobj = this.portfolio.getBoundingClientRect();
+		this.portfolioRECT.top = portfolioRECTobj.top + this.parallaxScrollPosition;
+		this.portfolioRECT.height = portfolioRECTobj.height;
+
+		let bubblesRECTobj = this.canvas.getBoundingClientRect();
+		this.bubblesRECT.top = bubblesRECTobj.top + this.parallaxScrollPosition;
+		this.bubblesRECT.height = bubblesRECTobj.height;
+
+		this.parallaxScrollHandler();
 	}
 
 	parallaxScrollHandler () {
-		if (!this.parallaxScrollHandlerTicking) {
-			this.parallaxScrollHandlerTicking = true;
-			window.requestAnimationFrame(this.parallaxScrollHandler1RenderBind);
-		}
+		this.parallaxScrollHandlerTicking || (this.parallaxScrollHandlerTicking = true, window.requestAnimationFrame(this.parallaxScrollHandler1RenderBind));
 	}
-	setParallaxScrollHandlerTickingFalse () {
-		this.parallaxScrollHandlerTicking = false;
-	}
+
 	parallaxScrollHandler1Render () {
 		if (this.state.menuIsOpen) 
 			return this.parallaxScrollHandlerTicking = false;
@@ -151,116 +158,57 @@ class ParallaxScroll {
 			return this.parallaxScrollHandlerTicking = false;
 
 		this.checkAndUpdateAngle();
+		this.checkAndUpdateBgVideo();
+		this.checkAndUpdateCerts();
+		this.checkAndUpdatePortfolio();
+		this.checkAndUpdateBubbles();
 
 		this.parallaxScrollCallbackCount === 0 && (this.parallaxScrollHandlerTicking = false);
-	}
-	parallaxScrollHandler1RenderTEST () {
-		if (!this.state.menuIsOpen) {
-			this.parallaxScrollPosition = 0/*this.parallax.scrollTop*/;
-			if (this.parallaxScrollPosition < 0) {
-				return this.parallaxScrollHandlerTicking = false;
-			}
-
-	    console.log('1render');
-
-
-			/*new Promise((resolve)=>{
-				window.requestAnimationFrame(this.promise2renderFunc.bind(this, resolve));
-			})
-			.finally(()=>{
-				debugger
-				console.log('finally');});*/
-//////////////////////////////////////
-
-			/*if (this.certificationRECTBottomBelowDisplay()) {
-				if (!this.checkAndUpdateCerts()) {
-					this.checkAndUpdateAngle();
-				}
-			} else {
-				if (!this.checkAndUpdateBubbles()) {
-					this.checkAndUpdatePortfolio();
-				}
-			}*/
-			/*this.checkAndUpdateAngle();
-			this.checkAndUpdateCerts();
-			this.checkAndUpdatePortfolio();
-			this.checkAndUpdateBubbles();
-
-			if (1) {
-				if ((this.angleContainerWrapperRECT.top + this.angleContainerWrapperRECT.height - this.parallaxScrollPosition)/this.state.windowHeight < 0.5 && (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight > -0.5) {
-					console.log("VIDEO");
-					this.bgVideoON();
-				} else {
-					this.bgVideoOFF();
-				}
-			}*/
-
-
-
-			if (this.parallaxScrollCallbackCount === 0) {
-				console.log('COUNT0!');
-				this.parallaxScrollHandlerTicking = false;
-			}
-		} else {
-			this.parallaxScrollHandlerTicking = false;
-		}
 	}
 
 	doItInNextRafAndCallbackCountPlus (f) {
 		window.requestAnimationFrame(f);
 		this.parallaxScrollCallbackCount++;
-		f = null;
+		return f = null, !0;
 	}
 
+	checkAndUpdateBgVideo () {
+		let angleContainerBottomOnDisplay = (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition) / this.state.windowHeight,
+		certificationTopOnDisplay = (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight,
+		a = 0, b = 1;
+
+		/*this.state.deviceIsTouchscreen && (a = -0.2, b = 1.2);*/
+
+		if (certificationTopOnDisplay > a && angleContainerBottomOnDisplay < b)
+			return this.bgVideoON();
+
+		this.bgVideoOFF();
+	}
 	bgVideoON () {
-		if (this.state.bgVideoIsOFF) {
+		this.state.bgVideoIsOFF && (this.state.bgVideoIsOFF = false,
+			this.bgVideo.play());
+		/*if (this.state.bgVideoIsOFF) {
 			this.state.bgVideoIsOFF = false;
 			this.bgVideo.play();
 			//this.bgVideo.classList.remove('opacity0');
-		}
+		}*/
 	}
 	bgVideoOFF () {
-		if (!this.state.bgVideoIsOFF) {
+		this.state.bgVideoIsOFF || (this.state.bgVideoIsOFF = true,
+			this.bgVideo.pause());
+
+		/*if (!this.state.bgVideoIsOFF) {
 			this.state.bgVideoIsOFF = true;
 			this.bgVideo.pause();
 			//this.bgVideo.classList.add('opacity0');
-		}
+		}*/
 	}
-/*	certificationRECTBottomBelowDisplay () {
-		console.log((this.certificationRECT.bottom - this.parallaxScrollPosition - this.state.windowHeight) > 0);
-		if ((this.certificationRECT.bottom - this.parallaxScrollPosition - this.state.windowHeight) > 0) {
-			return true;
-		}
-		return false;
-	}*/
+
 	checkAndUpdateAngle () {
 		this.angleContainerWrapperRECT.bottomOnDisplay = this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition;
 
 		this.angleContainerWrapperRECT.bottomOnDisplay > 0 && this.doItInNextRafAndCallbackCountPlus(this.setAngleToGradientBGRAFBind);
-
-		if (this.angleContainerWrapperRECT.bottomOnDisplay / this.state.windowHeight > -0.2)
-			return !this.gradientBGIsActive && this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGEnableRAFBind);
-
-		this.gradientBGIsActive && this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGDisableRAFBind);
 	}
-
-	/*checkAndUpdateAngleTEST () {console.log((this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition));
-		this.angleContainerWrapperRECT.bottomOnDisplay = this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition;
-
-		if (this.angleContainerWrapperRECT.bottomOnDisplay > 0) {
-			this.doItInNextRafAndCallbackCountPlus(this.setAngleToGradientBGRAFBind);
-		}
-
-		if (this.angleContainerWrapperRECT.bottomOnDisplay / this.state.windowHeight > -0.2) {
-			if (!this.gradientBGIsActive) {
-				this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGEnableRAFBind);
-			}
-		} else {
-			if (this.gradientBGIsActive) {
-				this.doItInNextRafAndCallbackCountPlus(this.angleGradientBGDisableRAFBind);
-			}
-		}
-	}*/
 
 	angleGradientBGEnableRAF () {
 		this.classWC(!0, this.WC.angle);
@@ -272,32 +220,23 @@ class ParallaxScroll {
 	}
 
 	checkAndUpdateCerts () {
-		let certificationDisplayProportion = 1 - (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight,
-		returnVal = false;
-		if (certificationDisplayProportion > 0.5) {
-			returnVal = true;
-		}
+		this.certificationRECT.topOnDisplay = this.certificationRECT.top - this.parallaxScrollPosition;
+		let percentOfTop = this.certificationRECT.topOnDisplay / this.state.windowHeight, certificationDisplayProportion = 1 - percentOfTop;
 
-		if (certificationDisplayProportion > 0.1) {
-			if (!this.certification__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideUpRAFBind);
-			}
-		} else {
-			if (this.certification__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideDownRAFBind);
-			}
-		}
+		if (certificationDisplayProportion < 0.1)
+			return this.certification__headerSlideUp && this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideDownRAFBind);
 
+		this.certification__headerSlideUp || this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideUpRAFBind);
 
-		if (!this.state.certificationUserStart) {
-			if (!this.certificationHintDisplay) {
-				if (certificationDisplayProportion > 0.9) {
-					this.doItInNextRafAndCallbackCountPlus(this.certificationHintDisplayRAFBind);
-				}
-			}
-		}
-
-		return returnVal;
+		certificationDisplayProportion < 0.9 || this.state.certificationUserStart || this.certificationHintDisplay || this.doItInNextRafAndCallbackCountPlus(this.certificationHintDisplayRAFBind);
+	}
+	certsEnableRAF () {
+		this.classWC(!0, this.WC.certs);
+		this.parallaxScrollFinish();
+	}
+	certsDisableRAF () {
+		this.classWC(!1, this.WC.certs);
+		this.parallaxScrollFinish();
 	}
 
 	certification__headerSlideUpRAF () {
@@ -317,16 +256,13 @@ class ParallaxScroll {
 	}
 
 	checkAndUpdatePortfolio () {
-		let portfolioDisplayProportion = 1 - (this.portfolioRECT.top - this.parallaxScrollPosition) / this.state.windowHeight;
-		if (portfolioDisplayProportion > 0.1) {
-			if (!this.portfolio__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideUpRAFBind);
-			}
-		} else {
-			if (this.portfolio__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideDownRAFBind);
-			}
-		}
+		this.portfolioRECT.topOnDisplay = this.portfolioRECT.top - this.parallaxScrollPosition;
+		let percentOfTop = this.portfolioRECT.topOnDisplay / this.state.windowHeight, portfolioDisplayProportion = 1 - percentOfTop;
+
+		if (portfolioDisplayProportion < 0.1)
+			return this.portfolio__headerSlideUp && this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideDownRAFBind);
+
+		this.portfolio__headerSlideUp || this.doItInNextRafAndCallbackCountPlus(this.portfolio__headerSlideUpRAFBind);
 	}
 	portfolio__headerSlideUpRAF () {
 		this.portfolio__header.classList.remove('header__text_slideDown');
@@ -340,47 +276,25 @@ class ParallaxScroll {
 	}
 
 	checkAndUpdateBubbles () {
-		let bubblesDisplayProportion = 1 - (this.bubblesRECT.top - this.parallaxScrollPosition) / this.state.windowHeight;
+		this.bubblesRECT.topOnDisplay = this.bubblesRECT.top - this.parallaxScrollPosition;
+		let percentOfTop = this.bubblesRECT.topOnDisplay / this.state.windowHeight, bubblesDisplayProportion = 1 - percentOfTop;
 
 		if (bubblesDisplayProportion > 0.1) {
-			if (!this.contactWithMe__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideUpRAFBind);
-			}
+			this.contactWithMe__headerSlideUp || this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideUpRAFBind);
 		} else {
-			if (this.contactWithMe__headerSlideUp) {
-				this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideDownRAFBind);
-			}
+			this.contactWithMe__headerSlideUp && this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideDownRAFBind);
 		}
-
-
-		if (this.bubblesStart) {
-			if (bubblesDisplayProportion > 0) {
-				if (this.state.bubblesPause) {
-					this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
-				}
-			} else {
-				if (!this.state.bubblesPause) {
-					this.state.bubblesPauseON();
-				}
-			}
-		} else {
-			if (bubblesDisplayProportion > 0.8) {
-				if (this.state.bubblesPause) {
-					this.state.bubblesStart = true;
-					window.requestAnimationFrame(this.setBubblesStartRAFBind);
-					this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
-				}
-			} else {
-				if (!this.state.bubblesPause) {
-					this.state.bubblesPauseON();
-				}
-			}
+//return;
+		if (this.bubblesStart) { 
+			if (bubblesDisplayProportion > 0) 
+				return this.state.bubblesPause && this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
+			return this.state.bubblesPause || this.state.bubblesPauseON();
 		}
-
-		if (bubblesDisplayProportion > 0) {
-			return true;
-		}
-		return false;
+		if (bubblesDisplayProportion < 0.8)
+			return this.state.bubblesPause || this.state.bubblesPauseON();
+		this.state.bubblesPause && (this.state.bubblesStart = true,
+		window.requestAnimationFrame(this.setBubblesStartRAFBind),
+		this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind));
 	}
 	bubbles__headerSlideUpRAF () {
 		this.contactWithMe__header.classList.remove('header__text_contactWithMeSlideDown');
@@ -405,14 +319,6 @@ class ParallaxScroll {
 		this.parallaxScrollFinish();
 	}
 
-	promise2renderFunc (resolve) {
-		
-		this.angleContainerWrapperRECT = this.angleContainerWrapper.getBoundingClientRect();
-		
-		console.log('2render');
-		resolve();
-	}
-
 	parallaxScrollFinish () {
 		--this.parallaxScrollCallbackCount === 0 && (this.parallaxScrollHandlerTicking = false);
 	}
@@ -420,20 +326,18 @@ class ParallaxScroll {
   setAngleToGradientBG () {
   	this.angle = (this.angleContainerWrapperRECT.top - this.parallaxScrollPosition - this.state.windowHeight/2)/this.state.windowHeight/2*-100;
 
+  	this.setTransformGradientBG();
+
   	if (this.angle > -0.5) {
   		this.angleContainer.style.transform = 'rotate(0deg) translateZ(0)';
-			this.aboutSectionElementsSlideUp();
-  	} else {
-  		this.aboutSectionElementsSlideDown();
+			return this.aboutSectionElementsSlideUp();
+  	} 
 
-  		if (this.angle > -10 && this.angle <= -0.5) {
-				this.angleContainer.style.transform = 'rotate(' + this.state.roundTo(this.angle, 1) + 'deg) translateZ(0)';
-			} else {
-				this.angleContainer.style.transform = 'rotate(-10deg) translateZ(0)';
-				return this.setTransformGradientBG(0);
-			}
-  	}
-  	this.setTransformGradientBG();
+  	this.aboutSectionElementsSlideDown();
+  	if (this.angle > -10 && this.angle <= -0.5)
+  		return this.angleContainer.style.transform = 'rotate(' + this.state.roundTo(this.angle, 1) + 'deg) translateZ(0)';
+
+  	this.angleContainer.style.transform = 'rotate(-10deg) translateZ(0)';
   }
 
 	aboutSectionElementsSlideUp () {
@@ -447,13 +351,14 @@ class ParallaxScroll {
 
 	setTransformGradientBG (value) {
 		if (value !== undefined)
-			return this.gradientBG.style.transform = 'translateX(0%)';
+			return this.gradientBG.style.transform = 'translate3d(0%, 0, 0)';
 
 		this.gradientBGTransformValue = -66 * (1 - this.angleContainerWrapperRECT.bottomOnDisplay / this.gradientBGScrollHeight);
 
 		this.gradientBGTransformValue < -66 && (this.gradientBGTransformValue = -66);
+		this.gradientBGTransformValue > 0 && (this.gradientBGTransformValue = 0);
 
-		this.gradientBG.style.transform = 'translateX(' + this.state.roundTo(this.gradientBGTransformValue, 1) + '%)';
+		this.gradientBG.style.transform = 'translate3d(' + this.state.roundTo(this.gradientBGTransformValue, 1) + '%, 0%, 0)';
 	}
 	classWC (add, target) {
 		if (add) {

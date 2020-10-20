@@ -41,7 +41,8 @@ class Menu {
 
 	init () {
 		this.menuButton = document.querySelector('.menuButton__lines-wrapper');
-		this.menuButtonCheckbox = document.getElementById('menuButton__checkbox');
+		//this.menuButtonCheckbox = document.getElementById('menuButton__checkbox');
+		this.menuButton_button = document.getElementById('menuButton');
 		this.menu = document.querySelector('.menu');
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
@@ -82,35 +83,37 @@ class Menu {
 	}
 
 	checkReadyToInit () {
-		if (this.state.preloaderIsOff) {
-			window.clearInterval(this.checkReadyToInitInterval);
-			this.addMenuButtonClickListener();
-		}
+		if (!this.state.preloaderIsOff) return;
+		window.clearInterval(this.checkReadyToInitInterval);
+		this.addMenuButtonClickListener();
 	}
 
 	addMenuButtonClickListener () {
-		this.menuButton.addEventListener('click', this.menuButtonClickHandlerBind);
+		this.menuButton_button.addEventListener('click', this.menuButtonClickHandlerBind);
 	}
 	removeMenuButtonClickListener () {
-		this.menuButton.removeEventListener('click', this.menuButtonClickHandlerBind);
+		this.menuButton_button.removeEventListener('click', this.menuButtonClickHandlerBind);
 	}
 
 	menuButtonClickHandler () {
 		//this.TIMER = [];
 		//this.TIMER.push('menuButtonClickHandler', Date.now(), '\n');
 		console.log('menuButtonClickHandler');
-
-		if (!this.state.menuIsOpen) {
-			this.openMenu();
-		} else {
-			this.closeMenu();
-		}
+		if (this.menuTicking) return;
+		this.menuTicking = true;
+		this.state.menuIsOpen ? this.closeMenu() : this.openMenu();
 	}
 
 	disableMenuButton () {
+		this.menuButton_button.disabled = true;
+		this.menuButton_button.blur();
 		this.menuButton.classList.add('menuButton__lines-wrapper_pointer-events_none');
+		if (this.state.menuIsOpen)
+			return this.menuButton.classList.add('menuButton__lines-wrapper_on');
+		this.menuButton.classList.remove('menuButton__lines-wrapper_on');
 	}
 	enableMenuButton () {
+		this.menuButton_button.disabled = false;
 		this.menuButton.classList.remove('menuButton__lines-wrapper_pointer-events_none');
 	}
 
@@ -125,99 +128,50 @@ class Menu {
 		//this.TIMER.push('openMenu', Date.now(), '\n');
 		this.state.menuIsOpen = true;
 
-		window.requestAnimationFrame(this.disableMenuButton.bind(this));
-		window.requestAnimationFrame(this.bodyDisableHover.bind(this));
-
-		//this.rAF(this.validateMenuButtonCheckbox);
-		this.doItIn1stRender(this.validateMenuButtonCheckbox);
-
-		/*if (this.state.slide1IsActive) {
-			this.content = this.slide1;
-			this.openMenuIfSlide1IsActive();
-		} else {
-			this.content = this.slide2;
-			this.openMenuIfSlide2IsActive();
-		}*/
 		if (this.state.slide1IsActive) {
 			this.content = this.slide1;
 			this.prepareForOpenMenuIfSlide1IsActive();
 		} else {
 			this.content = this.slide2;
-			this.prepareForOpenMenuIfSlide2IsActive();
+			this.doItIn1stRender(this.prepareForOpenMenuIfSlide2IsActive.bind(this));
 		}
 
 		this.doItIn1stRender(this.drawFlipper);
 
-		if (this.state.slide1IsActive) {
-			this.parallaxScrollStop = true;
-			this.scrollFlipperBeforeRotateDone = true;
-			this.doItIn2ndRender(this.makeContentSlideHidden);
-		}
-
+		this.state.slide1IsActive && (this.parallaxScrollStop = true,
+			this.scrollFlipperBeforeRotateDone = true,
+			this.doItIn2ndRender(this.makeContentSlideHidden));
+		
 		window.requestAnimationFrame(this.startWaitParallaxScrollStop.bind(this));
+		window.requestAnimationFrame(this.disableMenuButton.bind(this));
 		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDone.bind(this));
-	}
-
-	validateMenuButtonCheckbox () {
-		let value = this.menuButtonCheckbox.checked,
-				menuIsOpen = this.state.menuIsOpen;
-
-		if (menuIsOpen) {
-			if (!value) {
-				this.menuButtonCheckbox.checked = true;
-			}
-		} else {
-			if (value) {
-				this.menuButtonCheckbox.checked = false;
-			}
-		}
 	}
 
 	prepareForOpenMenuIfSlide1IsActive () {
 		this.state.hiBgImageTransformOFF();
 		this.state.fullscreenSliderOFF();
-
-		
 	}
 
 	prepareForOpenMenuIfSlide2IsActive () {
 		//this.TIMER.push('prepareForOpenMenuIfSlide2IsActive', Date.now(), '\n');
-
 		this.state.fullscreenSliderOFF();
-
 		this.state.cube3dStop();
-
 		this.pauseAndBlurBGVideo();
-/*		if (this.state.deviceIsTouchscreen) {
-			this.bgVideoMobile.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
-			this.bgVideoMobile.pause();
-		} else {
-			this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
-			this.bgVideoDesktop.pause();
-		}*/
-		//this.state.angleGradientBGOFF();
-
 		this.state.bubblesPauseON();
 	}
 
 	pauseAndBlurBGVideo () {
 		this.state.bgVideoIsOFF = true;
-		if (this.state.deviceIsTouchscreen) {
-			this.bgVideoMobile.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
+		if (this.state.deviceIsTouchscreen)
+			return this.bgVideoMobile.classList.add('parallax__bg-fullscreen-video_filter-contrast0'),
 			this.bgVideoMobile.pause();
-		} else {
-			this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
-			this.bgVideoDesktop.pause();
-		}
+		this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
+		this.bgVideoDesktop.pause();
 	}
 	playAndClearBGVideo () {
-		if (this.state.deviceIsTouchscreen) {
-			//this.bgVideoMobile.play();
-			this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
-		} else {
-			//this.bgVideoDesktop.play();
-			this.bgVideoDesktop.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
-		}
+		if (this.state.deviceIsTouchscreen)
+			return this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
+		this.bgVideoDesktop.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
 	}
 
 	drawFlipper () {
@@ -231,7 +185,6 @@ class Menu {
     	this.deleteCube3dInContentClone();
     	this.changeCertsScrollBehavior();
     	this.setFormValue();
-
     }
 
     this.menuClone = this.menu.cloneNode(true);
@@ -420,7 +373,6 @@ class Menu {
 
 	recParallaxScrollValue () {
 		this.parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
-
 	}
 	startWaitParallaxScrollStop () {
 		this.parallaxScrollValue = this.parallaxContainer.scrollTop;
@@ -509,6 +461,7 @@ class Menu {
 	}
 	afterFlipperRotate () {
 		//this.TIMER.push('flipper3Render', Date.now(), '\n');
+		this.menuTicking = false;
 		this.menu.classList.remove('hidden');
 		//this.flipper.classList.add('hidden');
 		this.flipper.classList.add('opacity0');
@@ -530,8 +483,6 @@ class Menu {
 		window.requestAnimationFrame(this.disableMenuButton.bind(this));
 		//this.bodyDisableHover();
 		window.requestAnimationFrame(this.bodyDisableHover.bind(this));
-
-		this.doItIn1stRender(this.validateMenuButtonCheckbox);
 
 		this.prepareForCloseMenu();
 
@@ -584,6 +535,8 @@ class Menu {
 		this.afterMenuClose();
 	}
 	afterMenuClose () {
+		this.menuTicking = false;
+
 		this.state.fullscreenSliderON();
 
 		if (this.state.slide1IsActive) {

@@ -25,8 +25,8 @@ class Form {
 		this.submitHandlerBind = this.submitHandler.bind(this);
 		this.XMLHttpRequestOnloadHandlerBind = this.XMLHttpRequestOnloadHandler.bind(this);
 		this.catchErrBind = this.catchErr.bind(this);
+		this.formInputHandlerBind = this.formInputHandler.bind(this);
 		
-
 		this.inputTickTimeout = null;
 		this.formData = null;
 		this.req = null;
@@ -53,16 +53,12 @@ class Form {
 		this.filePreview = this.form.querySelector('.form__filePreview');
 		this.resetFileInputButton = this.form.resetFileInput;
 		this.submitButton = this.form.submit;
-
-		this.addPhoneNumberListeners();
-
-		this.addFileInputChangeListener();
-
-		this.addResetFileInputButtonClickListener();
-
-		this.addSubmitListener();
+		this.loadingSection = document.querySelector('.loading_form');
 
 		this.form.reset();
+		this.addPhoneNumberListeners();
+		this.addFileInputListeners();
+		this.addSubmitListener();
 	}
 
 	addPhoneNumberListeners () {
@@ -80,122 +76,98 @@ class Form {
 		this.phoneNumInput.addEventListener('focus', this.phoneNumberInputFocusHandlerBind);
 	}
 	phoneNumberInputFocusHandler (e) {
-		if(this.phoneNumInput.value === "") {
-			this.phoneNumInput.value = "+7 (";
-		}
+		this.phoneNumInput.value === "" && (this.phoneNumInput.value = "+7 (");
 	}
 	addPhoneNumberInputBlurListener () {
 		this.phoneNumInput.addEventListener('blur', this.phoneNumberInputBlurHandlerBind);
 	}
 	phoneNumberInputBlurHandler (e) {
 		if (this.phoneNumInput.value.length < 5 ) return this.phoneNumInput.value = '';
-		if (this.phoneNumInput.value.length < 18) {
-			this.state.errHandler('Номер телефона должен состоять из 11 цифр');
-		}
+		this.phoneNumInput.value.length < 18 && this.state.errHandler('Номер телефона должен состоять из 11 цифр');
 	}
 	addPhoneNumberInputListener () {
 		this.phoneNumInput.addEventListener('input', this.phoneNumberInputHandlerBind);
 	}
-	phoneNumberInputHandler (e) {console.log('input');
+	phoneNumberInputHandler (e) {
 		window.clearTimeout(this.inputTickTimeout);
 		this.inputTickTimeout = window.setTimeout(this.inputValidPhoneNumberBind, 250);
 	}
 	
 	inputValidPhoneNumber () {
-		if (this.phoneNumInput.value !== "") {
-			this.phoneNumber = this.phoneNumInput.value.split("").filter(this.phoneNumberFilterFunc);
-
-			this.phoneNumInput.value = this.addChar(this.phoneNumber).join("");
-		}
+		if (this.phoneNumInput.value === "") return;
+		this.phoneNumber = this.phoneNumInput.value.split("").filter(this.phoneNumberFilterFunc);
+		this.phoneNumInput.value = this.addChar(this.phoneNumber).join("");
 	}
 	phoneNumberFilterFunc (char) {
-		if (/\d/.exec(char)) {
-			return char;
-		}
+		if (/\d/.exec(char)) return char;
 	}
 	addChar (arr) {
 		arr.splice(0,0,"+");
-		
-		if (arr[1] !== '7') {
-			arr.splice(1,0,"7");
-		}
-		
-		if(!arr[2]) {
-			return arr;
-		} else {
-			arr.splice(2,0," (");
-		}
-		if(!arr[6]) {
-			return arr;
-		} else {
-			arr.splice(6,0,") ");
-		}
-		if(!arr[10]) {
-			return arr;
-		} else {
-			arr.splice(10,0,"-");
-		}
-		if(!arr[13]) {
-			return arr;
-		} else {
-			arr.splice(13,0,"-");
-		}
-		if(!arr[16]) {
-			return arr;
-		} else {
-			arr.splice(16);
-		}
+		arr[1] !== '7' && arr.splice(1,0,"7");
+		if(!arr[2]) return arr;
+		arr.splice(2,0," (");
+		if(!arr[6]) return arr;
+		arr.splice(6,0,") ");
+		if(!arr[10]) return arr;
+		arr.splice(10,0,"-");
+		if(!arr[13]) return arr;
+		arr.splice(13,0,"-");
+		if(!arr[16]) return arr;
+		arr.splice(16);
 		return arr;
 	}
 	
-	addFileInputChangeListener () {
+	addFileInputListeners () {
 		this.fileInput.addEventListener('change', this.fileInputChangeHandlerBind);
+		this.fileInput.addEventListener('click', this.resetFileInputButtonClickBind);
 	}
-	fileInputChangeHandler (e) {console.log('FILE');
-		if (this.fileInput.files.length > 0) {
-			if (this.fileInput.files[0].size < 10485760) {
-				this.filePreview.textContent = this.fileInput.files[0].name;
-				this.enableResetFileInputButton();
-			} else {
-				this.fileInput.value = '';
-				this.filePreview.textContent = 'Файл не выбран. Размер файла не может превышать 10 MB';
-				this.disableResetFileInputButton();
-			}
-		}
-	}
-	displayFileName () {
-
+	fileInputChangeHandler (e) {
+		if (this.fileInput.files.length === 0) return;
+		if (this.fileInput.files[0].size < 10485760)
+			return this.filePreview.textContent = this.fileInput.files[0].name,
+			this.enableResetFileInputButton();
+		this.fileInput.value = '';
+		this.filePreview.textContent = 'Файл не выбран. Размер файла не может превышать 10 MB';
+		this.disableResetFileInputButton();
 	}
 
 	enableResetFileInputButton () {
-		// this.resetFileInputButton.disabled = false;
-		// this.resetFileInputButton.classList.remove('opacity0');
 		this.fileInputButton.textContent = 'Удалить файл';
 	}
 	disableResetFileInputButton () {
-		/*this.resetFileInputButton.disabled = true;
-		this.resetFileInputButton.classList.add('opacity0');*/
 		this.fileInputButton.textContent = 'Прикрепить файл';
 	}
-	enableSubmitFileInputButton () {
-		this.submitButton.disabled = false;
+	submitButtonSwitchSuccess () {
+		this.submitButton.classList.add('submit_success');
+		this.submitButton.value = 'Отправлено!';
 	}
-	disableSubmitFileInputButton () {
+	enableSubmitButton () {
+		this.submitButton.disabled = false;
+		this.submitButton.value = 'Отправить';
+		this.submitButton.classList.add('submit_hoverEnable');
+	}
+	disableSubmitButton () {
 		this.submitButton.disabled = true;
+		this.submitButton.classList.remove('submit_hoverEnable');
+	}
+	addFormInputListener () {
+		this.form.addEventListener('input', this.formInputHandlerBind);
+	}
+	removeFormInputListener () {
+		this.form.removeEventListener('input', this.formInputHandlerBind);
 	}
 
-	addResetFileInputButtonClickListener () {
-		/*this.resetFileInputButton.addEventListener('click', this.resetFileInputButtonClickBind);*/
-		this.fileInputButton.addEventListener('click', this.resetFileInputButtonClickBind);
+	formInputHandler () {
+		this.removeFormInputListener();
+		this.enableSubmitButton();
 	}
+
 	resetFileInputButtonClick (e) {
-		if (this.fileInput.files.length > 0) {
-			e.preventDefault();
-			console.log('RESET');
-			this.filePreview.textContent = '';
-			this.fileInput.value = '';
-			this.disableResetFileInputButton();
-		}
+		if (this.fileInput.files.length === 0) return;
+		e.preventDefault();
+		this.filePreview.textContent = '';
+		this.fileInput.value = '';
+		this.disableResetFileInputButton();
 	}
 
 	addSubmitListener () {
@@ -203,29 +175,22 @@ class Form {
 	}
 	async submitHandler (e) {
 		e.preventDefault();
-		this.disableSubmitFileInputButton();
-
-		this.result = null;
-		this.JSON = null;
-		this.serverErr = false;
+		this.disableSubmitButton();
+		this.cleanUp();
 
 		this.formData = new FormData(this.form);
 		this.formData.set('hidden', 'submit');
 		
 		await this.sendFormData().catch(this.catchErrBind);
-		
+
 		this.handleResponse();
-
-		this.enableSubmitFileInputButton();
-
-		this.cleanUp();		
+		this.cleanUp();	
 	}
+
 	async sendFormData () {
-		if (self.fetch) {
-			await this.fetchReq();
-		} else {
-			await this.XMLHttpReq();
-		}
+		if (self.fetch) 
+			return await this.fetchReq();
+		await this.XMLHttpReq();
 	}
 
 	async fetchReq () {
@@ -233,15 +198,15 @@ class Form {
 	    method: 'POST',
 	    body: this.formData
 	  });
-	  if (this.req) {
-	  	if (!this.req.ok) {
-	  		this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
-		  	throw new Error('Status is not OK');
-		  }
+	  if (!this.req) return;
 
-		  this.result = await this.req.text();
-		  this.JSON = JSON.parse(this.result);
+  	if (!this.req.ok) {
+  		this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
+	  	throw new Error('Status is not OK');
 	  }
+
+	  this.result = await this.req.text();
+	  this.JSON = JSON.parse(this.result);
 	}
 
 	XMLHttpReq () {
@@ -270,47 +235,36 @@ class Form {
 
 	catchErr (e) {
 		console.log(e);
-		// console.log(JSON.parse(/{"error":.*"}/.exec(this.result)));
-		// console.log(this.result);
-
 		this.state.errHandler(e);
 		try {
 			let json = /{"error":.*"}/.exec(this.result);
-			if (json !== null) {
-				this.JSON = JSON.parse(json);
-			}
+			json === null || (this.JSON = JSON.parse(json));
 		} catch (e) {
 			return this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
 		}
 	}
 
 	handleResponse () {
-		if (this.JSON) {
-			if (this.JSON.send) {
-				console.log('ПИСЬМО ОТПРАВЛЕНО');
-			} else {
-				this.state.errHandler('Сообщение не отправлено');
-			}
-
-			if (this.JSON.error) {
-				if (this.JSON.error.length > 0) {
-					for (var i = 0; i < this.JSON.error.length; i++) {
-						this.errorMsgHandler(this.JSON.error[i]);
-					}
-				}
-			}
-		} else {
-			console.log('ERROR!');
+		if (!this.JSON)
 			return this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
+		if (this.JSON.send) {
+			console.log('ПИСЬМО ОТПРАВЛЕНО');
+			this.submitButtonSwitchSuccess();
+		} else {
+			this.state.errHandler('Сообщение не отправлено');
 		}
+		this.addFormInputListener();
 
-		//console.log(this.result);
+		if (this.JSON.error && this.JSON.error.length > 0) {
+			for (var i = 0; i < this.JSON.error.length; i++) {
+				this.errorMsgHandler(this.JSON.error[i]);
+			}
+		}
 		console.log(this.JSON);
 	}
 
 	cleanUp () {
-		this.result = null;
-		this.JSON	= null;
+		this.result = this.JSON	= null;
 		this.serverErr = false;
 	}
 
@@ -370,15 +324,10 @@ class Form {
 			  break;
 
 			default:
-				if (!this.serverErr) {
-					this.serverErr = true;
-					this.state.errHandler('Сервис временно не доступен');
-				}
-
+				this.serverErr || (this.serverErr = true,
+					this.state.errHandler('Сервис временно не доступен'));
 				let err = /^Mailer Error:.*$/.exec(errorMsg);
-				if (err !== null) {
-					this.state.errHandler(new Error(err + '---' + this.result));
-				}
+				err === null || this.state.errHandler(new Error(err + '---' + this.result));
 			  break;
 		}
 	}

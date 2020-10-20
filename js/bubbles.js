@@ -40,17 +40,14 @@ class Bubbles {
 	}
 
 	init () {
-		this.parallax = document.querySelector('.parallax__scrollable-container');
 		this.canvas = document.getElementById('canvas');
-		this.canvasWrapper = document.querySelector(".bubbles");
+		this.canvasWrapper = this.canvas.parentNode;
 		this.form = document.getElementById('form');
 		this.phoneNumInput = this.form.phoneNumber;
 		
-		let elForBlocks = this.form.querySelectorAll('.form__input');
-		for (let i = 0; i < elForBlocks.length; i++) {
+		for (let i = 0, elForBlocks = this.form.querySelectorAll('.form__input'); i < elForBlocks.length; i++) {
 			this.toCreateBlocks.push(elForBlocks[i]);
 		}
-		elForBlocks = null;
 	}
 
 	rAF (f) {
@@ -83,7 +80,7 @@ class Bubbles {
 	    options: {
 	      width: this.canvasRECT.width,
 	      height: this.canvasRECT.height,
-	      background: 'transparent',
+	      background: '#212126',
 	      pixelRatio: 'auto',
 	      showShadows: false,
 	      wireframes: false,
@@ -98,101 +95,61 @@ class Bubbles {
 		this.createCircles();
 		this.createMouse();
 
-		if (!this.canvasWrapper.firstElementChild) {
-			this.canvasWrapper.append(canvas);
-		}
+		this.canvasWrapper.firstElementChild || this.canvasWrapper.append(canvas);
+
 		this.bubblesCreated = true;
 	}
 	bubblesResize () {
-		if (this.bubblesCreated) {
-			this.state.bubblesPause = true;
-			Matter.Render.stop(this.render);
-		  Matter.Runner.stop(this.runner);
+		if (!this.bubblesCreated) return;
+
+		this.state.bubblesPause = true;
+		Matter.Render.stop(this.render);
+	  Matter.Runner.stop(this.runner);
+
+  	this.mouse.element.removeEventListener("mousewheel", this.mouse.mousewheel);
+		this.mouse.element.removeEventListener("DOMMouseScroll", this.mouse.mousewheel);
+		this.mouse.element.removeEventListener("mousedown", this.mouse.mousedown);
+		this.mouse.element.removeEventListener("mousemove", this.mouse.mousemove);
+		this.mouse.element.removeEventListener("mouseup", this.mouse.mouseup);
+  	this.mouse.element.removeEventListener('touchmove', this.mousemoveBind, this.state.passiveListener);
+		this.mouse.element.removeEventListener('touchstart', this.mousedownBind, this.state.passiveListener);
+		this.mouse.element.removeEventListener('touchend', this.mouseupBind, this.state.passiveListener);
 
 
-	  	this.mouse.element.removeEventListener("mousewheel", this.mouse.mousewheel);
-			this.mouse.element.removeEventListener("DOMMouseScroll", this.mouse.mousewheel);
-			this.mouse.element.removeEventListener("mousedown", this.mouse.mousedown);
-			this.mouse.element.removeEventListener("mousemove", this.mouse.mousemove);
-			this.mouse.element.removeEventListener("mouseup", this.mouse.mouseup);
-			/*this.mouse.element.removeEventListener('touchmove', this.mouse.mousemove);
-	  	this.mouse.element.removeEventListener('touchstart', this.mouse.mousedown);
-	  	this.mouse.element.removeEventListener('touchend', this.mouse.mouseup);*/
-	  	this.mouse.element.removeEventListener('touchmove', this.mousemoveBind, this.state.passiveListener);
-  		this.mouse.element.removeEventListener('touchstart', this.mousedownBind, this.state.passiveListener);
-  		this.mouse.element.removeEventListener('touchend', this.mouseupBind, this.state.passiveListener);
+  	this.canvasWrapper.innerHTML = '';
+  	this.canvas = null;
+  	Matter.Engine.clear(this.engine);
+  	this.render.canvas = null;
+    this.render.context = null;
+    this.render.textures = {};
+    this.engine = {};
+    this.render = {};
+    this.runner = {};
+    this.mouse = {};
+    this.mouseConstraint = {};
+    this.walls = {};
+    this.blocksRECT = [];
+    this.blocks = {};
+    this.stack = {};
+    this.bubblesCreated = false;
 
-
-	  	this.canvasWrapper.innerHTML = '';
-	  	this.canvas = null;
-	  	Matter.Engine.clear(this.engine);
-	  	this.render.canvas = null;
-	    this.render.context = null;
-	    this.render.textures = {};
-	    this.engine = {};
-	    this.render = {};
-	    this.runner = {};
-	    this.mouse = {};
-	    this.mouseConstraint = {};
-	    this.walls = {};
-	    this.blocksRECT = [];
-	    this.blocks = {};
-	    this.stack = {};
-	    this.bubblesCreated = false;
-
-	    this.bubblesUpdate();
-		}
-	}
-	bubblesResizeOLD () {
-		if (this.bubblesCreated) {
-			Matter.World.clear(this.engine.world, false);
-			Matter.Render.stop(this.render);
-	    Matter.Runner.stop(this.runner);
-
-	    this.mouse.element.removeEventListener("mousewheel", this.mouse.mousewheel);
-			this.mouse.element.removeEventListener("DOMMouseScroll", this.mouse.mousewheel);
-			this.mouse.element.removeEventListener("mousedown", this.mouse.mousedown);
-			this.mouse.element.removeEventListener("mousemove", this.mouse.mousemove);
-			this.mouse.element.removeEventListener("mouseup", this.mouse.mouseup);
-			this.mouse.element.removeEventListener('touchmove', this.mouse.mousemove);
-	  	this.mouse.element.removeEventListener('touchstart', this.mouse.mousedown);
-	  	this.mouse.element.removeEventListener('touchend', this.mouse.mouseup);
-
-			this.render.bounds.max.x = this.canvasRECT.width;
-			this.render.bounds.max.y = this.canvasRECT.height;
-			this.render.options.width = this.canvasRECT.width;
-			this.render.options.height = this.canvasRECT.height;
-			this.canvas.width = this.canvasRECT.width /** this.render.options.pixelRatio*/;
-			this.canvas.height = this.canvasRECT.height /** this.render.options.pixelRatio*/;
-			this.canvas.style.width = this.canvasRECT.width + "px";
-			this.canvas.style.height = this.canvasRECT.height + "px";
-		}
-		
-		
-		//Matter.Engine.clear(this.engine); 
-    /*render.canvas.remove();
-    render.canvas = null;
-    render.context = null;
-    render.textures = {};*/
+    this.bubblesUpdate();
 	}
 
 	bubblesUpdate () {
-		if (!this.state.slide1IsActive) {
-			this.canvasRECT = this.canvasWrapper.getBoundingClientRect();
-
-			for (var i = this.toCreateBlocks.length - 1; i >= 0; i--) {
-				let getBCR = this.toCreateBlocks[i].getBoundingClientRect(),
-				rect = {
-					top: getBCR.top - this.canvasRECT.top,
-					left: getBCR.left,
-					width: getBCR.width,
-					height: getBCR.height
-				};
-				this.blocksRECT.push(rect);
-			}
-	    
-			this.bubblesCreate();
+		if (this.state.slide1IsActive) return;
+		this.canvasRECT = this.canvasWrapper.getBoundingClientRect();
+		for (var i = this.toCreateBlocks.length - 1; i >= 0; i--) {
+			let getBCR = this.toCreateBlocks[i].getBoundingClientRect(),
+			rect = {
+				top: getBCR.top - this.canvasRECT.top,
+				left: getBCR.left,
+				width: getBCR.width,
+				height: getBCR.height
+			};
+			this.blocksRECT.push(rect);
 		}
+		this.bubblesCreate();
 	}
 
 	createWalls () {
@@ -212,12 +169,11 @@ class Bubbles {
 			
 			Matter.Composite.add(this.blocks, block);
 		}
-
 		Matter.World.add(this.engine.world, this.blocks);
 	}
 	createCircles () {
-		let RECT = this.canvasRECT;
-		let stackOption = {
+		let RECT = this.canvasRECT,
+		stackOption = {
     	circlesSize: Math.min(RECT.width*0.1, RECT.height*0.1),
 			circleRenderOptions: {
 				//friction: 0.1,//0.1
@@ -368,36 +324,28 @@ class Bubbles {
 	}
 	
 	addHover () {
-		if (!this.mousemoveTicking) {
-			if (this.mouseConstraint.body === null) {
-				this.hoverObj = Matter.Query.point(this.stack.bodies, this.mouse.position);
-				if (this.hoverObj.length > 0) {
-					if (!this.hover) {
-						this.mousemoveTicking = true;
-						this.hover = true;
-						this.addCanvasCursorGrab();
-					}
-				} else {
-					if (this.hover) {
-						this.mousemoveTicking = true;
-						this.hover = false;
-						this.removeCanvasCursorGrab();
-					}
-				}
-			}
-		}
+		if (this.mousemoveTicking) return;
+		if (this.mouseConstraint.body !== null) return;
+
+		this.hoverObj = Matter.Query.point(this.stack.bodies, this.mouse.position);
+
+		if (this.hoverObj.length > 0)
+			return this.hover || (this.mousemoveTicking = true,
+			this.hover = true,
+			this.addCanvasCursorGrab());
+
+		this.hover && (this.mousemoveTicking = true,
+			this.hover = false,
+			this.removeCanvasCursorGrab());
 	}
 
   bubblesStart () {
-  	if (!this.bubblesCreated) {
-	  	this.bubblesUpdate();
-	  } else {
-	  	if (this.state.bubblesStart) {
-	  		this.state.bubblesPause = false;
-				Matter.Render.run(this.render);
-				Matter.Runner.run(this.runner, this.engine);
-	  	}
-	  }
+  	if (!this.bubblesCreated)
+  		return this.bubblesUpdate();
+
+  	this.state.bubblesStart && (this.state.bubblesPause = false,
+			Matter.Render.run(this.render),
+			Matter.Runner.run(this.runner, this.engine));
   }
   bubblesPause () {
   	this.state.bubblesPause = true;

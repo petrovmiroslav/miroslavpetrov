@@ -28,9 +28,9 @@ class Portfolio {
 
 		this.imacIsActive = true;
 		this.curProject = null;
-
-		this.imacButtonClickHandlerBind = this.imacButtonClickHandler.bind(this);
-		this.iphoneButtonClickHandlerBind = this.iphoneButtonClickHandler.bind(this);
+		
+		this.deviceSwitchHandlerBind = this.deviceSwitchHandler.bind(this);
+		this.waitDeviceSliderAnimationDoneRAFBind = this.waitDeviceSliderAnimationDoneRAF.bind(this);
 		this.waitDeviceSliderAnimationDoneBind = this.waitDeviceSliderAnimationDone.bind(this);
 		this.projectsClickHandlerBind = this.projectsClickHandler.bind(this);
 	}
@@ -47,13 +47,10 @@ class Portfolio {
 
 	init () {
 		this.parallax = document.querySelector('.parallax__scrollable-container');
-		this.deviceSlider = document.querySelector('.portfolio__deviceSlider');
+		this.portfolioSection = this.parallax.querySelector('.portfolio');
+		this.deviceSlider = this.parallax.querySelector('.portfolio__deviceContainer');
 		this.imacButton = document.getElementById('iMacButton');
 		this.iphoneButton = document.getElementById('iPhoneButton');
-		this.imacButtonBG_back = this.imacButton.querySelector('.portfolio__switchButtonBG_back');
-		this.imacButtonBG_highlight = this.imacButton.querySelector('.portfolio__switchButtonBG_highlight');
-		this.iphoneButtonBG_back = this.iphoneButton.querySelector('.portfolio__switchButtonBG_back');
-		this.iphoneButtonBG_highlight = this.iphoneButton.querySelector('.portfolio__switchButtonBG_highlight');
 		this.imacSVG = document.getElementById('iMacSVG');
 		this.iphoneSVG = document.getElementById('iPhoneSVG');
 		this.portfolioIframe = document.getElementById('portfolioIframe');
@@ -61,93 +58,100 @@ class Portfolio {
 		this.iphoneDisplay = document.getElementById('iPhoneDisplay');
 		this.curProject = this.parallax.querySelector('.portfolio__project');
 
-		this.addDeviceSwitchButtonsClickListeners();
+		this.addDeviceSwitchListener();
 		this.addProjectsClickListeners();
 	}
 
-	addDeviceSwitchButtonsClickListeners () {
-		this.imacButton.addEventListener('click', this.imacButtonClickHandlerBind, false);
-		this.iphoneButton.addEventListener('click', this.iphoneButtonClickHandlerBind, false);
+	addDeviceSwitchListener () {
+		this.imacButton.parentNode.addEventListener('change', this.deviceSwitchHandlerBind, false);
 	}
-	imacButtonClickHandler () {
-		if (!this.imacIsActive) {
+
+	deviceSwitchHandler (e) {
+		if (e.target.id === 'iMacView' && !this.imacIsActive) {
 			this.imacIsActive = true;
 			this.imacButton.classList.add('portfolio__switchButton_checked');
-			this.imacButtonBG_back.classList.add('opacity0');
-			this.imacButtonBG_highlight.classList.add('portfolio__switchButtonBG_checked');
-			this.iphoneButton.classList.remove('portfolio__switchButton_checked');
-			this.iphoneButtonBG_back.classList.remove('opacity0');
-			this.iphoneButtonBG_highlight.classList.remove('portfolio__switchButtonBG_checked');
-			this.deviceSlider.classList.remove('portfolio__deviceSlider_iphoneChecked');
-			this.imacSVG.classList.add('portfolio__device_checked');
-			this.iphoneSVG.classList.remove('portfolio__device_checked');
-			this.portfolioIframe.classList.add('opacity0');
-			
-			this.startWaitDeviceSliderAnimationDone();
-		}
-	}
-	iphoneButtonClickHandler () {
-		if (this.imacIsActive) {
-			this.imacIsActive = false;
-			this.imacButton.classList.remove('portfolio__switchButton_checked');
-			this.imacButtonBG_back.classList.remove('opacity0');
-			this.imacButtonBG_highlight.classList.remove('portfolio__switchButtonBG_checked');
-			this.iphoneButton.classList.add('portfolio__switchButton_checked');
-			this.iphoneButtonBG_back.classList.add('opacity0');
-			this.iphoneButtonBG_highlight.classList.add('portfolio__switchButtonBG_checked');
-			this.deviceSlider.classList.add('portfolio__deviceSlider_iphoneChecked');
-			this.imacSVG.classList.remove('portfolio__device_checked');
-			this.iphoneSVG.classList.add('portfolio__device_checked');
-			this.portfolioIframe.classList.add('opacity0');
+			this.imacButton.classList.remove('portfolio__switchButton_hoverEnable');
+			this.imacButton.firstElementChild.classList.remove('portfolio__switchButtonBG_hoverEnable');
 
-			this.startWaitDeviceSliderAnimationDone();
+			this.iphoneButton.classList.remove('portfolio__switchButton_checked');
+			this.iphoneButton.classList.add('portfolio__switchButton_hoverEnable');
+			this.iphoneButton.firstElementChild.classList.add('portfolio__switchButtonBG_hoverEnable');
+			this.imacSVG.parentNode.classList.remove('portfolio__deviceContainer_iphoneChecked');
+			this.imacSVG.parentNode.classList.remove('opacity0');
+			this.iphoneSVG.parentNode.classList.remove('portfolio__deviceContainer_iphoneChecked');
+			this.iphoneSVG.parentNode.classList.add('opacity0');
+			this.iframeOff();
+		} else {
+			if (e.target.id === 'iPhoneView' && this.imacIsActive) {
+				this.imacIsActive = false;
+				this.imacButton.classList.remove('portfolio__switchButton_checked');
+				this.imacButton.classList.add('portfolio__switchButton_hoverEnable');
+				this.imacButton.firstElementChild.classList.add('portfolio__switchButtonBG_hoverEnable');
+				this.iphoneButton.classList.add('portfolio__switchButton_checked');
+				this.iphoneButton.classList.remove('portfolio__switchButton_hoverEnable');
+				this.iphoneButton.firstElementChild.classList.remove('portfolio__switchButtonBG_hoverEnable');
+				this.imacSVG.parentNode.classList.add('portfolio__deviceContainer_iphoneChecked');
+				this.imacSVG.parentNode.classList.add('opacity0');
+				this.iphoneSVG.parentNode.classList.add('portfolio__deviceContainer_iphoneChecked');
+				this.iphoneSVG.parentNode.classList.remove('opacity0');
+				this.iframeOff();
+			}
 		}
+		this.startWaitDeviceSliderAnimationDone();
 	}
 
 	resize () {
-		if (!this.state.slide1IsActive) {
-			let imacDisplayRECT = this.imacDisplay.getBoundingClientRect();
-			let iphoneDisplayRECT = this.iphoneDisplay.getBoundingClientRect();
-			let deviceSliderRECT = this.deviceSlider.getBoundingClientRect();
-			this.iframePosition.scrollTopPos = deviceSliderRECT.top + this.parallax.scrollTop;
+		if (this.state.slide1IsActive)
+			return;
 
-			this.iframePosition.iMac.top = imacDisplayRECT.top - deviceSliderRECT.top + "px";
-			this.iframePosition.iMac.width = imacDisplayRECT.width * 2 + "px";
-			this.iframePosition.iMac.height = imacDisplayRECT.height * 2 + "px";
+		let imacDisplayRECT = this.imacDisplay.getBoundingClientRect(),
+				iphoneDisplayRECT = this.iphoneDisplay.getBoundingClientRect(),
+				portfolioSectionRECT = this.portfolioSection.getBoundingClientRect(),
+				deviceSliderRECT = this.deviceSlider.getBoundingClientRect();
+		this.iframePosition.scrollTopPos = portfolioSectionRECT.top + this.parallax.scrollTop;
 
-			this.iframePosition.iPhone.top = iphoneDisplayRECT.top - deviceSliderRECT.top + "px";
-			this.iframePosition.iPhone.width = iphoneDisplayRECT.width * 2 + "px";
-			this.iframePosition.iPhone.height = iphoneDisplayRECT.height * 2 + "px";
-			
-			if (this.imacIsActive) {
-				this.iframePosition.iMac.left = imacDisplayRECT.left + "px";
-				this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left);
+		this.iframePosition.iMac.top = imacDisplayRECT.top - portfolioSectionRECT.top + "px";
+		this.iframePosition.iMac.width = imacDisplayRECT.width * 2 + "px";
+		this.iframePosition.iMac.height = imacDisplayRECT.height * 2 + "px";
 
-				this.iframePosition.iPhone.left = iphoneDisplayRECT.left + "px";
-				this.iframePosition.iPhone.animDonePos = Math.round(-deviceSliderRECT.width / 2);
-			} else {
-				this.iframePosition.iMac.left = imacDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
-				this.iframePosition.iMac.animDonePos = Math.round(deviceSliderRECT.left + deviceSliderRECT.width / 2);
+		this.iframePosition.iPhone.top = iphoneDisplayRECT.top - portfolioSectionRECT.top + "px";
+		this.iframePosition.iPhone.width = iphoneDisplayRECT.width * 2 + "px";
+		this.iframePosition.iPhone.height = iphoneDisplayRECT.height * 2 + "px";
 
-				this.iframePosition.iPhone.left = iphoneDisplayRECT.left + deviceSliderRECT.width / 2 + "px";
-				this.iframePosition.iPhone.animDonePos = Math.round(deviceSliderRECT.left);
-			}
-			
-			this.setIframePosition();
+		if (this.imacIsActive) {
+			this.iframePosition.iMac.left = imacDisplayRECT.left + "px";
+			this.iframePosition.iMac.animDonePosIn = Math.round(deviceSliderRECT.left);
+			this.iframePosition.iMac.animDonePosOut = Math.round(-deviceSliderRECT.width);
+
+			this.iframePosition.iPhone.left = iphoneDisplayRECT.left - deviceSliderRECT.width + "px";
+		} else {
+			this.iframePosition.iMac.left = imacDisplayRECT.left + deviceSliderRECT.width + "px";
+			this.iframePosition.iMac.animDonePosIn = Math.round(deviceSliderRECT.left + deviceSliderRECT.width);
+			this.iframePosition.iMac.animDonePosOut = Math.round(deviceSliderRECT.left);
+
+			this.iframePosition.iPhone.left = iphoneDisplayRECT.left + "px";
 		}
+		this.setIframePosition();
 	}
 	setIframePosition () {
-		if (this.imacIsActive) {
-			this.portfolioIframe.style.top = this.iframePosition.iMac.top;
-			this.portfolioIframe.style.left = this.iframePosition.iMac.left;
-			this.portfolioIframe.style.width = this.iframePosition.iMac.width;
+		if (this.imacIsActive)
+			return this.portfolioIframe.style.top = this.iframePosition.iMac.top,
+			this.portfolioIframe.style.left = this.iframePosition.iMac.left,
+			this.portfolioIframe.style.width = this.iframePosition.iMac.width,
 			this.portfolioIframe.style.height = this.iframePosition.iMac.height;
-		} else {
-			this.portfolioIframe.style.top = this.iframePosition.iPhone.top;
-			this.portfolioIframe.style.left = this.iframePosition.iPhone.left;
-			this.portfolioIframe.style.width = this.iframePosition.iPhone.width;
-			this.portfolioIframe.style.height = this.iframePosition.iPhone.height;
-		}
+
+		this.portfolioIframe.style.top = this.iframePosition.iPhone.top;
+		this.portfolioIframe.style.left = this.iframePosition.iPhone.left;
+		this.portfolioIframe.style.width = this.iframePosition.iPhone.width;
+		this.portfolioIframe.style.height = this.iframePosition.iPhone.height;
+	}
+	iframeOn () {
+		this.portfolioIframe.classList.remove('opacity0');
+		this.portfolioIframe.classList.add('portfolio__Iframe_opacityTransition');
+	}
+	iframeOff () {
+		this.portfolioIframe.classList.add('opacity0');
+		this.portfolioIframe.classList.remove('portfolio__Iframe_opacityTransition');
 	}
 
 	resizeRAF () {
@@ -155,27 +159,26 @@ class Portfolio {
 	}
 
 	startWaitDeviceSliderAnimationDone () {
-		window.setTimeout(()=>{
-			return window.requestAnimationFrame(this.waitDeviceSliderAnimationDoneBind);
-		}, 300);
+		window.setTimeout(this.waitDeviceSliderAnimationDoneRAFBind, 300);
+	}
+	waitDeviceSliderAnimationDoneRAF () {
+		window.requestAnimationFrame(this.waitDeviceSliderAnimationDoneBind);
 	}
 	waitDeviceSliderAnimationDone () {
 		let rect = this.deviceSlider.getBoundingClientRect();
-		console.log(Math.round(rect.left),'---', this.iframePosition.iMac.animDonePos,'---', this.iframePosition.iPhone.animDonePos);
+		console.log(Math.round(rect.left),'---', this.iframePosition.iMac.animDonePosIn,'---', this.iframePosition.iMac.animDonePosOut);
 		if (this.imacIsActive) {
-			if (Math.round(rect.left) !== this.iframePosition.iMac.animDonePos) {
-				this.rAF(this.waitDeviceSliderAnimationDone);
-			} else {
-				this.setIframePosition();
-				this.portfolioIframe.classList.remove('opacity0');
-			}
+			if (Math.round(rect.left) !== this.iframePosition.iMac.animDonePosIn)
+				return this.rAF(this.waitDeviceSliderAnimationDone);
+			
+			this.setIframePosition();
+			this.iframeOn();
 		} else {
-			if (Math.round(rect.left) !== this.iframePosition.iPhone.animDonePos) {
-				this.rAF(this.waitDeviceSliderAnimationDone);
-			} else {
-				this.setIframePosition();
-				this.portfolioIframe.classList.remove('opacity0');
-			}
+			if (Math.round(rect.left) !== this.iframePosition.iMac.animDonePosOut)
+				return this.rAF(this.waitDeviceSliderAnimationDone);
+
+			this.setIframePosition();
+			this.iframeOn();
 		}
 	}
 
@@ -192,15 +195,17 @@ class Portfolio {
 	projectsClickHandler (e) {
 		e.preventDefault();
 		let project = this.returnTargetProject(e);
-		if (!this.sameProject(project)) {
-			console.log(project.href);
-			this.portfolioIframe.src = project.href;
-			this.curProject.firstElementChild.classList.remove('portfolio__projectDescriptionContainer_projectChecked');
-			project.firstElementChild.classList.add('portfolio__projectDescriptionContainer_projectChecked');
-			this.curProject = project;
-			this.rAF(this.scrollToDeviceSlider);
-		}
-		
+
+		if (this.sameProject(project))
+			return;
+
+		this.portfolioIframe.src = project.value;
+		this.curProject.classList.remove('portfolio__project_projectChecked');
+		this.curProject.firstElementChild.classList.remove('portfolio__projectDescriptionContainer_projectChecked');
+		project.classList.add('portfolio__project_projectChecked');
+		project.firstElementChild.classList.add('portfolio__projectDescriptionContainer_projectChecked');
+		this.curProject = project;
+		this.rAF(this.scrollToDeviceSlider);
 	}
 
 	scrollToDeviceSlider () {
@@ -208,26 +213,13 @@ class Portfolio {
 	}
 
 	returnTargetProject (e) {
-		if (e.target.tagName !== "A") {
-			if (e.target.parentNode.tagName !== "A") {
-				if (e.target.parentNode.parentNode.tagName !== "A") {
-					return document.querySelector('.portfolio__project');
-				} else {
-					return e.target.parentNode.parentNode;
-				}
-			} else {
-				return e.target.parentNode;
-			}
-		} else {
-			return e.target;
-		}
+		let target = e.target;
+		return e.target.tagName === "BUTTON" || (e.target.parentNode.tagName === "BUTTON" && (target = e.target.parentNode) || (target = e.target.parentNode.parentNode)), target;
 	}
 
 	sameProject (p) {
-		console.log(this.portfolioIframe.src === p.href);
-		if (this.portfolioIframe.src === p.href) {
+		if (this.portfolioIframe.src === p.value)
 			return true;
-		}
 		return false;
 	}
 }

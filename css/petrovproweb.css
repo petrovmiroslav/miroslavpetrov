@@ -14,6 +14,25 @@
 .will-change {
   will-change: transform, opacity;
 }
+.userSelect-None {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; 
+}
+.visuallyhidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
 .body-disable-hover, .body-disable-hover * {
   pointer-events: none !important;
 }
@@ -501,18 +520,6 @@ html {
 #cube3d-Wrapper.hidden {
 	opacity: 0;
 }
-.userSelect-None {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; 
-}
-.userSelect-None * {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;  
-}
 .cube3d-CubeContainer{
   perspective: 500px;
   perspective: 3200px;
@@ -851,11 +858,16 @@ html {
   align-items: center;
   border-radius: 50%;
   background: radial-gradient(circle, #454C59 0%, transparent 80%);
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 .loading__scene {
   width: calc(60vmin/6);
   height: calc(60vmin/6);
   transform-style: preserve-3d;
+  transform: translateZ(0);
+  will-change: transform;
 }
 .loading__Y {
   width: 100%;
@@ -863,12 +875,16 @@ html {
   position: absolute;
   transform-style: preserve-3d;
   animation: 3s cubic-bezier(.6,0,.4,1) infinite alternate;
+  transform: translateZ(0);
+  will-change: transform;
 }
 .loading__Z {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   animation: loading__Z calc(3s * 2) linear infinite;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 .loading__BG {
   width: 100%;
@@ -876,6 +892,8 @@ html {
   border-radius: 50%;
   background: radial-gradient(circle, transparent 0%, #ffffff 550%);
   animation: loading__opacity calc(3s * 2) linear infinite;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 .loading__Z_gradientColor1 {
   background: radial-gradient(circle, #F24B59 0%, transparent 100%);

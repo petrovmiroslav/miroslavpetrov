@@ -1,10 +1,7 @@
 .certification {
 	min-height: 80vh;
 	padding: 10% 0 15% 10%;
-	background: url('../img/image-from-rawpixel-id-67136-jpeg.jpg');
-	background-size: cover;
-	background-repeat: no-repeat;
-	transform: translateZ(0);
+	background: no-repeat center/cover url('../img/image-from-rawpixel-id-67136-jpeg.jpg') #e7e7e7;
 }
 .certification__framed-certificate {
 	width: 50%;
@@ -12,13 +9,14 @@
 }
 .certification__frame {
 	position: absolute;
-	width: 100%;
-	max-height: 100%;
-	margin: auto;
-	transform: scale(1.3, 1.15);
-	pointer-events: none;
-	z-index: 1;
-	filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.24));
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  background: center no-repeat url(../img/frame_mini.svg);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.24));
+  transform: scale(1.3, 1.15);
+  pointer-events: none;
 }
 .certification__carousel {
 	position: relative;
@@ -35,7 +33,6 @@
 	display: flex;
 	align-items: center;
 	transform: translateZ(0);
-	will-change: transform;
 }
 .certification__certificates_mobile-view {
 	white-space: nowrap;
@@ -113,9 +110,11 @@
 	opacity: 0.8;
 }*/
 .header {
-	width: 100%;
-	position: absolute;
+	height: 0;
+}
+.header__contentLayer {
 	display: flex;
+	transform: translateZ(0);
 }
 .header__text {
 	margin: 0 auto;
@@ -125,7 +124,6 @@
 	transition: opacity .2s cubic-bezier(0.4, 0.0, 0.2, 1), transform .2s cubic-bezier(0.4, 0.0, 0.2, 1);
 	transform: translate3d(0, -100%, 0);
 	opacity: 1;
-	will-change: transform;
 }
 .header__text_certification {
 	font-size: 11.8vw;
@@ -168,34 +166,24 @@
   background-image: url(../img/plant-fore.png);
   transform: translate3d(53%, -25%, 0) rotate(-25deg) rotateY(0deg);
 }*/
-.certification__plantParallaxImgContainer {
-	position: absolute;
+
+.certification__plantParallaxImg {
+  max-height: 50%;
+  max-width: 50vmax;
+  position: absolute;
   bottom: 0;
   right: 0;
   pointer-events: none;
 }
-.certification__plantParallaxImgContainerBase_desktop-view {
-	-webkit-transform: translateZ(45px) scale(.85);
-  transform: translateZ(45px) scale(.85);
-}
-.certification__plantParallaxImgContainerFore_desktop-view {
-	-webkit-transform: translateZ(90px) scale(.71);
-  transform: translateZ(90px) scale(.71);
-}
-.certification__plantParallaxImg {
-	max-height: 50%;
-  max-width: 50vmax;
-}
 .certification__plantParallaxImg_back {
 	transform: translateX(5%);
-	z-index: 2;
 }
 .certification__plantParallaxImg_base {
-	transform: translate3d(37%, -33%, 0);
+	transform: translate3d(31%, -33%, 45px) scale(.85);
 }
 .certification__plantParallaxImg_fore {
 	max-height: 40vmax;
-	transform: translate3d(2%, 2%, 0);
+	transform: translate3d(2%, 2%, 90px) scale(.71);
 }
 .userHint_cert {
 	width: 64%;

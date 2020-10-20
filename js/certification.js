@@ -45,7 +45,6 @@ class Certification {
 		this.certificatesOnTouchstartBind = this.certificatesOnTouchstart.bind(this);
 		this.certificatesOnTouchEndBind = this.certificatesOnTouchEnd.bind(this);
 		this.certificatesOnScrollBind = this.certificatesOnScroll.bind(this);
-		this.photoswipeHandlerBind = this.photoswipeHandler.bind(this);
 	}
 
 	rAF (f) {
@@ -59,7 +58,7 @@ class Certification {
 	}
 	
 	init() {
-		this.certificationCarousel = document.querySelector('.certification__framed-certificate .certification__carousel');//УТОЧНИТЬ
+		this.certificationCarousel = document.querySelector('.certification__carousel');
 		this.certificates = this.certificationCarousel.querySelector('.certification__certificates');
 		this.certsLength = this.certificates.children.length;	
 		this.certificationHint = document.querySelector('.userHint_cert');
@@ -75,11 +74,10 @@ class Certification {
 	}
 
 	addCertificatesMouseDownListener () {
-		if (this.state.deviceIsTouchscreen) {
-			this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.state.passiveListener);
-		} else {
-			this.certificationCarousel.addEventListener('mousedown', this.certificatesOnMouseDownBind, false);
-		}
+		if (this.state.deviceIsTouchscreen)
+			return this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.state.passiveListener);
+
+		this.certificationCarousel.addEventListener('mousedown', this.certificatesOnMouseDownBind, false);
 	}
 	addCertificatesScrollListener () {
 		this.certificates.addEventListener('scroll', this.certificatesOnScrollBind, this.state.passiveListener);
@@ -109,10 +107,8 @@ class Certification {
 		this.addCertificationMouseOutListener();
 	}
 	removeCertificationHintListeners () {
-		if (!this.state.deviceIsTouchscreen) {
-			this.removeCertificationMouseOverListener();
-			this.removeCertificationMouseOutListener();
-		}
+		this.state.deviceIsTouchscreen || (this.removeCertificationMouseOverListener(),
+			this.removeCertificationMouseOutListener());
 	}
 	addCertificationMouseOverListener () {
 		this.certificationCarousel.addEventListener('mouseover', this.certificatesHintOnMouseOverBind, false);
@@ -142,30 +138,27 @@ class Certification {
 		this.hideUserHint();
 	}
 	certificatesOnMouseMove (e) {
-		if(this.md) {
-			if (!this.ticking) {
-				this.ticking = true;
+		if(!this.md) return;
+		if (this.ticking)
+			return this.mm = true;
 
-				let newMousePosition = this.getMousePositionInFrame(e);
+		this.ticking = true;
+		let newMousePosition = this.getMousePositionInFrame(e);
 
-				this.mouseMoveValue = this.oldMousePosition - newMousePosition;
-				this.oldMousePosition = newMousePosition;
-				let newScrollLeft = this.oldScrollLeft - this.mouseMoveValue;
-				if (newScrollLeft <= 0+this.certificationCarouselRECT.width && newScrollLeft >= this.certificatesScrollMax-this.certificationCarouselRECT.width) {
-					this.oldScrollLeft = newScrollLeft;
-					this.setCertScrollLeftInNextRaf(this.oldScrollLeft);
-				} else {
-					this.ticking = false;
-				}
-			}
-			this.mm = true;
+		this.mouseMoveValue = this.oldMousePosition - newMousePosition;
+		this.oldMousePosition = newMousePosition;
+		let newScrollLeft = this.oldScrollLeft - this.mouseMoveValue;
+		if (newScrollLeft <= 0+this.certificationCarouselRECT.width && newScrollLeft >= this.certificatesScrollMax-this.certificationCarouselRECT.width) {
+			this.oldScrollLeft = newScrollLeft;
+			this.setCertScrollLeftInNextRaf(this.oldScrollLeft);
+		} else {
+			this.ticking = false;
 		}
+		this.mm = true;
 	}
 	certificatesOnMouseUp (e) {
 		this.removeCertificatesSwipeListeners();
-		if (this.md) {
-			this.scrollSnap(e);
-		}
+		this.md && this.scrollSnap(e);
 	}
 	certificatesOnMouseOut (e) {
 		this.removeCertificatesSwipeListeners();
@@ -191,11 +184,9 @@ class Certification {
 	}
 
 	hideUserHint () {
-		if (!this.state.certificationUserStart) {
-			this.state.certificationUserStart = true;
-			this.certificationHint.classList.add('hidden');
-			this.removeCertificationHintListeners();
-		}
+		this.state.certificationUserStart || (this.state.certificationUserStart = true,
+			this.certificationHint.classList.add('hidden'),
+			this.removeCertificationHintListeners());
 	}
 	scrollSnap (e) {
 		window.cancelAnimationFrame(this.rAFid);
@@ -212,7 +203,6 @@ class Certification {
 					this.lastScrollStep = this.getCurrentScrollStepPX();
 				}
 			}
-
 			this.oldScrollLeft = this.lastScrollStep;
 			this.rAF(this.scrollToCurrentCert);
 		} else {
@@ -225,21 +215,14 @@ class Certification {
 
 	getMousePositionInFrame (e) {
 		let mousePosition = e.clientX - this.certificationCarouselRECT.left;
-		if (mousePosition < 0) {
-			return 0;
-		} else {
-			if (mousePosition - this.certificationCarouselRECT.width > 0) {
-				return this.certificationCarouselRECT.width;
-			} else {
-				return mousePosition;
-			}
-		}
-		return e.clientX - this.certificationCarouselRECT.left;
+		if (mousePosition < 0) return 0;
+		if (mousePosition - this.certificationCarouselRECT.width > 0)
+			return this.certificationCarouselRECT.width;
+		return mousePosition;
 	}
 
 	setCertScrollLeftInNextRaf (scrollValue) {
 		this.scrollValue = scrollValue;
-		/*this.rAF(this.setScrollValue);*/
 		window.requestAnimationFrame(this.setScrollValueBind);
 	}
 
@@ -260,77 +243,55 @@ class Certification {
 		this.mm = true;
 		let newScrollLeft = this.certificates.scrollLeft;
 		console.log('this.scrollValue--', this.scrollValue, '--newScrollLeft--', newScrollLeft);
-		if (this.scrollValue == newScrollLeft) {
-			this.currentCert = Math.round(this.scrollValue / this.scrollStepValue);
+		if (this.scrollValue == newScrollLeft)
+			return this.currentCert = Math.round(this.scrollValue / this.scrollStepValue),
 			console.log('CURRCERT---', this.currentCert);
-			document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'CURRCERT---' + this.currentCert;
-		} else {
-			this.scrollValue = this.certificates.scrollLeft;
-			this.rAF(this.certificatesOnScroll);
-		}
+		this.scrollValue = this.certificates.scrollLeft;
+		this.rAF(this.certificatesOnScroll);
 	}
 
 	displayCurrentCert (index) {
-		if (this.state.deviceIsTouchscreen) {
-			// this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
-			this.certificates.scrollLeft = this.scrollStepValue * index;
+		if (this.state.deviceIsTouchscreen)
+			return this.certificates.scrollLeft = this.scrollStepValue * index,
 			console.log('displayCurrentCert', this.scrollStepValue * index);
-		} else {
-			this.currentCert = index;
-			this.lastScrollStep = this.getCurrentScrollStepPX();
-			this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
-		}
+		this.currentCert = index;
+		this.lastScrollStep = this.getCurrentScrollStepPX();
+		this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
 	}
 
 	resize () {
-		if (!this.state.slide1IsActive) {
-			if (this.state.deviceIsTouchscreen) {
-				this.certificatesScrollWidth = this.certificates.scrollWidth;
-				this.certificatesRECT = this.certificates.getBoundingClientRect();
-				this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
+		if (this.state.slide1IsActive) return;
+		if (this.state.deviceIsTouchscreen) {
+			this.certificatesScrollWidth = this.certificates.scrollWidth;
+			this.certificatesRECT = this.certificates.getBoundingClientRect();
+			this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
 
-				this.certificates.classList.add('hidden');
-				this.certificates.style['scroll-behavior'] = 'unset';
-				window.requestAnimationFrame(()=>{
-					this.certificates.classList.remove('hidden');
-					this.certificates.scrollLeft = Math.round(this.scrollStepValue * this.currentCert);
-					this.rAF(this.setScrollBehaviorSmooth);
-					/*this.rAF(this.waitScrollCurCert);*/
-				});
-				//document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+'resize---WIDTH--' + this.certificatesScrollWidth+' scrollStepValue--'+this.scrollStepValue;
-			} else {
-				this.certificationCarouselRECT = this.certificationCarousel.getBoundingClientRect();
-				this.certificatesRECT = this.certificates.getBoundingClientRect();
-				this.scrollStepValue = this.certificatesRECT.width / this.certsLength;
-				this.certificatesScrollMax = -(this.certificatesRECT.width - this.scrollStepValue);
-				this.lastScrollStep = (-this.certificatesRECT.width / this.certsLength) * this.currentCert;
-			}
-		}
-	}
-
-	waitScrollCurCert () {
-		document.getElementById('log').innerHTML = document.getElementById('log').innerHTML+'<br>'+ 'WAIT---'+Math.round(this.scrollStepValue * this.currentCert)+ ' CURRCERT---'+ this.currentCert+ ' SCROLL---'+ this.certificates.scrollLeft;
-		if (this.certificates.scrollLeft > (this.scrollStepValue * this.currentCert)-5 && this.certificates.scrollLeft < (this.scrollStepValue * this.currentCert)+5) {
-
+			this.certificates.classList.add('hidden');
+			this.certificates.style['scroll-behavior'] = 'unset';
+			window.requestAnimationFrame(()=>{
+				this.certificates.classList.remove('hidden');
+				this.certificates.scrollLeft = Math.round(this.scrollStepValue * this.currentCert);
+				this.rAF(this.setScrollBehaviorSmooth);
+			});
 		} else {
-			this.certificates.scrollLeft = this.scrollStepValue * this.currentCert;
-			this.rAF(this.waitScrollCurCert);
+			this.certificationCarouselRECT = this.certificationCarousel.getBoundingClientRect();
+			this.certificatesRECT = this.certificates.getBoundingClientRect();
+			this.scrollStepValue = this.certificatesRECT.width / this.certsLength;
+			this.certificatesScrollMax = -(this.certificatesRECT.width - this.scrollStepValue);
+			this.lastScrollStep = (-this.certificatesRECT.width / this.certsLength) * this.currentCert;
 		}
 	}
 
 	displayCurrentCertInFlipper (el) {
-		if (this.state.deviceIsTouchscreen) {
-			el.scrollLeft = this.scrollStepValue * this.currentCert;
+		if (this.state.deviceIsTouchscreen)
+			return el.scrollLeft = this.scrollStepValue * this.currentCert,
 			console.log('displayCurrentCert', this.scrollStepValue * this.currentCert);
-		} else {
-			this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
-		}
+		this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
 	}
 
 	setScrollBehaviorSmooth () {
 		this.certificates.style['scroll-behavior'] = 'smooth';
 	}
-
 
  	///SERTIFICATION GALLERY///
 	initPhotoSwipeFromDOM (gallerySelector) {
@@ -559,7 +520,7 @@ class Certification {
       }
   };
   // execute above function
-  addCertificatesClickListener () {
+/*  addCertificatesClickListener () {
   	let anchors = this.certificates.querySelectorAll('a');
 		for (let i = 0; i < anchors.length; i++) {
 			anchors[i].addEventListener('click', this.photoswipeHandlerBind);
@@ -568,6 +529,6 @@ class Certification {
   photoswipeHandler (e) {console.log("CLICK");
   	e.preventDefault();
   	this.initPhotoSwipeFromDOM(this.certificates, this);
-  }
+  }*/
   ///SERTIFICATION GALLERY///////////
 }

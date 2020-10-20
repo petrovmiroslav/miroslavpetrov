@@ -42,6 +42,7 @@ class Cube3d {
 		this.lev = 5;
 		this.text = 'MiroslavPetrov';
 		this.currentLevel = 1;
+    this.levelRegExp = /level(\d)/;
 		this.gap = -14.5;
 		this.gaps = [];
 		this.gapscnt = 0;
@@ -54,6 +55,7 @@ class Cube3d {
 		this.cube3dWidth = null;
 		this.cube3dPause = true;
     this.userStartPlay = false;
+    this.cube3dLevelsRotateValue = [];
 		this.cube3dRotateYValue = 0;
 		this.activateLevelCount = 0;
 	}
@@ -63,7 +65,7 @@ class Cube3d {
 		this.cube3dScene = this.cube3d.querySelector('.cube3d__scene');
 		this.cube3dLoadingIcon = this.cube3d.querySelector('.cube3d__loadingIconContainer');
     this.userHint = this.cube3d.querySelector('.userHint_cube3d');
-    this.cubeBG = document.querySelector('.aboutSection__cubeBG');
+    this.cubeGravity = document.querySelector('.aboutSection__cubeGravity');
 	}
 
 	rAF (f) {
@@ -79,7 +81,6 @@ class Cube3d {
 	create () {
 		this.cube3dWidth = this.cube3d.clientWidth;
 		this.draw();
-
 		this.rAF(this.activate);
 	}
 
@@ -106,45 +107,44 @@ class Cube3d {
     		fontSize = 'style="font-size: ' + this.translateZValue * 0.525 + 'px;"';
     for (let i = 1; i < this.lev + 1; i++) {
     	let levelZIndex = 'auto';
-    	if (i >= Math.ceil(this.lev / 2)) {
-    		levelZIndex = this.lev + 1 - i;
-    	}
+      i >= Math.ceil(this.lev / 2) && (levelZIndex = this.lev + 1 - i);
 
-    	let divClickTarget = '<div id="' + i + '" class="cube3d__clickTarget cube3d__clickTarget_level' + i + '"></div>';
+    	let divClickTarget = '<div id="' + i + '" class="cube3d__clickTarget cube3d__clickTarget_level' + i + '"></div>',
+    	top = '<div class="cube3d__side cube3d__side_top" style="transform: rotateX(90deg) translateZ(' + this.translateZValue + 'px);"></div>',
+    	bottom = '<div class="cube3d__side cube3d__side_bottom" style="transform: rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px);"></div>';
 
-      html += '<div id="cube3d-level' + i + '" class="cube3d__level" ' +
-				      'style="' + 
-				      	'width: ' + sideWidth + 'px; ' +
-				      	'height: ' + sideHeight + 'px; ' +
-				      	'z-index: ' + levelZIndex  + '; ' + 
-				      	//'transform: translateZ(-' + this.translateZValue + 'px) rotateY( 0deg);' +
-				      '">' +
-	      					'<div class="cube3d__side cube3d__side_front" ' + 
-	      					'style="' +
-	      						'transform: rotateY(0deg) translateZ(' + this.translateZValue + 'px);' +
-	      					'">'+
-		      						'<p class="cube3d__text cube3d__text_shift_up" ' + fontSize +'>' + this.text + '</p>' +
-		      						'<p class="cube3d__text cube3d__text_shift_down" ' + fontSize +'>' + this.text + '</p>' +
-		      						divClickTarget +
-	      					'</div>'+
-			            '<div class="cube3d__side cube3d__side_back" style="transform: rotateY(180deg) translateZ(' + this.translateZValue + 'px);">'+
-	      						'<p class="cube3d__text cube3d__text_shift_up" ' + fontSize +'>' + this.text + '</p>' +
-	      						'<p class="cube3d__text cube3d__text_shift_down" ' + fontSize +'>' + this.text + '</p>' +
-	      						divClickTarget +
-	      					'</div>'+
-			            '<div class="cube3d__side cube3d__side_left" style="transform: rotateY(-90deg) translateZ(' + this.translateZValue + 'px);">'+
-	      						'<p class="cube3d__text cube3d__text_shift_up-left" ' + fontSize +'>' + this.text + '</p>' +
-	      						'<p class="cube3d__text cube3d__text_shift_down-left" ' + fontSize +'>' + this.text + '</p>' +
-	      						divClickTarget +
-	      					'</div>'+
-			            '<div class="cube3d__side cube3d__side_right" style="transform: rotateY(90deg) translateZ(' + this.translateZValue + 'px);">'+
-	      						'<p class="cube3d__text cube3d__text_shift_up-left" ' + fontSize +'>' + this.text + '</p>' +
-	      						'<p class="cube3d__text cube3d__text_shift_down-left" ' + fontSize +'>' + this.text + '</p>' +
-	      						divClickTarget +
-	      					'</div>'+
-			            '<div class="cube3d__side cube3d__side_top" style="transform: rotateX(90deg) translateZ(' + this.translateZValue + 'px);"></div>'+
-			            '<div class="cube3d__side cube3d__side_bottom" style="transform: rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px);"></div>'	+
-      				'</div>';
+      html += 
+      '<div id="cube3d-level' + i + '" class="cube3d__level" ' +
+	      'style="' + 
+	      	'width: ' + sideWidth + 'px; ' +
+	      	'height: ' + sideHeight + 'px; ' +
+	      	'z-index: ' + levelZIndex  + '; ' + 
+	    '">' +
+    		(i < Math.ceil(this.lev / 2) ? top+bottom : bottom+top) +
+        '<div class="cube3d__side cube3d__side_back" style="transform: rotateY(180deg) translateZ(' + this.translateZValue + 'px);">'+
+					'<p class="cube3d__text cube3d__text_shift_up" ' + fontSize +'>' + this.text + '</p>' +
+					'<p class="cube3d__text cube3d__text_shift_down" ' + fontSize +'>' + this.text + '</p>' +
+					divClickTarget +
+				'</div>'+
+        '<div class="cube3d__side cube3d__side_left" style="transform: rotateY(-90deg) translateZ(' + this.translateZValue + 'px);">'+
+					'<p class="cube3d__text cube3d__text_shift_up-left" ' + fontSize +'>' + this.text + '</p>' +
+					'<p class="cube3d__text cube3d__text_shift_down-left" ' + fontSize +'>' + this.text + '</p>' +
+					divClickTarget +
+				'</div>'+
+        '<div class="cube3d__side cube3d__side_right" style="transform: rotateY(90deg) translateZ(' + this.translateZValue + 'px);">'+
+					'<p class="cube3d__text cube3d__text_shift_up-left" ' + fontSize +'>' + this.text + '</p>' +
+					'<p class="cube3d__text cube3d__text_shift_down-left" ' + fontSize +'>' + this.text + '</p>' +
+					divClickTarget +
+				'</div>'+
+				'<div class="cube3d__side cube3d__side_front" ' + 
+				'style="' +
+					'transform: rotateY(0deg) translateZ(' + this.translateZValue + 'px);' +
+				'">'+
+						'<p class="cube3d__text cube3d__text_shift_up" ' + fontSize +'>' + this.text + '</p>' +
+						'<p class="cube3d__text cube3d__text_shift_down" ' + fontSize +'>' + this.text + '</p>' +
+						divClickTarget +
+				'</div>'+
+			'</div>';
     }
     this.cube3dScene.innerHTML = html;
 
@@ -173,219 +173,139 @@ class Cube3d {
   	this.cube3dScene.classList.remove('hidden');
   }
   resize () {
-  	if (this.state.drawCube3dDone) {
-  		this.cube3dWidth = this.cube3d.clientWidth;
-	  	this.translateZValue = this.cube3dWidth / 2;
-	  	let sideWidth = this.cube3dWidth,
-	    		sideHeight = this.cube3dWidth / 5,
-	    		fontSize = 'style="font-size: ' + this.translateZValue * 0.525 + 'px;"';
+    if (!this.state.drawCube3dDone) return;
+		this.cube3dWidth = this.cube3d.clientWidth;
+  	this.translateZValue = this.cube3dWidth / 2;
+  	let sideWidth = this.cube3dWidth,
+    		sideHeight = this.cube3dWidth / 5,
+    		fontSize = 'style="font-size: ' + this.translateZValue * 0.525 + 'px;"';
 
-	  	/*this.cube3dLevels.forEach(function (level) {
-	  		level.style.width = sideWidth + 'px';
-	  		level.style.height = sideHeight + 'px';
-	  		level.style.transform = 'translateZ(-' + translateZValue + 'px) rotateY(0deg)';
-	  	});
-	  	this.frontSides.forEach(function (frontSide) {
-	  		frontSide.style.transform = 'rotateY(0deg) translateZ(' + translateZValue + 'px)';
-	  	});
-	  	this.backSides.forEach(function (backSide) {
-	  		backSide.style.transform = 'rotateY(180deg) translateZ(' + translateZValue + 'px)';
-	  	});
-	  	this.leftSides.forEach(function (leftSide) {
-	  		leftSide.style.transform = 'rotateY(-90deg) translateZ(' + translateZValue + 'px)';
-	  	});
-	  	this.rightSides.forEach(function (rightSide) {
-	  		rightSide.style.transform = 'rotateY(90deg) translateZ(' + translateZValue + 'px)';
-	  	});
-	  	this.topSides.forEach(function (topSide) {
-	  		topSide.style.transform = 'rotateX(90deg) translateZ(' + translateZValue + 'px)';
-	  	});
-	  	this.bottomSides.forEach(function (bottomSide) {
-	  		bottomSide.style.transform = 'rotateX(-90deg) translateZ(' + translateZValue * -0.6 + 'px)';
-	  	});
-	  	this.texts.forEach(function (text) {
-	  		text.style['font-size'] = translateZValue * 0.525 + 'px';
-	  	});*/
-	  	for (let i = 0; i < this.cube3dLevels.length; i++) {
-	  		this.cube3dLevels[i].style.width = sideWidth + 'px';
-	  		this.cube3dLevels[i].style.height = sideHeight + 'px';
-			  //this.cube3dLevels[i].style.transform = 'translateZ(-' + this.translateZValue + 'px) rotateY(0deg)';
-			}
-	  	for (let i = 0; i < this.frontSides.length; i++) {
-			  this.frontSides[i].style.transform = 'rotateY(0deg) translateZ(' + this.translateZValue + 'px)';
-			}
-	  	for (let i = 0; i < this.backSides.length; i++) {
-			  this.backSides[i].style.transform = 'rotateY(180deg) translateZ(' + this.translateZValue + 'px)';
-			}
-	  	for (let i = 0; i < this.leftSides.length; i++) {
-			  this.leftSides[i].style.transform = 'rotateY(-90deg) translateZ(' + this.translateZValue + 'px)';
-			}
-	  	for (let i = 0; i < this.rightSides.length; i++) {
-			  this.rightSides[i].style.transform = 'rotateY(90deg) translateZ(' + this.translateZValue + 'px)';
-			}
-	  	for (let i = 0; i < this.topSides.length; i++) {
-			  this.topSides[i].style.transform = 'rotateX(90deg) translateZ(' + this.translateZValue + 'px)';
-			}
-	  	for (let i = 0; i < this.bottomSides.length; i++) {
-			  this.bottomSides[i].style.transform = 'rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px)';
-			}
-	  	for (let i = 0; i < this.texts.length; i++) {
-			  this.texts[i].style['font-size'] = this.translateZValue * 0.525 + 'px';
-			}
-			this.render();
-  	}
+  	for (let i = 0; i < this.cube3dLevels.length; i++) {
+  		this.cube3dLevels[i].style.width = sideWidth + 'px';
+  		this.cube3dLevels[i].style.height = sideHeight + 'px';
+		}
+  	for (let i = 0; i < this.frontSides.length; i++) {
+		  this.frontSides[i].style.transform = 'rotateY(0deg) translateZ(' + this.translateZValue + 'px)';
+		}
+  	for (let i = 0; i < this.backSides.length; i++) {
+		  this.backSides[i].style.transform = 'rotateY(180deg) translateZ(' + this.translateZValue + 'px)';
+		}
+  	for (let i = 0; i < this.leftSides.length; i++) {
+		  this.leftSides[i].style.transform = 'rotateY(-90deg) translateZ(' + this.translateZValue + 'px)';
+		}
+  	for (let i = 0; i < this.rightSides.length; i++) {
+		  this.rightSides[i].style.transform = 'rotateY(90deg) translateZ(' + this.translateZValue + 'px)';
+		}
+  	for (let i = 0; i < this.topSides.length; i++) {
+		  this.topSides[i].style.transform = 'rotateX(90deg) translateZ(' + this.translateZValue + 'px)';
+		}
+  	for (let i = 0; i < this.bottomSides.length; i++) {
+		  this.bottomSides[i].style.transform = 'rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px)';
+		}
+  	for (let i = 0; i < this.texts.length; i++) {
+		  this.texts[i].style['font-size'] = this.translateZValue * 0.525 + 'px';
+		}
+		this.render();
   }
 
   addCube3dClickListener () {
-  	if (this.state.deviceIsTouchscreen) {
-      this.cube3d.addEventListener('touchstart', this.cube3dOnTouchStartBind, this.state.passiveListener);
-    } else {
-      this.cube3d.addEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
-    }
+    if (this.state.deviceIsTouchscreen)
+      return this.cube3d.addEventListener('touchstart', this.cube3dOnTouchStartBind, this.state.passiveListener);
+    this.cube3d.addEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
   }
   removeCube3dClickListener() {
-    if (this.state.deviceIsTouchscreen) {
-      this.cube3d.removeEventListener('touchstart', this.cube3dOnMouseMoveBind, this.state.passiveListener);
-    } else {
-      this.cube3d.removeEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
-    }
+    if (this.state.deviceIsTouchscreen)
+      return this.cube3d.removeEventListener('touchstart', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+    this.cube3d.removeEventListener('mousedown', this.cube3dOnMouseDownBind, this.state.passiveListener);
   }
 
   addCube3dMoveAndUpListeners () {
-    if (this.state.deviceIsTouchscreen) {
-    	document.addEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
-    	document.addEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
-    } else {
-			document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
-			document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
+    if (this.state.deviceIsTouchscreen)
+      return document.addEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener),
+      document.addEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
+    document.addEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+    document.addEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
 
-      this.addUserHintListeners();
-    }
+    this.addUserHintListeners();
   }
   removeCube3dMoveAndUpListeners () {
-    if (this.state.deviceIsTouchscreen) {
-      document.removeEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener);
+    if (this.state.deviceIsTouchscreen)
+      return document.removeEventListener('touchmove', this.cube3dOnTouchMoveBind, this.state.passiveListener),
       document.removeEventListener('touchend', this.cube3dOnTouchEndBind, this.state.passiveListener);
-    } else {
-      document.removeEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
-    	document.removeEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
-    }
+    document.removeEventListener('mousemove', this.cube3dOnMouseMoveBind, this.state.passiveListener);
+    document.removeEventListener('mouseup', this.cube3dOnMouseUpBind, this.state.passiveListener);
   }
 
   addUserHintListeners () {
-    if (!this.userStartPlay) {
-      this.cube3d.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
-      this.cube3d.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
-      this.cubeBG.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
-      this.cubeBG.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
-    }
+    if (this.userStartPlay) return;
+    this.cube3d.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+    this.cube3d.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
+    this.cubeGravity.addEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+    this.cubeGravity.addEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
   }
   removeUserHintListeners () {
-    if (!this.state.deviceIsTouchscreen) {
-      this.cube3d.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
-      this.cube3d.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
-      this.cubeBG.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
-      this.cubeBG.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
-    }
+    if (this.state.deviceIsTouchscreen) return;
+    this.cube3d.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+    this.cube3d.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
+    this.cubeGravity.removeEventListener('mouseover', this.userHintOpacity0Bind, this.state.passiveListener);
+    this.cubeGravity.removeEventListener('mouseout', this.userHintOpacity1Bind, this.state.passiveListener);
   }
   
-	cube3dOnTouchStart (e) { console.log('cube3dOnTouchStart');
-		/*e.preventDefault();*/
-
-  	window.clearTimeout(this.cube3dPauseTimeout);
-  	if (this.cube3dPause) {
-  		this.cube3dPauseOFF(e);
-  	}
-
-  	this.clearClickPositionHistory(e);
-
-  	this.setCurrentLevel(e);
-
-  	this.gaps.length = 0;
-  	this.md = true;
-
-    if (!this.userStartPlay) {
-      this.removeUserHintListeners();
-      this.hideUserHint();
-    }
+	cube3dOnTouchStart (e) {
+  	this.cube3dMoveStartHandler(e);
 	}
 	cube3dOnTouchMove (e) {
-		/*e.preventDefault(); */
-    this.mouseX = e.touches[0].clientX; /*console.log(event.touches[0].clientX);*/
+    this.mouseX = e.touches[0].clientX;
 	}
-	cube3dOnTouchEnd (e) {console.log('cube3dOnTouchEnd');
-    if (this.md) {
-      this.md = false;
-    	
-    	this.cube3dRotateYValue = 0;
-    	this.waitCube3dStopRotation();
-    }
+	cube3dOnTouchEnd () {
+    this.cube3dMoveEndHandler();
 	}
-  cube3dOnMouseDown (e) {console.log('cube3dOnMouseDown');
-  	/*e.preventDefault();*/
-
-  	window.clearTimeout(this.cube3dPauseTimeout);
-  	if (this.cube3dPause) {
-  		this.cube3dPauseOFF(e);
-  	}
-  	this.clearClickPositionHistory(e);
-
-  	this.setCurrentLevel(e);
-
-  	this.gaps.length = 0;
-  	this.md = true;
-
-    if (!this.userStartPlay) {
-      this.removeUserHintListeners();
-      this.hideUserHint();
-    }
+  cube3dOnMouseDown (e) {
+  	this.cube3dMoveStartHandler(e);
   }
   cube3dOnMouseMove (e) {
-    /*console.log(event.clientX);*/
-    //e.preventDefault();
-    if (this.md) {
-    	this.mouseX = e.clientX;  
-    }
+    this.md && (this.mouseX = e.clientX);
   }
-  cube3dOnMouseUp (e) {console.log('cube3dOnMouseUp');
-  	if (this.md) {
-      console.log("UP");
-      //e.preventDefault();
-      this.md = false;
-      this.cube3dRotateYValue = 0;
-      this.waitCube3dStopRotation();
-    }
-
-    //this.cube3dPauseTimeout = window.setTimeout(this.waitCube3dStopRotationBind, 2000);
+  cube3dOnMouseUp () {
+    this.cube3dMoveEndHandler();
+  }
+  cube3dMoveStartHandler (e) {
+    window.clearTimeout(this.cube3dPauseTimeout);
+    this.cube3dPause && this.cube3dPauseOFF();
+    this.clearClickPositionHistory(e);
+    this.setCurrentLevel(e);
+    this.gaps.length = 0;
+    this.md = true;
+    this.userStartPlay || (this.removeUserHintListeners(), this.hideUserHint());
+  }
+  cube3dMoveEndHandler () {
+    this.md && (this.md = this.cube3dRotateYValue = 0, this.waitCube3dStopRotation());
   }
   clearClickPositionHistory (event) {
-  	if (event) {
-  		if (this.state.deviceIsTouchscreen) {
-  			this.oldMouseX = event.touches[0].clientX;
-	  		this.mouseX = event.touches[0].clientX;
-	  	} else {
-	  		this.oldMouseX = event.clientX;
-		  	this.mouseX = event.clientX;
-	  	}
-  	}
+    if (!event) return;
+    if (this.state.deviceIsTouchscreen)
+      return this.oldMouseX = event.touches[0].clientX,
+      this.mouseX = event.touches[0].clientX;
+  	this.oldMouseX = event.clientX;
+	  this.mouseX = event.clientX;
   }
-  waitCube3dStopRotation () {console.log('WAIT');
-  	let newRotateYValue = +/\((\S*)deg\)/.exec(this.cube3dLevels[0].style.transform)[1];
-  	if (this.cube3dRotateYValue === newRotateYValue) {
-  		return this.cube3dPauseON();
-  	}
-  	this.cube3dRotateYValue = newRotateYValue;
+  waitCube3dStopRotation () {
+    let d = !0;
+    for (let i = 0; i < this.cube3dLevelsRotateValue.length-1; i++) {
+      this.cube3dLevelsRotateValue[i] === this.cube3dLevelsRotateValue[i+1] || (d = !1);
+      break; 
+    }
+    d && this.cube3dRotateYValue === this.cube3dLevelsRotateValue[0] || (d = !1);
+    this.cube3dRotateYValue = this.cube3dLevelsRotateValue[0];
+    if (d) return this.cube3dPauseON();
   	this.cube3dPauseTimeout = window.setTimeout(this.waitCube3dStopRotationBind, 2000);
   }
   cube3dPauseON () {console.log('cube3dPauseON');
   	this.cube3dPause = true;
   	this.removeCube3dMoveAndUpListeners();
-
-    if (!this.userStartPlay) {
-      this.rAF(this.displayUserHint);
-    }
+    this.userStartPlay || this.rAF(this.displayUserHint);
   }
-  cube3dPauseOFF (event) {console.log('cube3dPauseOFF');
+  cube3dPauseOFF () {console.log('cube3dPauseOFF');
   	this.cube3dPause = false;
   	this.addCube3dMoveAndUpListeners();
   	this.loop();
@@ -400,7 +320,6 @@ class Cube3d {
   	if (!this.cube3dPause) {console.log('CUBESTOP');
   		window.clearTimeout(this.cube3dPauseTimeout);
 	  	this.cube3dPauseON();
-
 	  	this.gap = 0;
 	  	for (let i = 0; i < this.lev + 2; i++) {
 	  		this.vx[i] = 0;
@@ -412,33 +331,22 @@ class Cube3d {
   }
 
   setCurrentLevel (event) {
-  	let	level = this.currentLevel,
-  			re = /level(\d)/,
-  			thisLev = this.lev;
-  	event.target.classList.forEach(function (className) {
-  		let match = re.exec(className);
-  		if (match) {
-  			if (match[1] <= thisLev) {
-  				level = match[1];
-  			}
-  		}
-  	});
-  	this.currentLevel = level;
+    for (var i = event.target.classList.length - 1; i >= 0; i--) {
+      let match = this.levelRegExp.exec(event.target.classList[i]);
+      if (this.levelRegExp.exec(event.target.classList[i]))
+        return match[1] <= this.lev && (this.currentLevel = match[1]);
+    }
   }
 
-  loop () {/*console.log(Date.now());*/
-  	if (!this.cube3dPause) {
-  		this.update();
-	  	this.render();
-
-	  	window.requestAnimationFrame(this.loopBind);
-  	}
+  loop () {
+    if (this.cube3dPause) return;
+		this.update();
+  	this.render();
+  	window.requestAnimationFrame(this.loopBind);
   }
 
   update () {
-    if (this.md) {
-      this.gap = this.averageGaps(this.mouseX - this.oldMouseX);
-    }
+    this.md && (this.gap = this.averageGaps(this.mouseX - this.oldMouseX));
     this.oldMouseX = this.mouseX;
     this.gap *= .93
     this.px[this.currentLevel] += this.gap;
@@ -453,9 +361,7 @@ class Cube3d {
     this.px[this.lev + 1] = this.px[this.lev];
   }
   averageGaps(n) {
-    if (isNaN(n)) {
-      return 0;
-    }
+    if (isNaN(n)) return 0;
     let gl = this.gaps.length;
     this.gaps[this.gapscnt] = n;
     let ave = 0;
@@ -464,13 +370,13 @@ class Cube3d {
     };
     this.gapscnt = (this.gapscnt + 1) % 10;
     let tmp = ave / gl*0.8;
-    if (isNaN(tmp)) {
-      tmp = 0;
-    }
+    isNaN(tmp) && (tmp = 0);
     return tmp;
   }
   render() {
+    this.cube3dLevelsRotateValue = [];
   	for (let i = 0; i < this.cube3dLevels.length; ++i) {
+      this.cube3dLevelsRotateValue[i] = Math.round(this.px[i+1]); 
 		  this.cube3dLevels[i].style.transform = 'translateZ(-' + this.translateZValue + 'px) rotateY(' + this.px[i+1] + 'deg)';
 		}
   }
@@ -483,22 +389,17 @@ class Cube3d {
     this.userHint.classList.remove('hidden');
   }
   hideUserHint () {
-    //this.rAF(this.hideUserHintRAF);
     this.userStartPlay = true;
     this.userHint.classList.add('hidden');
-    console.log('HIDE');
   }
   hideUserHintRAF () {
     this.userHint.classList.add('hidden');
-    
   }
   userHintOpacity0 () {
     this.userHint.classList.add('opacity0');
-    console.log('IN');
   }
   userHintOpacity1 () {
     this.userHint.classList.remove('opacity0');
-    console.log('OUT');
   }
 }
 //Twisty thing - more cross browser - in CSS/JS by dehash.com released under MIT License https://opensource.org/licenses/MIT 

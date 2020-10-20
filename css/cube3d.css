@@ -2,12 +2,11 @@
 	grid-area: cube;
 	width: 40vmin;
 	height: 40vmin;
+	position: relative;
 	margin: auto;
-	transform: translateZ(0);
-	will-change: transform;
 }
 .cube3d__scene {
-	perspective: calc(100vw);
+	perspective: calc(100vmax);
 	width: 100%;
 	height: 100%;
 }
@@ -17,6 +16,7 @@
 	position: relative;
 	transform-style: preserve-3d;
 	transform: rotateY(-90deg) translate3d(-50%, 0, 0) rotateY(90deg) rotateY(0deg);
+	/*will-change: transform;*/
 }
 .cube3d__side {
 	position: absolute;
@@ -26,6 +26,7 @@
 	background: linear-gradient(to right, #F24B59 0%, #F24B59 38%, #F2F2F2 38%, #F2F2F2 100%);
 	overflow: hidden;
 	backface-visibility: hidden;
+	/*will-change: transform;*/
 }
 .cube3d__side_front {
 	transform: rotateY(-90deg) translate3d(50%, 0, 0) rotateY(90deg);
@@ -128,4 +129,22 @@
 	background-color: #F2F2F2;
 	border-radius: 1vmin;
 	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+@media (max-width: 768px) and (min-height: 320px), (max-width: 812px) and (max-height: 375px) {
+	.cube3d_mobileView {
+    width: 50vmin;
+    height: 50vmin;
+	}
+}
+@media (max-width: 1024px) and (min-height: 1366px) {
+	.cube3d_mobileView {
+    width: 30vmin;
+    height: 30vmin;
+	}
+}
+@media (max-width: 414px) and (min-height: 415px) {
+	.cube3d {
+    width: 60vmin;
+    height: 60vmin;
+	}
 }
