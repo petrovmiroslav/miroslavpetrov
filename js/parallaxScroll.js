@@ -7,36 +7,30 @@ export { ParallaxScroll };
 class ParallaxScroll {
 	constructor (State, ClientDevice) {
 		this.state = State;
-		// this.state.parallaxScrollON = this.addParallaxScrollListener.bind(this);
-    // this.state.parallaxScrollOFF = this.removeParallaxScrollListener.bind(this);
     this.state.angleGradientBGIsActive = false;
     this.state.parallaxScrollUPDATE = this.parallaxScrollUpdate.bind(this);
     
-
     this.clientDevice = ClientDevice;
     this.clientDevice.windowResizeHandlersQueue.resizeParallax = this.parallaxScrollUpdate.bind(this);
-    //this.clientDevice.windowResizeHandlersQueue.resizeGradientBG = this.resizeGradientBG.bind(this);
 
-		this.parallax = null;
+		this.parallax = {};
 		this.parallaxScrollPosition = 0;
-		this.angleContainerWrapper = null;
+		this.angleContainerWrapper = {};
 		this.angleContainerWrapperRECT = {};
 		this.certificationRECT = {};
 		this.portfolioRECT = {};
 		this.bubblesRECT = {};
-		this.angleContainer = null;
-		this.gradientBG = null;
-		this.aboutSection__header = null;
-		this.stackDescriptionWrapper = null;
-		this.bgVideoMobile = null;
+		this.angleContainer = {};
+		this.gradientBG = {};
+		this.aboutSection__header = {};
+		this.stackDescriptionWrapper = {};
+		this.bgVideoMobile = {};
 
 		this.parallaxScrollHandlerBind = this.parallaxScrollHandler.bind(this);
 		this.parallaxScrollHandler1RenderBind = this.parallaxScrollHandler1Render.bind(this);
 		this.setAngleToGradientBGRAFBind = this.setAngleToGradientBGRAF.bind(this);
 		this.angleGradientBGEnableRAFBind = this.angleGradientBGEnableRAF.bind(this);
 		this.angleGradientBGDisableRAFBind = this.angleGradientBGDisableRAF.bind(this);
-		this.certsEnableRAFBind = this.certsEnableRAF.bind(this);
-		this.certsDisableRAFBind = this.certsDisableRAF.bind(this);
 		this.certification__headerSlideUpRAFBind = this.certification__headerSlideUpRAF.bind(this);
 		this.certification__headerSlideDownRAFBind = this.certification__headerSlideDownRAF.bind(this);
 		this.certificationHintDisplayRAFBind = this.certificationHintDisplayRAF.bind(this);
@@ -46,20 +40,10 @@ class ParallaxScroll {
 		this.bubbles__headerSlideDownRAFBind = this.bubbles__headerSlideDownRAF.bind(this);
 		this.setBubblesStartRAFBind = this.setBubblesStartRAF.bind(this);
 		this.bubblesPauseOFFRAFBind = this.bubblesPauseOFFRAF.bind(this);
-		
-		
+		this.paralaxScrollTickingFuncBind = this.paralaxScrollTickingFunc.bind(this);
 
-		this.parallaxScrollHandlerTicking = false;
-		this.angle = 0;
-		this.gradientBGTransformValue = 0;
-		this.gradientBGIsActive = false;
-		this.certsIsActive = false;
-		this.parallaxScrollCallbackCount = 0;
-		this.certification__headerSlideUp = false;
-		this.portfolio__headerSlideUp = false;
-		this.certificationHintDisplay = false;
-		this.contactWithMe__headerSlideUp = false;
-		this.bubblesStart = false;
+		this.angle = this.gradientBGTransformValue = this.parallaxScrollCallbackCount = 0;
+		this.parallaxScrollHandlerTicking = this.gradientBGIsActive = this.certsIsActive = this.certification__headerSlideUp = this.portfolio__headerSlideUp = this.certificationHintDisplay = this.contactWithMe__headerSlideUp = this.bubblesStart = false;
 	}
 
 	init () {
@@ -84,17 +68,6 @@ class ParallaxScroll {
 		this.bgVideo = document.querySelector(this.state.deviceIsTouchscreen ? 
 			'.parallax__bg-fullscreen-video_mobile-view' :
 			'.parallax__bg-fullscreen-video_desktop-view');
-
-		this.WC = {
-			angle: {
-				arr: [this.gradientBG, this.angleContainer, this.stackDescriptionWrapper, this.aboutSection__header, this.cube3dUserHint],
-				state: "gradientBGIsActive"
-			},
-			certs: {
-				arr: [this.certification__header, this.certificates, this.certification__frame, this.certificationHint, this.certification__headerContentLayer],
-				state: "certsIsActive"
-			}
-		};
 
 		this.addParallaxScrollListener();
 	}
@@ -157,6 +130,7 @@ class ParallaxScroll {
 		if (this.parallaxScrollPosition < 0) 
 			return this.parallaxScrollHandlerTicking = false;
 
+		this.checkAndUpdateFullscreenSlider();
 		this.checkAndUpdateAngle();
 		this.checkAndUpdateBgVideo();
 		this.checkAndUpdateCerts();
@@ -174,36 +148,30 @@ class ParallaxScroll {
 
 	checkAndUpdateBgVideo () {
 		let angleContainerBottomOnDisplay = (this.angleContainerWrapperRECT.bottom - this.parallaxScrollPosition) / this.state.windowHeight,
-		certificationTopOnDisplay = (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight,
-		a = 0, b = 1;
+		certificationTopOnDisplay = (this.certificationRECT.top - this.parallaxScrollPosition)/this.state.windowHeight;
 
-		/*this.state.deviceIsTouchscreen && (a = -0.2, b = 1.2);*/
-
-		if (certificationTopOnDisplay > a && angleContainerBottomOnDisplay < b)
+		if (certificationTopOnDisplay > 0 && angleContainerBottomOnDisplay < 1)
 			return this.bgVideoON();
-
 		this.bgVideoOFF();
 	}
 	bgVideoON () {
 		this.state.bgVideoIsOFF && (this.state.bgVideoIsOFF = false,
 			this.bgVideo.classList.remove('opacity0'),
 			this.bgVideo.play());
-		/*if (this.state.bgVideoIsOFF) {
-			this.state.bgVideoIsOFF = false;
-			this.bgVideo.play();
-			//this.bgVideo.classList.remove('opacity0');
-		}*/
 	}
 	bgVideoOFF () {
 		this.state.bgVideoIsOFF || (this.state.bgVideoIsOFF = true,
 			this.bgVideo.classList.add('opacity0'),
 			this.bgVideo.pause());
+	}
 
-		/*if (!this.state.bgVideoIsOFF) {
-			this.state.bgVideoIsOFF = true;
-			this.bgVideo.pause();
-			//this.bgVideo.classList.add('opacity0');
-		}*/
+	checkAndUpdateFullscreenSlider () {
+		if (this.state.slide1IsActive) return;
+		this.state.fullscreenSliderPause = true;
+		this.parallaxScrollPosition > 10 || (window.clearTimeout(this.state.paralaxScrollTickingTimeout), this.state.paralaxScrollTickingTimeout = window.setTimeout(this.paralaxScrollTickingFuncBind, 1000));
+	}
+	paralaxScrollTickingFunc () {
+		this.state.fullscreenSliderPause = false;
 	}
 
 	checkAndUpdateAngle () {
@@ -231,14 +199,6 @@ class ParallaxScroll {
 		this.certification__headerSlideUp || this.doItInNextRafAndCallbackCountPlus(this.certification__headerSlideUpRAFBind);
 
 		certificationDisplayProportion < 0.9 || this.state.certificationUserStart || this.certificationHintDisplay || this.doItInNextRafAndCallbackCountPlus(this.certificationHintDisplayRAFBind);
-	}
-	certsEnableRAF () {
-		this.classWC(!0, this.WC.certs);
-		this.parallaxScrollFinish();
-	}
-	certsDisableRAF () {
-		this.classWC(!1, this.WC.certs);
-		this.parallaxScrollFinish();
 	}
 
 	certification__headerSlideUpRAF () {
@@ -286,7 +246,7 @@ class ParallaxScroll {
 		} else {
 			this.contactWithMe__headerSlideUp && this.doItInNextRafAndCallbackCountPlus(this.bubbles__headerSlideDownRAFBind);
 		}
-//return;
+
 		if (this.bubblesStart) { 
 			if (bubblesDisplayProportion > 0) 
 				return this.state.bubblesPause && this.doItInNextRafAndCallbackCountPlus(this.bubblesPauseOFFRAFBind);
@@ -332,14 +292,18 @@ class ParallaxScroll {
 
   	if (this.angle > -0.5) {
   		this.angleContainer.style.transform = 'rotate(0deg) translateZ(0)';
+  		this.state.angle = 0;
 			return this.aboutSectionElementsSlideUp();
   	} 
 
   	this.aboutSectionElementsSlideDown();
-  	if (this.angle > -10 && this.angle <= -0.5)
-  		return this.angleContainer.style.transform = 'rotate(' + this.state.roundTo(this.angle, 1) + 'deg) translateZ(0)';
+  	if (this.angle > -10 && this.angle <= -0.5) {
+  		this.state.angle = this.state.roundTo(this.angle, 1);
+  		return this.angleContainer.style.transform = 'rotate(' + this.state.angle + 'deg) translateZ(0)';
+  	}
 
   	this.angleContainer.style.transform = 'rotate(-10deg) translateZ(0)';
+  	this.state.angle = -10;
   }
 
 	aboutSectionElementsSlideUp () {
@@ -360,30 +324,7 @@ class ParallaxScroll {
 		this.gradientBGTransformValue < -66 && (this.gradientBGTransformValue = -66);
 		this.gradientBGTransformValue > 0 && (this.gradientBGTransformValue = 0);
 
-		this.gradientBG.style.transform = 'translate3d(' + this.state.roundTo(this.gradientBGTransformValue, 1) + '%, 0%, 0)';
+		this.state.gradient = this.state.roundTo(this.gradientBGTransformValue, 1);
+		this.gradientBG.style.transform = 'translate3d(' + this.state.gradient + '%, 0%, 0)';
 	}
-	classWC (add, target) {
-		if (add) {
-			this[target.state] = true;
-			for (var i = target.arr.length - 1; i >= 0; i--)
-				target.arr[i].classList.add('will-change');
-			return;
-		}
-		
-		this[target.state] = false;
-		for (var i = target.arr.length - 1; i >= 0; i--)
-			target.arr[i].classList.remove('will-change');
-	}
-/*	resizeGradientBG () {
-		if (this.state.angleGradientBGIsActive) { console.log('resizeGradientBG');
-			//this.angleContainer.classList.add('hidden');
-			this.angleGradientBGDisable();
-			window.requestAnimationFrame(()=>{
-				// this.angleContainer.classList.remove('hidden');
-				// this.angleContainerWrapperRECT = null;
-				// this.setAngleToGradientBG();
-				this.angleGradientBGEnable();
-			});
-		}
-	}*/
 }

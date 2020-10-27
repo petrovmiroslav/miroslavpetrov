@@ -14,28 +14,14 @@ class Certification {
 		this.clientDevice = ClientDevice;
 		this.clientDevice.windowResizeHandlersQueue.resizeCertificates = this.resize.bind(this);
 
-		this.certificationCarousel = null;
-		this.certificates = null;
-
-		this.certsLength = 0;
-		this.certificatesScrollMax = 0;
-		this.certificatesScrollWidth = 0;
-		this.scrollStepValue = 0;
-		this.certificatesRECT = null;
-
-		this.md = false;
-		this.ticking = false;
-		this.mouseMoveValue = 0;
-		this.startMousePosition = 0;
-		this.oldScrollLeft = 0;
-		this.lastScrollStep = 0;
-		this.currentCert = 0;
-		this.rAFid = null;
-		this.scrollValue = 0;
-
-
+		this.certificationCarousel = {};
+		this.certificates = {};
+		this.certificatesRECT = {};
+		this.certificatesScrollTimeout = this.rAFid = null;
+		this.m = this.md = this.mm = this.ticking = false;
+		this.mouseMoveValue = this.startMousePosition = this.oldScrollLeft = this.lastScrollStep = this.currentCert = this.scrollValue = this.certsLength = this.certificatesScrollMax = this.certificatesScrollWidth = this.scrollStepValue = 0;
+		
 		this.setScrollValueBind = this.setScrollValue.bind(this);
-
 		this.certificatesOnMouseDownBind = this.certificatesOnMouseDown.bind(this);
 		this.certificatesOnMouseMoveBind = this.certificatesOnMouseMove.bind(this);
 		this.certificatesOnMouseUpBind = this.certificatesOnMouseUp.bind(this);
@@ -44,6 +30,7 @@ class Certification {
 		this.certificatesHintOnMouseOutBind = this.certificatesHintOnMouseOut.bind(this);
 		this.certificatesOnTouchstartBind = this.certificatesOnTouchstart.bind(this);
 		this.certificatesOnTouchEndBind = this.certificatesOnTouchEnd.bind(this);
+		this.certificatesScrollHandlerBind = this.certificatesScrollHandler.bind(this);
 		this.certificatesOnScrollBind = this.certificatesOnScroll.bind(this);
 	}
 
@@ -75,15 +62,15 @@ class Certification {
 
 	addCertificatesMouseDownListener () {
 		if (this.state.deviceIsTouchscreen)
-			return this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.state.passiveListener);
+			return this.certificationCarousel.addEventListener('touchstart', this.certificatesOnTouchstartBind, this.state.passiveListener), this.addCertificatesScrollListener();
 
 		this.certificationCarousel.addEventListener('mousedown', this.certificatesOnMouseDownBind, false);
 	}
 	addCertificatesScrollListener () {
-		this.certificates.addEventListener('scroll', this.certificatesOnScrollBind, this.state.passiveListener);
+		this.certificates.addEventListener('scroll', this.certificatesScrollHandlerBind, this.state.passiveListener);
 	}
 	removeCertificatesScrollListener () {
-		this.certificates.removeEventListener('scroll', this.certificatesOnScrollBind, this.state.passiveListener);
+		this.certificates.removeEventListener('scroll', this.certificatesScrollHandlerBind, this.state.passiveListener);
 	}
 	addCertificatesSwipeListeners () {
 		this.certificationCarousel.addEventListener('mousemove', this.certificatesOnMouseMoveBind, false);
@@ -172,15 +159,14 @@ class Certification {
 	}
 
 	certificatesOnTouchstart (e) {
+		this.md = this.m = true;
 		this.mm = false;
-		this.addCertificatesScrollListener();
 		this.addCertificatesTouchEndListener();
-
 		this.hideUserHint();
 	}
 	certificatesOnTouchEnd (e) {
+		this.md = false;
 		this.removeCertificatesTouchEndListener();
-		this.removeCertificatesScrollListener();
 	}
 
 	hideUserHint () {
@@ -239,15 +225,14 @@ class Certification {
 		return (-this.certificatesRECT.width / this.certsLength) * this.currentCert;
 	}
 
-	certificatesOnScroll () {
+	certificatesScrollHandler () {
 		this.mm = true;
-		let newScrollLeft = this.certificates.scrollLeft;
-		console.log('this.scrollValue--', this.scrollValue, '--newScrollLeft--', newScrollLeft);
-		if (this.scrollValue == newScrollLeft)
-			return this.currentCert = Math.round(this.scrollValue / this.scrollStepValue),
-			console.log('CURRCERT---', this.currentCert);
-		this.scrollValue = this.certificates.scrollLeft;
-		this.rAF(this.certificatesOnScroll);
+		window.clearTimeout(this.certificatesScrollTimeout);
+		this.certificatesScrollTimeout = window.setTimeout(this.certificatesOnScrollBind, 100);
+	}
+
+	certificatesOnScroll () {
+		this.m && !this.md && (this.currentCert = Math.round(this.certificates.scrollLeft / this.scrollStepValue), this.m = false, console.log(this.currentCert));
 	}
 
 	displayCurrentCert (index) {
@@ -265,11 +250,8 @@ class Certification {
 			this.certificatesScrollWidth = this.certificates.scrollWidth;
 			this.certificatesRECT = this.certificates.getBoundingClientRect();
 			this.scrollStepValue = (this.certificatesScrollWidth - this.certificatesRECT.width) / (this.certsLength - 1);
-
-			this.certificates.classList.add('hidden');
 			this.certificates.style['scroll-behavior'] = 'unset';
 			window.requestAnimationFrame(()=>{
-				this.certificates.classList.remove('hidden');
 				this.certificates.scrollLeft = Math.round(this.scrollStepValue * this.currentCert);
 				this.rAF(this.setScrollBehaviorSmooth);
 			});
@@ -286,14 +268,13 @@ class Certification {
 		if (this.state.deviceIsTouchscreen)
 			return el.scrollLeft = this.scrollStepValue * this.currentCert,
 			console.log('displayCurrentCert', this.scrollStepValue * this.currentCert);
-		this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
+		el.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%)';
 	}
 
 	setScrollBehaviorSmooth () {
 		this.certificates.style['scroll-behavior'] = 'smooth';
 	}
 
- 	///SERTIFICATION GALLERY///
 	initPhotoSwipeFromDOM (gallerySelector) {
 			let thisObj = this;
       // parse slide data (url, title, size ...) from DOM elements 
@@ -519,16 +500,4 @@ class Certification {
           openPhotoSwipe( hashData.pid ,  galleryElements[ hashData.gid - 1 ], true, true, thisObjRef);
       }
   };
-  // execute above function
-/*  addCertificatesClickListener () {
-  	let anchors = this.certificates.querySelectorAll('a');
-		for (let i = 0; i < anchors.length; i++) {
-			anchors[i].addEventListener('click', this.photoswipeHandlerBind);
-		}
-  }
-  photoswipeHandler (e) {console.log("CLICK");
-  	e.preventDefault();
-  	this.initPhotoSwipeFromDOM(this.certificates, this);
-  }*/
-  ///SERTIFICATION GALLERY///////////
 }

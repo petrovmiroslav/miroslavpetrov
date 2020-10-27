@@ -4,7 +4,10 @@
 	width: 100%;
 	background-color: #454C59;
 	touch-action: pan-y;
-	pointer-events: none;
+	z-index: 1;
+}
+.hiScreen_slider {
+	z-index: auto;
 }
 .hiScreen__content-block {
 	position: relative;
@@ -27,8 +30,8 @@
 	color: black;
 	background-color: #fff;
 }
-.hiScreen_for-blure-effect .hiScreen__text{
-	color: #cdcecd;/*#e98895;*/
+.hiScreen__text__forBlurTransition {
+	color: #384453;
 }
 .hiScreen__text_top {
 	padding-top: 2.5vmin;
@@ -92,8 +95,7 @@
 
 }
 .hiScreen__bg-image_lazy-afterLoad {
-	/*background-image: url(../img/hiScreenBg.jpg);*/
-	background-image: url('https://petrovmiroslav.github.io/static/hiScreenBg.jpg');
+	background-image: url('../img/hiScreenBg.jpg');
 }
 .hiScreen__scrollIconSection {
 	position: absolute;

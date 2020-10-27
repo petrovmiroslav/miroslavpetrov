@@ -8,13 +8,16 @@ class LazyLoader {
 	constructor (State) {
 		this.state = State;
 
-		this.imgForLazyLoadHiScreen = null;
-		this.hiScreen = null;
-		this.divForDownload = null;
-		this.imgMini = null;
-		this.imgLazy = null;
+		this.imgForLazyLoadHiScreen = {};
+		this.hiScreen = {};
+		this.divForDownload = {};
+		this.imgMini = {};
+		this.imgLazy = {};
 
-		this.checkReadyToRemoveMiniImgInterval = null;
+		this.hiBgImageLoadHandlerBind = this.hiBgImageLoadHandler.bind(this);
+		this.removeMiniImgBind = this.removeMiniImg.bind(this);
+		this.hiBgImageBlurTransitionEndBind = this.hiBgImageBlurTransitionEnd.bind(this);
+		this.removeHiScreenClass = this.removeHiScreenClass.bind(this);
 	}
 	rAF (f) {
 		let nextRenderFunc = f;
@@ -27,106 +30,82 @@ class LazyLoader {
 	}
 
 	init () {
-		this.rAF(this.lazyLoadAndReplaceHiBgImage);
-		this.rAF(this.loadVideos);
-	}
-
-	lazyLoadAndReplaceHiBgImage () {
 		this.hiScreen = document.querySelector('.hiScreen');
+		this.hiScreenTexts = this.hiScreen.querySelectorAll('.hiScreen__text');
 		this.divForDownload = document.querySelector('.forDownload');
 		this.imgMini = document.querySelector('.hiScreen__bg-image_mini');
 		this.imgLazy = document.querySelector('.hiScreen__bg-image_lazy');
 
-		this.divForDownload.querySelector('img').remove();
+		this.rAF(this.lazyLoadAndReplaceHiBgImage);
+		this.rAF(this.loadVideos);
+		this.rAF(this.addPlantsImgSourceRAF);
+	}
+
+	lazyLoadAndReplaceHiBgImage () {
 		this.imgForLazyLoadHiScreen = document.createElement('img');
 		
-		this.imgForLazyLoadHiScreen.setAttribute('src', 'https://petrovmiroslav.github.io/static/hiScreenBg.jpg');
-	  /*this.imgForLazyLoadHiScreen.setAttribute('src', './img/hiScreenBg.jpg');*/
+		this.imgForLazyLoadHiScreen.setAttribute('src', this.state.static.hiBg.max);
 	  this.divForDownload.appendChild(this.imgForLazyLoadHiScreen);
 	  this.addImgForLazyLoadHiScreenListener();
 	}
-
+	hiBgImageLoadHandler () {
+		this.imgForLazyLoadHiScreen.removeEventListener('load', this.hiBgImageLoadHandlerBind);
+  	this.imgForLazyLoadHiScreen.remove();
+  	this.imgForLazyLoadHiScreen = null;
+  	this.state.hiBgLazyImageIsLoaded = true;
+  	this.switchHiBgImage();
+	}
 	addImgForLazyLoadHiScreenListener () {
-		let that = this;
-    let f = function (ref) {
-    	ref.imgForLazyLoadHiScreen.removeEventListener('load', func);
-    	ref.imgForLazyLoadHiScreen.remove();
-    	ref.imgForLazyLoadHiScreen = null;
-    	ref.setStateHiBgLazyImageIsLoadedTrue();
-    	ref = null;
-    };
-    let func = function () {
-    	return f(that);
-    }
-  	this.imgForLazyLoadHiScreen.addEventListener('load', func);
+		this.imgForLazyLoadHiScreen.addEventListener('load', this.hiBgImageLoadHandlerBind);
 	}
 
-	setStateHiBgLazyImageIsLoadedTrue () {
-		this.state.hiBgLazyImageIsLoaded = true;
-		this.prepareToRemoveMiniImg();
-	}
+	switchHiBgImage () {
+		this.state.deviceIsTouchscreen || this.state.switchHiBgImageTransformTarget();
+		this.state.hiBgImageMini = false;
+		this.imgLazy.classList.add('hiScreen__bg-image_lazy-afterLoad');
+		this.imgLazyRemoveClassBlurred();
+		window.setTimeout(this.removeMiniImgBind, 1000);
 
-	prepareToRemoveMiniImg () {
-		this.setCheckReadyToRemoveMiniImgInterval();
-	}
-
-	setCheckReadyToRemoveMiniImgInterval () {
-		this.checkReadyToRemoveMiniImgInterval = window.setInterval(this.checkReadyToRemoveMiniImg.bind(this),50);
-	}
-	checkReadyToRemoveMiniImg () {
-		if (this.state.hiBgLazyImageIsTargetTransform || this.state.deviceIsTouchscreen) {
-			window.clearInterval(this.checkReadyToRemoveMiniImgInterval);
-			this.imgLazy.classList.add("hiScreen__bg-image_lazy-afterLoad");
-			this.rAF(this.imgLazyRemoveClassBlurred);
-			this.rAF(this.setRemoveMiniImgTimeout);
-
-			if (this.state.deviceIsTouchscreen) {
-				this.hiScreen.classList.add('hiScreen_for-blure-effect');
-				this.setRemoveHiScreenClassTimeout();
+		if (this.state.deviceIsTouchscreen) {
+			for (var i = this.hiScreenTexts.length - 1; i >= 0; i--) {
+				this.hiScreenTexts[i].classList.add('hiScreen__text__forBlurTransition');
 			}
+			this.waitHiBgImageBlurTransitionEnd();
 		}
 	}
+
 	imgLazyRemoveClassBlurred () {
+		if (!this.state.preloaderIsOff) return this.rAF(this.imgLazyRemoveClassBlurred);
+		if (!this.state.hiBgImageBlured) return;
+		this.state.hiBgImageBlured = false;
 		this.imgLazy.classList.remove('hiScreen__bg-image_blurred');
 	}
-	setRemoveMiniImgTimeout () {
-		window.setTimeout(this.removeMiniImg.bind(this), 1000);
-	}
+
 	removeMiniImg () {
 		this.imgMini.remove();
-
-
-		this.imgForLazyLoadHiScreen = null;
-		this.divForDownload = null;
-		this.imgMini = null;
-		this.imgLazy = null;
+		this.imgForLazyLoadHiScreen = this.imgMini = null;
 	}
-	setRemoveHiScreenClassTimeout () {
-		window.setTimeout(this.removeHiScreenClass.bind(this), 700);
+
+	waitHiBgImageBlurTransitionEnd () {
+		if (this.state.transitionEventSupport)
+			return this.imgLazy.addEventListener('transitionend', this.hiBgImageBlurTransitionEndBind);
+		window.setTimeout(this.removeHiScreenClass, 700);
+	}
+	hiBgImageBlurTransitionEnd (e) {
+		if (e.target.parentNode.id !== 'hiScreenWrapper' || e.propertyName !== 'filter') return;
+		this.imgLazy.removeEventListener('transitionend', this.hiBgImageBlurTransitionEndBind);
+		this.removeHiScreenClass();
 	}
 	removeHiScreenClass () {
-		this.hiScreen.classList.remove('hiScreen_for-blure-effect');
+		for (var i = this.hiScreenTexts.length - 1; i >= 0; i--) {
+			this.hiScreenTexts[i].classList.remove('hiScreen__text__forBlurTransition');
+		}
+		this.hiScreenTexts = null;
 	}
 
 	loadVideos () {
-		this.sourcesBGVideo = [	
-														{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.webm',
-														  type: 'video/webm'
-														},
-														{ src: 'https://petrovmiroslav.github.io/static/videoBG-1280.webm',
-														  type: 'video/webm'
-														}
-													];
 		this.fullscreenBgVideo = document.querySelectorAll('.parallax__bg-fullscreen-video');
-		this.addVideoSource(this.fullscreenBgVideo, this.sourcesBGVideo);
-
-		/*this.sourcesRainVideo = [
-														  { src: 'https://www.w3schools.com/howto/rain.mp4',
-														    type: 'video/mp4'
-														  }
-														];
-		this.rainVideo = document.querySelector('#rainVideo');
-		this.addVideoSource(this.rainVideo, this.sourcesRainVideo);*/
+		this.addVideoSource(this.fullscreenBgVideo, this.state.static.bGVideo);
 	}
 	addVideoSource (video, sources) {
 		if (video.length) {
@@ -149,5 +128,18 @@ class LazyLoader {
 			}
 		}
 	}
-
+	addPlantsImgSourceRAF () {
+		this.rAF(this.addPlantsImgSource);
+	}
+	addPlantsImgSource () {
+		document.querySelector('.certification__plantParallaxImg_back').setAttribute('src', this.state.static.plants.back);
+		if (this.state.deviceIsTouchscreen) return;
+		let b = document.querySelector('.certification__plantParallaxImg_base'),
+				f = document.querySelector('.certification__plantParallaxImg_fore');
+		b.setAttribute('src', this.state.static.plants.base);
+		f.setAttribute('src', this.state.static.plants.fore);
+		b.classList.remove('hidden');
+		f.classList.remove('hidden');
+		b = f = null;
+	}
 }

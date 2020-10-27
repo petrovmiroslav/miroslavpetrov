@@ -2,38 +2,59 @@ export { State };
 
 class State {
 	constructor () {
-		this.windowWidth = document.documentElement.clientWidth;//window.innerWidth;
-  	this.windowHeight = document.documentElement.clientHeight;//window.innerHeight;
-  	this.deviceIsTouchscreen = false;
-  	this.passiveListener = false;
+		this.windowWidth = document.documentElement.clientWidth;
+  	this.windowHeight = document.documentElement.clientHeight;
+  	this.deviceIsTouchscreen = 
+  	this.passiveListener = 
+  	this.transitionEventSupport = false;
 
-		this.preloaderIsOff = false;
-		this.slide1IsActive = false;
+		this.preloaderIsOff = 
+		this.slide1IsActive = 
 		this.menuIsOpen = false;
-		this.parallaxScrollUPDATE = null;
+		this.hiBgImageMini = 
+		this.hiBgImageBlured = true;
+		this.hiBgImageTransform = [0,0];
+		this.parallaxScrollUPDATE = {};
 		this.angleGradientBGIsActive = false;
-		this.angleGradientBGON = null;
-		this.angleGradientBGOFF = null;
-		this.hiBgImageTransformListener = false;
-		this.hiBgImageTransformON = null;
-		this.hiBgImageTransformOFF = null;
-		this.fullscreenSliderON = null;
-    this.fullscreenSliderOFF = null;
+		this.angleGradientBGON = {};
+		this.angleGradientBGOFF = {};
+		this.hiBgImageTransformON = {};
+		this.hiBgImageTransformOFF = {};
+		this.fullscreenSliderON = {};
+    this.fullscreenSliderOFF = {};
+    this.fullscreenSliderPause = false;
+    this.paralaxScrollTickingTimeout = 0;
+    this.cube3dBlockSlider = false;
     this.cube3dIsActive = false;
-    this.cube3dCreate = null;
+    this.cube3dCreate = {};
 
-		this.hiBgLazyImageIsLoaded = false;
+		this.hiBgLazyImageIsLoaded = 
 		this.hiBgLazyImageIsTargetTransform = false;
 		this.bgVideoIsOFF = true;
-	}
 
-	init () {
-		
+		this.static = {
+			hiBg: {
+				mini: '',
+				max: '../img/hiScreenBg.jpg'
+			},
+			bGVideo: [	
+				{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.webm',
+				  type: 'video/webm'
+				},
+				{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.mp4',
+				  type: 'video/mp4'
+				}
+			],
+			plants: {
+				back: '../img/plant-bg_mini.png',
+				base: '../img/plant-base_mini.png',
+				fore: '../img/plant-fore_mini.png'
+			}
+		}
 	}
 
 	roundTo (numberToRound, digits) {
 		return +numberToRound.toFixed(digits);
 	}
-
 }
 

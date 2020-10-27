@@ -9,14 +9,13 @@ class ClientDevice {
 		this.state = State;
 		this.state.clientDevice = this;
 
-		this.windowResizeHandlerTimeout = null;
+		this.windowResizeHandlerTimeout = 0;
 		this.windowResizeHandlersQueue = {};
-		this.windowOrientationChangeHandlerTimeout = null;
 
-		this.main = null;
-		this.hiScreen = null;
-		this.mobileBGFullscreenVideo = null;
-		this.desktopBGFullscreenVideo = null;
+		this.main = {};
+		this.hiScreen = {};
+		this.mobileBGFullscreenVideo = {};
+		this.desktopBGFullscreenVideo = {};
 	}
 	
 	init () {
@@ -27,10 +26,8 @@ class ClientDevice {
 
 		this.state.deviceIsTouchscreen = this.detectTouchScreen();
 		this.detectSupportsPassive();
-
+		this.detectSupportAnimationEvent();
 		this.addWindowResizeListener();
-		/*this.addWindowOrientationChangeListener();*/
-
 		this.selectVideoBGFullscreen();
 		this.initParallaxIfClientDeviceIsDesktop();
 	}
@@ -48,7 +45,7 @@ class ClientDevice {
 		        hasTouchScreen = !!mQ.matches;
 		    } else {
 		    	if ('orientation' in window) {
-		        hasTouchScreen = true; // deprecated, but good fallback
+		        hasTouchScreen = true;
 			    } else {
 			    	var UA = navigator.userAgent;
 		        hasTouchScreen = (
@@ -71,7 +68,17 @@ class ClientDevice {
 		  });
 		  window.addEventListener("testPassive", null, opts);
 		  window.removeEventListener("testPassive", null, opts);
-		} catch (e) {console.log('SUPPORTSPASSIVE',e)}
+		} catch (e) {this.state.errHandler(e);}
+	}
+
+	detectSupportAnimationEvent () {
+		let el = document.createElement('div');
+    this.state.transitionEventSupport = ('ontransitionend' in el);
+    if (!this.state.transitionEventSupport) {
+      el.setAttribute('transitionend', 'return;');
+      this.state.transitionEventSupport = typeof el['transitionend'] == 'function';
+    }
+    el = null;
 	}
 
 	addWindowResizeListener () {
@@ -86,81 +93,32 @@ class ClientDevice {
 	}
 	windowResize () {
 		try {
-			this.state.windowWidth = document.documentElement.clientWidth;//window.innerWidth;
-	  	this.state.windowHeight = document.documentElement.clientHeight;//window.innerHeight;
+			this.state.windowWidth = document.documentElement.clientWidth;
+	  	this.state.windowHeight = document.documentElement.clientHeight;
 
 	  	for (let func in this.windowResizeHandlersQueue) {
-	  		if (typeof this.windowResizeHandlersQueue[func] === 'function') {
-	  			this.windowResizeHandlersQueue[func]();
-	  		}
+	  		typeof this.windowResizeHandlersQueue[func] === 'function' && this.windowResizeHandlersQueue[func]();
 	  	}
 		} catch (e) {
 			this.state.errHandler(e);
 		}
 	}
 
-	addWindowOrientationChangeListener () {
-		window.addEventListener('orientationchange', this.setWindowOrientationChangeHandlerTimeout.bind(this));
-	}
-	setWindowOrientationChangeHandlerTimeout () {
-		window.clearTimeout(this.windowOrientationChangeHandlerTimeout);
-		this.windowOrientationChangeHandlerTimeout = window.setTimeout(this.windowOrientationChangeHandlerFunc.bind(this), 100);
-	}
-	windowOrientationChangeHandlerFunc () {
-		void(document.querySelector('html').offsetHeight);
-		void(document.body.offsetHeight);
-		void(this.main.offsetHeight);
-		void(this.hiScreen.offsetHeight);
-	}
-
 	selectVideoBGFullscreen () {
-		if (this.state.deviceIsTouchscreen) {
-			/*this.mobileBGFullscreenVideo.classList.remove('hidden');
-			this.desktopBGFullscreenVideo.classList.add('hidden');*/
-			this.mobileBGFullscreenVideo.classList.remove('hidden')
-			this.desktopBGFullscreenVideo.remove();
-		} else {
-			this.mobileBGFullscreenVideo.remove();
-		}
+		if (!this.state.deviceIsTouchscreen) return this.mobileBGFullscreenVideo.remove();
+		this.mobileBGFullscreenVideo.classList.remove('hidden')
+		this.desktopBGFullscreenVideo.remove();
 	}
 	initParallaxIfClientDeviceIsDesktop () {
-		if (!this.state.deviceIsTouchscreen) {
-			this.main.querySelector('.parallax__scrollable-container').classList.add('parallax__scrollable-container_desktop-view');
-			this.main.querySelectorAll('.parallax__group').forEach(function (el) {
-				el.classList.add('parallax__group_desktop-view');
-			});
-			this.main.querySelectorAll('.parallax__layer--back').forEach(function (el) {
-				el.classList.add('parallax__layer--back_desktop-view');
-			});
-			this.main.querySelectorAll('.parallax__layer--fore').forEach(function (el) {
-				el.classList.add('parallax__layer--fore_desktop-view');
-			});
-			this.main.querySelector('.menu__emailSection').classList.remove('menu__emailSection_menuBarFix');
-
-			document.getElementById('group1').classList.add('group1_desktop-view');
-			document.getElementById('group1').classList.remove('parallax__group_desktop-view');
-			this.main.querySelector('.cube3d').classList.remove('cube3d_mobileView');
-			document.getElementById('group2').classList.add('parallax__videoContainer');
-			document.getElementById('group2').classList.remove('parallax__group_desktop-view');
-			this.main.querySelector('.videoDescription').classList.add('videoDescription_desktop-view');
-			//document.getElementById('group3').classList.remove('parallax__group_desktop-view');
-			//this.main.querySelector('.header__text_certification').classList.add('will-change');
-
-			document.getElementById('group4').classList.remove('parallax__group_desktop-view');
-			//this.main.querySelector('.header__text_portfolio').classList.add('will-change');
-
-			this.main.querySelector('.contactWithMe').classList.remove('contactWithMe_mobileView');
-			document.getElementById('wrapperMenuButton').classList.add('menuButton_desktop-view');
-			
-
-			let plantContainerBase = this.main.querySelector('.certification__plantParallaxImg_base'),
-					plantContainerFore = this.main.querySelector('.certification__plantParallaxImg_fore');
-			plantContainerBase.classList.remove('hidden');		
-			plantContainerBase.setAttribute('src', '../img/plant-base.png');
-
-			plantContainerFore.classList.remove('hidden');
-			plantContainerFore.setAttribute('src', '../img/plant-fore.png');
-			plantContainerBase = plantContainerFore = null;
-		}
+		if (this.state.deviceIsTouchscreen) return;
+		this.main.querySelector('.parallax__scrollable-container').classList.add('parallax__scrollable-container_desktop-view');
+		this.main.querySelector('.menu__emailSection').classList.remove('menu__emailSection_menuBarFix');
+		document.getElementById('group1').classList.add('group1_desktop-view');
+		this.main.querySelector('.cube3d').classList.remove('cube3d_mobileView');
+		document.getElementById('group2').classList.add('parallax__videoContainer');
+		this.main.querySelector('.videoDescription').classList.add('videoDescription_desktop-view');
+		document.getElementById('group3').classList.add('parallax__group_desktop-view');
+		this.main.querySelector('.contactWithMe').classList.remove('contactWithMe_mobileView');
+		document.getElementById('wrapperMenuButton').classList.add('menuButton_desktop-view');
 	}
 }

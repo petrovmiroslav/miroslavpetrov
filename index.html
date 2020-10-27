@@ -24,26 +24,8 @@
 	<link href="css/contactWithMe.css" type="text/css" rel="stylesheet">
 	<link href="css/toasts.css" type="text/css" rel="stylesheet">
 </head>
-<body class="page page_bgLikePreloader">
-	<!--<div id="preloaderWrapper" class="preloader preloader_beforeStart preloader_bgLikePreloader hidden">
-		<div class="preloader__topWrapper opacity0">
-			<div class="preloader__cube preloader__left-cube"></div>
-			<div class="preloader__cube preloader__right-cube"></div>
-		</div>
-		<div class="preloader__bottomWrapper">
-			<div class="preloader__cube preloader__bottom-cube">
-			</div>
-		</div>
-	</div>-->
-	<div class="preloader-side preloader-side__top hidden">
-		<div class="preloader-left-cube"></div>
-		<div class="preloader-right-cube"></div>
-	</div>
-	<div class="preloader-side preloader-side__bottom hidden">
-		<div class="preloader-bottom-cube">
-		</div>
-	</div>
-	<div class="main main_darkened hidden">
+<body>
+	<div class="main">
 		<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="pswp__bg"></div>
 			<div class="pswp__scroll-wrap">
@@ -149,70 +131,17 @@
 					</g>
 				</svg>
 			</div>
-
-			<!-- <div class="loading userSelect-None hidden">
-				<div class="loading__scene">
-					<div class="loading__Y loading__Y0">
-						<div class="loading__Z loading__Z_gradientColor1">
-							<div class="loading__BG loading__BG_color1">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y0 loading__1_2">
-						<div class="loading__Z loading__Z_gradientColor1 loading__1_2">
-							<div class="loading__BG loading__BG_color1 loading__1_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y-45 loading__3">
-						<div class="loading__Z loading__Z_gradientColor3 loading__3">
-							<div class="loading__BG loading__BG_color3 loading__3">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y-45 loading__3_2">
-						<div class="loading__Z loading__Z_gradientColor2 loading__3_2">
-							<div class="loading__BG loading__BG_color2 loading__3_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y45 loading__4">
-						<div class="loading__Z loading__Z_gradientColor2 loading__4">
-							<div class="loading__BG loading__BG_color2 loading__4">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y45 loading__4_2">
-						<div class="loading__Z loading__Z_gradientColor3 loading__4_2">
-							<div class="loading__BG loading__BG_color3 loading__4_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y90 loading__2">
-						<div class="loading__Z loading__Z_gradientColor3 loading__2">
-							<div class="loading__BG loading__BG_color3 loading__2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y90 loading__2_2">
-						<div class="loading__Z loading__Z_gradientColor2 loading__2_2">
-							<div class="loading__BG loading__BG_color2 loading__2_2">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> -->
 		</div>
 
-		<div class="slide2 hidden">	
+		<div class="slide2 opacity0">	
 			<div class="parallax">
 				<div class="debug hidden">
     			<label><input type="checkbox"> Debug</label>
   			</div>
-				<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_mobile-view hidden" poster="img/polina.jpg" id="bgvid" disablePictureInPicture playsinline muted loop preload="auto">
+				<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_mobile-view hidden"  id="bgvid" disablePictureInPicture playsinline muted loop preload="auto">
 				</video>
 				<div id="parallax__scrollable-container" class="parallax__scrollable-container parallax__scrollable-container_smoothScroll">
-			    <div id="group1" class="parallax__group shadow_8">
+			    <div id="group1" class="parallax__group parallax__group_1 shadow_8">
 		    		<div class="scrollcoverTop">
 		    		</div>
 		        <div class="aboutSection">
@@ -298,8 +227,7 @@
 						</div>
 			    </div>
 			    <div id="group2" class="parallax__group">
-			    		<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_desktop-view" poster="img/polina.jpg" playsinline=""  muted="" loop="" preload="auto">
-							</video>
+		    		<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_desktop-view" playsinline=""  muted="" loop="" preload="auto"></video>
 			    </div>
 			    <div class="videoDescription">
 			    	<div class="videoDescription__content">
@@ -456,7 +384,7 @@
 								</div>
 							</div>
 	        	</div>
-	        	<img class="certification__plantParallaxImg certification__plantParallaxImg_back" src="../img/plant-bg.png">
+	        	<img class="certification__plantParallaxImg certification__plantParallaxImg_back" src="">
 							</img>
 			      <img class="certification__plantParallaxImg certification__plantParallaxImg_base hidden" src="">
 	        	</img>
@@ -468,7 +396,7 @@
 			    		<h2 class="header__text header__text_portfolio header__text_slideDown will-change">ПОРТФОЛИО</h2>
 			    	</div>
 					</div>
-			    <div id="group4" class="parallax__group shadow_8">		   
+			    <div id="group4" class="parallax__group parallax__group_4 shadow_8">		   
 	      		<section class="portfolio">
 							<div class="portfolio__projectViewSection shadow_4">
 								<div class="portfolio__projectView">
@@ -954,10 +882,6 @@
 						<div class="aboutSection__cubeGravity">
 	        	</div>
 						<div class="cube3d cube3d_mobileView userSelect-None">
-								<div class="cube3d__loadingIconContainer">
-									<div class="cube3d__loadingIcon">
-									</div>
-								</div>
 								<div class="cube3d__scene hidden" id="cube3d-CubeContainer">
 									<div id="cube3d-level1" class="cube3d-level">
 										<div class="cube3d-front cube3d-side"></div>
@@ -1022,7 +946,8 @@
 				</div>
 			</div>
 		</div>
-
+		<div id="flipper" class="fullscreenFlipper opacity0 hidden">
+		</div>
 		<div class="menu hidden">
 			<div class="menu__bg">
 				<div class="menu__letterContainer">
@@ -1111,19 +1036,67 @@
 					<p class="menu__email">miroslavpetrov.collaboration@gmail.com</p>
 					<div class="hero hero_animationON hidden">
 						<div class="hero__anim_vert">
-							<img class="hero__sprites hero__anim_hor" src="../img/hero.png">
+							<img class="hero__sprites hero__anim_hor" src="../img/hero_mini.png">
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="fullscreenFlipper opacity0 hidden">
-		</div>
-		<div class="fullscreenSlider hidden">
-			<div class="fullscreenSlider__fallback"></div>
-			<div class="fullscreenSlider__side fullscreenSlider__side_top"></div>
-			<div class="fullscreenSlider__side fullscreenSlider__side_bottom"></div>
+		<div id="slider" class="fullscreenSlider hidden">
+			<div class="fullscreenSlider__side fullscreenSlider__side_top">
+				<div class="hiScreen hiScreen_slider">	
+					<div class="hiScreen__bg-image hiScreen__bg-image_mini hiScreen__bg-image_blurred">
+					</div>
+					<div class="hiScreen__bg-image hiScreen__bg-image_lazy hiScreen__bg-image_blurred hidden">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_top">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_bottom">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_right">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_left">
+					</div>
+					<div class="hiScreen__content-block">
+						<div class="hiScreen__text-block">
+							<h1 class="hiScreen__text hiScreen__text_top">Привет!</h1>
+							<h2 class="hiScreen__text hiScreen__text_bottom">Меня зовут <br>Мирослав</h2>
+						</div>
+						<div class="hiScreen__shadow hiScreen__shadow_top-right"></div>
+						<div class="hiScreen__shadow hiScreen__shadow_bottom-left">
+						</div>
+						<div class="hiScreen__shadow hiScreen__shadow_bottom-right">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="fullscreenSlider__side fullscreenSlider__side_bottom">
+				<div class="hiScreen hiScreen_slider">	
+					<div class="hiScreen__bg-image hiScreen__bg-image_mini hiScreen__bg-image_blurred">
+					</div>
+					<div class="hiScreen__bg-image hiScreen__bg-image_lazy hiScreen__bg-image_blurred hidden">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_top">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_bottom">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_right">
+					</div>
+					<div class="hiScreen__bgGradientFilter hiScreen__bgGradientFilter_left">
+					</div>
+					<div class="hiScreen__content-block">
+						<div class="hiScreen__text-block">
+							<h1 class="hiScreen__text hiScreen__text_top">Привет!</h1>
+							<h2 class="hiScreen__text hiScreen__text_bottom">Меня зовут <br>Мирослав</h2>
+						</div>
+						<div class="hiScreen__shadow hiScreen__shadow_top-right"></div>
+						<div class="hiScreen__shadow hiScreen__shadow_bottom-left">
+						</div>
+						<div class="hiScreen__shadow hiScreen__shadow_bottom-right">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div id="wrapperMenuButton" class="menuButton">
 			<button tabindex="1" id="menuButton" value="Меню" class="menuButton__button visuallyhidden"></button>
@@ -1149,16 +1122,70 @@
 			</label>
 		</div>
 	</div>
-
-	
+	<div id="preloaderSide_top" class="preloaderSide preloaderSide_top will-change">
+		<div class="preloaderCube_top preloaderCube_left will-change"></div>
+		<div class="preloaderCube_top preloaderCube_right will-change"></div>
+	</div>
+	<div id="preloaderSide_bottom" class="preloaderSide preloaderSide_bottom will-change">
+		<div class="preloaderCube_bottom will-change">
+		</div>
+	</div>
 	<div class="forDownload">
-		<img src="../img/hiScreenBgMini.png">
-		<h1 class="text hiH1">Привет!</h1>
-		<h2 class="text hiH2">Меня зовут Мирослав</h2>
-		<div class="test"></div>
 	</div>
-	<div class="toasts toasts_out">
+	<div class="toasts toasts_out will-change">
 	</div>
+	<!-- <div class="loading userSelect-None hidden">
+				<div class="loading__scene">
+					<div class="loading__Y loading__Y0">
+						<div class="loading__Z loading__Z_gradientColor1">
+							<div class="loading__BG loading__BG_color1">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y0 loading__1_2">
+						<div class="loading__Z loading__Z_gradientColor1 loading__1_2">
+							<div class="loading__BG loading__BG_color1 loading__1_2">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y-45 loading__3">
+						<div class="loading__Z loading__Z_gradientColor3 loading__3">
+							<div class="loading__BG loading__BG_color3 loading__3">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y-45 loading__3_2">
+						<div class="loading__Z loading__Z_gradientColor2 loading__3_2">
+							<div class="loading__BG loading__BG_color2 loading__3_2">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y45 loading__4">
+						<div class="loading__Z loading__Z_gradientColor2 loading__4">
+							<div class="loading__BG loading__BG_color2 loading__4">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y45 loading__4_2">
+						<div class="loading__Z loading__Z_gradientColor3 loading__4_2">
+							<div class="loading__BG loading__BG_color3 loading__4_2">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y90 loading__2">
+						<div class="loading__Z loading__Z_gradientColor3 loading__2">
+							<div class="loading__BG loading__BG_color3 loading__2">
+							</div>
+						</div>
+					</div>
+					<div class="loading__Y loading__Y90 loading__2_2">
+						<div class="loading__Z loading__Z_gradientColor2 loading__2_2">
+							<div class="loading__BG loading__BG_color2 loading__2_2">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
 <script>
     var debugInput = document.querySelector(".debug");
     function updateDebugState() {

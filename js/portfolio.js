@@ -10,24 +10,17 @@ class Portfolio {
 		this.state.portfolioResize = this.resize.bind(this);
 		this.state.clientDevice.windowResizeHandlersQueue.resizePortfolio = this.resize.bind(this);
 
-		this.parallax = null;
-		this.deviceSlider = null;
-		this.imacButton = null;
-		this.iphoneButton = null;
-		this.imacButtonBG_back = null;
-		this.imacButtonBG_highlight = null;
-		this.iphoneButtonBG_back = null;
-		this.iphoneButtonBG_highlight = null;
-		this.imacSVG = null;
-		this.iphoneSVG = null;
-		this.portfolioIframe = null;
+		this.parallax = {};
+		this.deviceSlider = {};
+		this.imacButton = {};
+		this.iphoneButton = {};
+		this.imacSVG = {};
+		this.iphoneSVG = {};
+		this.portfolioIframe = {};
+		this.curProject = {};
 		this.iframePosition = {iMac: {}, iPhone: {}};
-		this.deviceSliderRECT = null;
-		this.deviceSliderAnimationStartPosition = null;
-		this.deviceSliderAnimationDonePosition = null;
 
 		this.imacIsActive = true;
-		this.curProject = null;
 		
 		this.deviceSwitchHandlerBind = this.deviceSwitchHandler.bind(this);
 		this.waitDeviceSliderAnimationDoneRAFBind = this.waitDeviceSliderAnimationDoneRAF.bind(this);

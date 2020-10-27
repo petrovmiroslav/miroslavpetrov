@@ -140,6 +140,9 @@
 	transform: translate3d(0, 0vh, 0);
 	opacity: 1;
 }
+.stackSection__stackDescriptionWrapper_flipper {
+	position: relative;
+}
 .stackSection__stackDescriptionWrapper_slideDown {
 	transform: translate3d(0, 20vh, 0);
 	opacity: 0;

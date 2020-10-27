@@ -4,7 +4,7 @@
 .portfolio__projectViewSection {
 	width: 100%;
 	overflow: hidden;
-  background: url(../img/WoodBG_mini.svg) center/cover no-repeat #b2663b;
+  background: url(../img/WoodBG_mini.jpg) center/cover no-repeat #b2663b;
 }
 .portfolio__projectView {
 	height: 91vh;
@@ -210,6 +210,9 @@
   overflow: hidden;
   transform: translate3d(0, calc(100% - 31px), 0);
   opacity: .8;
+}
+.portfolio__projectDescriptionContainer_flipper {
+  transform: translateY(calc(100% - 31px));
 }
 .portfolio__project:hover .portfolio__projectDescriptionContainer {
 	transform: translate3d(0, 0, 0);

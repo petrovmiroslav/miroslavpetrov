@@ -21,6 +21,9 @@ class Bubbles {
 		this.canvasRECT = {};
 		this.toCreateBlocks = [];
 		this.blocksRECT = [];
+		this.hover = this.drag = this.mousemoveTicking = false;
+		this.windowWidth = this.windowHeight = 0;
+
 		this.mousemoveBind = this.mousemove.bind(this);
 		this.mousedownBind = this.mousedown.bind(this);
 		this.mouseupBind = this.mouseup.bind(this);
@@ -33,10 +36,6 @@ class Bubbles {
 		this.addCanvasCursorGrabbingBind = this.addCanvasCursorGrabbing.bind(this);
 		this.removeCanvasCursorGrabbingBind = this.removeCanvasCursorGrabbing.bind(this);
 		this.addHoverBind = this.addHover.bind(this);
-
-		this.hover = false;
-		this.drag = false;
-		this.mousemoveTicking = false;
 	}
 
 	init () {
@@ -68,7 +67,6 @@ class Bubbles {
 			this.canvas = canvas;
 		}
 
-
 		this.engine = Matter.Engine.create({
 	    enableSleeping: true,
 	  });
@@ -99,8 +97,13 @@ class Bubbles {
 
 		this.bubblesCreated = true;
 	}
+
 	bubblesResize () {
 		if (!this.bubblesCreated) return;
+		if (this.state.windowWidth === this.windowWidth && this.state.windowHeight === this.windowHeight) return;
+		this.windowWidth = this.state.windowWidth;
+	  this.windowHeight = this.state.windowHeight;
+
 
 		this.state.bubblesPause = true;
 		Matter.Render.stop(this.render);
@@ -117,10 +120,10 @@ class Bubbles {
 
 
   	this.canvasWrapper.innerHTML = '';
-  	this.canvas = null;
+  	this.canvas = {};
   	Matter.Engine.clear(this.engine);
-  	this.render.canvas = null;
-    this.render.context = null;
+  	this.render.canvas = {};
+    this.render.context = {};
     this.render.textures = {};
     this.engine = {};
     this.render = {};
@@ -176,11 +179,7 @@ class Bubbles {
 		stackOption = {
     	circlesSize: Math.min(RECT.width*0.1, RECT.height*0.1),
 			circleRenderOptions: {
-				//friction: 0.1,//0.1
-				//frictionAir: 0.01,//0.01
-				//frictionStatic: 0.5,//0.5
-				restitution: 0.4, //0
-				//timeScale: 1,//1
+				restitution: 0.4,
 				render: {
 		        fillStyle: 'rgba(242,75,89, 1)',
 		        lineWidth: 0,
@@ -238,7 +237,6 @@ class Bubbles {
   }
 
   fixEventListeners () {
-  	//this.mouse.element.addEventListener('mouseout', this.mouse.mouseup);
   	this.mouse.element.removeEventListener("mousewheel", this.mouse.mousewheel);
 		this.mouse.element.removeEventListener("DOMMouseScroll", this.mouse.mousewheel);
 		this.mouse.element.removeEventListener('touchmove', this.mouse.mousemove);

@@ -43,10 +43,10 @@ html{
   width: 100%;
   min-width: 240px;
 	height: 100vh;
-  /*overflow: hidden;*/
-  overscroll-behavior-y: contain;
+  overflow: hidden;
+  /*overscroll-behavior-y: contain;*/
+  overscroll-behavior: none;
   touch-action: pan-y;
-	/*background-color: #212126;*/
   background-color: #454C59;
   font-family: arial;
 	font-family: Raleway;
@@ -66,18 +66,24 @@ html {
 	/*position: fixed;*/
 /*	overflow: hidden;*/
 }
-.forDownload, .forDownload * {
+/*.forDownload, .forDownload * {
   width: 0px;
   height: 0px;
   opacity: 0;
   overflow: hidden;
+}*/
+.forDownload {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
-#hiScreenWrapper {
-	/*width: 100%;
-	height: 100%;
-	background-color: #212126;
-	display: flex;
-	overflow-y: scroll;*/
+.main {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 .hiWrapper {
 	height: 100%;

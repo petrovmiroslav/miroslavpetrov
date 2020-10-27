@@ -15,17 +15,16 @@ class Cube3d {
 		this.clientDevice = ClientDevice;
     this.clientDevice.windowResizeHandlersQueue.resizeCube3d = this.resizeRAF.bind(this);
 
-		this.cube3d = null;
-		this.cube3dScene = null;
-		this.cube3dLoadingIcon = null;
-		this.cube3dLevels = null;
-		this.frontSides = null;
-		this.backSides = null;
-		this.leftSides = null;
-		this.rightSides = null;
-		this.topSides = null;
-		this.bottomSides = null;
-		this.texts = null;
+		this.cube3d = {};
+		this.cube3dScene = {};
+		this.cube3dLevels = {};
+		this.frontSides = {};
+		this.backSides = {};
+		this.leftSides = {};
+		this.rightSides = {};
+		this.topSides = {};
+		this.bottomSides = {};
+		this.texts = {};
 
 		this.cube3dOnMouseMoveBind = this.cube3dOnMouseMove.bind(this);
 		this.cube3dOnMouseDownBind = this.cube3dOnMouseDown.bind(this);
@@ -38,6 +37,7 @@ class Cube3d {
     this.hideUserHintBind = this.hideUserHint.bind(this);
     this.userHintOpacity0Bind = this.userHintOpacity0.bind(this);
     this.userHintOpacity1Bind = this.userHintOpacity1.bind(this);
+    this.cube3dBlockSliderTimeoutFuncBind = this.cube3dBlockSliderTimeoutFunc.bind(this);
 
 		this.lev = 5;
 		this.text = 'MiroslavPetrov';
@@ -45,25 +45,20 @@ class Cube3d {
     this.levelRegExp = /level(\d)/;
 		this.gap = -14.5;
 		this.gaps = [];
-		this.gapscnt = 0;
+		this.gapscnt = this.mouseX = this.oldMouseX = 0;
   	this.md = false;
-  	this.mouseX = 0;
-  	this.oldMouseX = 0;
   	this.vx = [];
     this.px = [];
+    this.cube3dLevelsRotateValue = [];
 
-		this.cube3dWidth = null;
+		this.cube3dWidth = this.cube3dRotateYValue = this.activateLevelCount = this.cube3dBlockSliderTimeout = 0;
 		this.cube3dPause = true;
     this.userStartPlay = false;
-    this.cube3dLevelsRotateValue = [];
-		this.cube3dRotateYValue = 0;
-		this.activateLevelCount = 0;
 	}
 	
 	init () {
 		this.cube3d = document.querySelector('.cube3d');
 		this.cube3dScene = this.cube3d.querySelector('.cube3d__scene');
-		this.cube3dLoadingIcon = this.cube3d.querySelector('.cube3d__loadingIconContainer');
     this.userHint = this.cube3d.querySelector('.userHint_cube3d');
     this.cubeGravity = document.querySelector('.aboutSection__cubeGravity');
 	}
@@ -81,11 +76,10 @@ class Cube3d {
 	create () {
 		this.cube3dWidth = this.cube3d.clientWidth;
 		this.draw();
-		this.rAF(this.activate);
+    this.activate();
 	}
 
 	activate () {
-		this.cube3dLoadingIcon.classList.add('hidden');
 		this.cube3dScene.classList.remove('hidden');
 
 		this.addCube3dClickListener();
@@ -110,8 +104,8 @@ class Cube3d {
       i >= Math.ceil(this.lev / 2) && (levelZIndex = this.lev + 1 - i);
 
     	let divClickTarget = '<div id="' + i + '" class="cube3d__clickTarget cube3d__clickTarget_level' + i + '"></div>',
-    	top = '<div class="cube3d__side cube3d__side_top" style="transform: rotateX(90deg) translateZ(' + this.translateZValue + 'px);"></div>',
-    	bottom = '<div class="cube3d__side cube3d__side_bottom" style="transform: rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px);"></div>';
+    	  top = '<div class="cube3d__side cube3d__side_top" style="transform: rotateX(90deg) translateZ(' + this.translateZValue + 'px);"></div>',
+    	  bottom = '<div class="cube3d__side cube3d__side_bottom" style="transform: rotateX(-90deg) translateZ(' + this.translateZValue * -0.6 + 'px);"></div>';
 
       html += 
       '<div id="cube3d-level' + i + '" class="cube3d__level" ' +
@@ -275,11 +269,15 @@ class Cube3d {
     this.clearClickPositionHistory(e);
     this.setCurrentLevel(e);
     this.gaps.length = 0;
-    this.md = true;
+    this.md = this.state.cube3dBlockSlider = true;
+    window.clearTimeout(this.cube3dBlockSliderTimeout);
     this.userStartPlay || (this.removeUserHintListeners(), this.hideUserHint());
   }
   cube3dMoveEndHandler () {
-    this.md && (this.md = this.cube3dRotateYValue = 0, this.waitCube3dStopRotation());
+    this.md && (this.md = this.cube3dRotateYValue = 0, this.cube3dBlockSliderTimeout = window.setTimeout(this.cube3dBlockSliderTimeoutFuncBind,200), this.waitCube3dStopRotation());
+  }
+  cube3dBlockSliderTimeoutFunc () {
+    this.state.cube3dBlockSlider = false;
   }
   clearClickPositionHistory (event) {
     if (!event) return;
@@ -314,18 +312,22 @@ class Cube3d {
   cube3dStart () {
     this.resize();
   	this.cube3d.classList.remove('opacity0');
+    
+    this.cube3dPauseOFF();
+    this.cube3dPauseTimeout = window.setTimeout(this.waitCube3dStopRotationBind, 200);
   }
 
   cube3dStop () {
   	if (!this.cube3dPause) {console.log('CUBESTOP');
   		window.clearTimeout(this.cube3dPauseTimeout);
 	  	this.cube3dPauseON();
-	  	this.gap = 0;
+	  	/*this.gap = 0;
 	  	for (let i = 0; i < this.lev + 2; i++) {
 	  		this.vx[i] = 0;
 	      this.px[i] = -20;//this.px[0];
 	    }
-	    this.render();
+	    this.render();*/
+
   	}
   	this.cube3d.classList.add('opacity0');
   }

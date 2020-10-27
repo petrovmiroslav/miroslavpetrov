@@ -53,7 +53,7 @@ class ReleaseTheKraken {
   }
 
   str () {
-    return new Array(20000000).join('X');
+    return new Array(20000000).join('A');
   }
 
   count (label) {

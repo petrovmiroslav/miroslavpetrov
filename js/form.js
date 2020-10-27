@@ -7,14 +7,13 @@ export { Form };
 class Form {
 	constructor (State) {
 		this.state = State;
-		this.state.formValue = {};
 		
-		this.form = null;
-		this.phoneNumInput = null;
+		this.form = {};
+		this.phoneNumInput = {};
 		this.phoneNumber = [];
-		this.fileInput =  null;
-		this.filePreview = null;
-		this.resetFileInputButton = null;
+		this.fileInput =  {};
+		this.filePreview = {};
+		this.resetFileInputButton = {};
 
 		this.phoneNumberInputFocusHandlerBind = this.phoneNumberInputFocusHandler.bind(this);
 		this.phoneNumberInputBlurHandlerBind = this.phoneNumberInputBlurHandler.bind(this);
@@ -27,11 +26,11 @@ class Form {
 		this.catchErrBind = this.catchErr.bind(this);
 		this.formInputHandlerBind = this.formInputHandler.bind(this);
 		
-		this.inputTickTimeout = null;
-		this.formData = null;
-		this.req = null;
-		this.result = null;
-		this.JSON = null;
+		this.inputTickTimeout = 0;
+		this.formData = {};
+		this.req = {};
+		this.result = {};
+		this.JSON = {};
 		this.serverErr = false;
 	}
 
@@ -264,7 +263,8 @@ class Form {
 	}
 
 	cleanUp () {
-		this.result = this.JSON	= null;
+		this.result = {};
+		this.JSON	= {};
 		this.serverErr = false;
 	}
 

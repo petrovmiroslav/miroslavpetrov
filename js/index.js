@@ -17,7 +17,6 @@ import { Form as FormModule } from "./form.js";
 import { Bubbles as BubblesModule } from "./bubbles.js";
 
 const State = new StateModule();
-State.init();
 const Errors = new ErrorsModule(State);
 Errors.init();
 const ClientDevice = new ClientDeviceModule(State);
@@ -39,7 +38,7 @@ const DOMContentLoaded = function (state) {
   document.removeEventListener('DOMContentLoaded', DOMContentLoaded);
   
   let Preloader = new PreloaderModule(State);
-  Preloader.run();
+  Preloader.init();
   Preloader = null;
 };
 const WindowLoaded = function () {
@@ -47,7 +46,6 @@ const WindowLoaded = function () {
 
   let LazyLoader = new LazyLoaderModule(State);
   LazyLoader.init();
-
   
   HiBgImageTransform.init();
   FullscreenSlider.init();

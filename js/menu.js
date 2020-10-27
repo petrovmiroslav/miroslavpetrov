@@ -10,20 +10,18 @@ class Menu {
 		this.state.clientDevice.windowResizeHandlersQueue.resizeMenu = this.resize.bind(this);
 		this.state.clientDevice.windowResizeHandlersQueue.resizeHero = this.resizeHero.bind(this);
 
-		this.menuButton = null;
-		this.menuButtonCheckbox = null;
-		this.menu = null;
-		this.content = null;
-		this.contentClone = null;
-		this.menuClone = null;
-		this.slide1 = null;
-		this.slide2 = null;
-		this.flipper = null;
-		this.cube3dLoadingIcon = null;
-		this.bgVideoMobile = null;
-		this.bgVideoDesktop = null;
-		this.angleBGGradientAnimationLayer = null;
-		this.allParallaxInFlipper = null;
+		this.menuButton = {};
+		this.menuButton_button = {};
+		this.menu = {};
+		this.content = {};
+		this.contentClone = {};
+		this.menuClone = {};
+		this.slide1 = {};
+		this.slide2 = {};
+		this.flipper = {};
+		this.bgVideo = {};
+		this.parallaxContainer = {};
+		this.hero = {};
 
 		this.menuButtonLeftPosition = -999999;
 		this.flipperFirstChildPosition = -999999;
@@ -31,29 +29,42 @@ class Menu {
 		this.menuButtonAnimationDuration = 250;
 		this.flipperRotationAnimationDuration = 500;
 
+		this.menuTicking = false;
 		this.checkReadyToInitInterval = null;
 		this.parallaxScrollStop = false;
 		this.scrollFlipperBeforeRotateDone = false;
 		this.drawFlipperDone = false;
+		this.bubblesPause = false;
 
 		this.menuButtonClickHandlerBind = this.menuButtonClickHandler.bind(this);
+		this.menuButtonTransitionEndBind = this.menuButtonTransitionEnd.bind(this);
+		this.flipperTransitionEndBind = this.flipperTransitionEnd.bind(this);
+		this.prepareForOpenMenuIfSlide1IsActiveBind = this.prepareForOpenMenuIfSlide1IsActive.bind(this);
+		this.prepareForOpenMenuIfSlide2IsActiveBind = this.prepareForOpenMenuIfSlide2IsActive.bind(this);
+		this.startWaitParallaxScrollStopBind = this.startWaitParallaxScrollStop.bind(this);
+		this.waitParallaxScrollStopBind = this.waitParallaxScrollStop.bind(this);
+		this.disableMenuButtonBind = this.disableMenuButton.bind(this);
+		this.startWaitMenuButtonAnimationDoneBind = this.startWaitMenuButtonAnimationDone.bind(this);
+		this.waitMenuButtonAnimationDoneBind = this.waitMenuButtonAnimationDone.bind(this);
+		this.ifScrollStopScrollFlipperBind = this.ifScrollStopScrollFlipper.bind(this);
+		this.waitFlipperAnimationDoneBind = this.waitFlipperAnimationDone.bind(this);
+		this.setMenuButtonLeftPositionBind = this.setMenuButtonLeftPosition.bind(this
+			);
+		this.heroAnimationOnBind = this.heroAnimationOn.bind(this);
 	}
 
 	init () {
 		this.menuButton = document.querySelector('.menuButton__lines-wrapper');
-		//this.menuButtonCheckbox = document.getElementById('menuButton__checkbox');
 		this.menuButton_button = document.getElementById('menuButton');
 		this.menu = document.querySelector('.menu');
 		this.slide1 = document.querySelector('.slide1');
 		this.slide2 = document.querySelector('.slide2');
 		this.flipper = document.querySelector('.fullscreenFlipper');
 		this.parallaxContainer = this.slide2.querySelector('.parallax__scrollable-container');
-		this.cube3dLoadingIcon = this.slide2.querySelector('.cube3d__loadingIconContainer');
-		this.bgVideoMobile = this.slide2.querySelector('.parallax__bg-fullscreen-video_mobile-view');
-		this.bgVideoDesktop = this.slide2.querySelector('.parallax__bg-fullscreen-video_desktop-view');
-		this.angleBGGradientAnimationLayer = this.slide2.querySelector('.stackSection__gradientBG');
+		this.bgVideo = document.querySelector(this.state.deviceIsTouchscreen ? 
+			'.parallax__bg-fullscreen-video_mobile-view' :
+			'.parallax__bg-fullscreen-video_desktop-view');
 		this.hero = this.menu.querySelector('.hero');
-
 
 		this.setCheckReadyToInitInterval();
 	}
@@ -66,16 +77,6 @@ class Menu {
 		window.requestAnimationFrame(nextRAF.bind(this, nextRenderFunc));
 		nextRenderFunc = null;
 		nextRAF = null;
-	}
-	doItIn1stRender (f) {
-		return this.rAF(f);
-	}
-	doItIn2ndRender (f) {
-  	let SecondRenderFunc = f,
-  			rafFunc = function (func) {
-  		this.rAF(func);
-  	};
-  	window.requestAnimationFrame(rafFunc.bind(this, SecondRenderFunc));
 	}
 
 	setCheckReadyToInitInterval () {
@@ -96,9 +97,6 @@ class Menu {
 	}
 
 	menuButtonClickHandler () {
-		//this.TIMER = [];
-		//this.TIMER.push('menuButtonClickHandler', Date.now(), '\n');
-		console.log('menuButtonClickHandler');
 		if (this.menuTicking) return;
 		this.menuTicking = true;
 		this.state.menuIsOpen ? this.closeMenu() : this.openMenu();
@@ -117,34 +115,22 @@ class Menu {
 		this.menuButton.classList.remove('menuButton__lines-wrapper_pointer-events_none');
 	}
 
-	bodyDisableHover () {
-		document.body.classList.add('body-disable-hover');
-	}
-	bodyEnableHover () {
-		document.body.classList.remove('body-disable-hover');
-	}
-
 	openMenu () {
-		//this.TIMER.push('openMenu', Date.now(), '\n');
 		this.state.menuIsOpen = true;
 
 		if (this.state.slide1IsActive) {
 			this.content = this.slide1;
-			this.prepareForOpenMenuIfSlide1IsActive();
+			window.requestAnimationFrame(this.prepareForOpenMenuIfSlide1IsActiveBind);
 		} else {
 			this.content = this.slide2;
-			this.doItIn1stRender(this.prepareForOpenMenuIfSlide2IsActive.bind(this));
+			this.rAF(this.prepareForOpenMenuIfSlide2IsActive);
 		}
 
-		this.doItIn1stRender(this.drawFlipper);
+		this.rAF(this.drawFlipper);
 
-		this.state.slide1IsActive && (this.parallaxScrollStop = true,
-			this.scrollFlipperBeforeRotateDone = true,
-			this.doItIn2ndRender(this.makeContentSlideHidden));
-		
-		window.requestAnimationFrame(this.startWaitParallaxScrollStop.bind(this));
-		window.requestAnimationFrame(this.disableMenuButton.bind(this));
-		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDone.bind(this));
+		(this.state.slide1IsActive && (this.parallaxScrollStop = this.scrollFlipperBeforeRotateDone = true)) || window.requestAnimationFrame(this.startWaitParallaxScrollStopBind);
+		window.requestAnimationFrame(this.disableMenuButtonBind);
+		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDoneBind);
 	}
 
 	prepareForOpenMenuIfSlide1IsActive () {
@@ -153,7 +139,6 @@ class Menu {
 	}
 
 	prepareForOpenMenuIfSlide2IsActive () {
-		//this.TIMER.push('prepareForOpenMenuIfSlide2IsActive', Date.now(), '\n');
 		this.state.fullscreenSliderOFF();
 		this.state.cube3dStop();
 		this.pauseAndBlurBGVideo();
@@ -162,133 +147,170 @@ class Menu {
 
 	pauseAndBlurBGVideo () {
 		this.state.bgVideoIsOFF = true;
-		if (this.state.deviceIsTouchscreen)
-			return this.bgVideoMobile.classList.add('parallax__bg-fullscreen-video_filter-contrast0'),
-			this.bgVideoMobile.pause();
-		this.bgVideoDesktop.classList.add('parallax__bg-fullscreen-video_filter-contrast0');
-		this.bgVideoDesktop.pause();
+		this.bgVideo.classList.add('parallax__bg-fullscreen-video_filter');
+		this.bgVideo.pause();
 	}
 	playAndClearBGVideo () {
-		if (this.state.deviceIsTouchscreen)
-			return this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
-		this.bgVideoDesktop.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
+		this.bgVideo.classList.remove('parallax__bg-fullscreen-video_filter');
 	}
 
 	drawFlipper () {
     this.contentClone = this.content.cloneNode(true);
-    if (!this.state.slide1IsActive) {
-    	this.removeSmoothScroll();
-    	//this.contentClone.querySelector('.portfolio__Iframe').remove();
-    	this.contentClone.querySelector('.portfolio__deviceSlider').remove();
-    	
-    	this.deleteVideoSoucesInContentClone();
-    	this.deleteCube3dInContentClone();
-    	this.changeCertsScrollBehavior();
-    	this.setFormValue();
-    }
+    this.prepareMenu();
+    this.state.slide1IsActive ? this.prepareSlide1() : this.prepareSlide2();
 
-    this.menuClone = this.menu.cloneNode(true);
-    this.menuClone.classList.remove('hidden');
-    this.menuClone.querySelector('.hero').remove();
-
-    /////
     let flipperInnerHTML = '';
-
     for (let i = 0,
     				 n = 5, 
     				 frontFlipperSide = this.contentClone.outerHTML,
     				 backFlipperSide = this.menuClone.outerHTML; i < n; i++) {
 
     	flipperInnerHTML += '<div class="fullscreenFlipper__flipper" style="width: ' + 100/n +'%;">'+
-    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_back">'+
-    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translate3d(-' + 100/n * i +  '%,0,0)">'+
-    						backFlipperSide+
-    					'</div>'+
-    				'</div>'+
-    				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_front">'+
-    					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translate3d(-' + 100/n * i +  '%,0,0)">'+
-    						frontFlipperSide+
-    					'</div>'+
-    				'</div>'+
-    			'</div>';
+				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_back">'+
+					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translateX(-' + 100/n * i +  '%)">'+
+						backFlipperSide+
+					'</div>'+
+				'</div>'+
+				'<div class="fullscreenFlipper__flipperSide fullscreenFlipper__flipperSide_front">'+
+					'<div class="fullscreenFlipper__sideInnerWrapper" style="width: ' + 100*n +'%; transform: translateX(-' + 100/n * i +  '%)">'+
+						frontFlipperSide+
+					'</div>'+
+				'</div>'+
+			'</div>';
     }
-
+    this.flipper.classList.remove('hidden');
     this.flipper.innerHTML = flipperInnerHTML;
 
-    /*let flipperContainerFragment = document.createDocumentFragment();
-    for (let i = 0,
-    				 n = 5; i < n; i++) {
-
-    	let frontFlipperInnerWrapper = document.createElement('div'),
-    			backFlipperInnerWrapper = document.createElement('div'),
-    			front = document.createElement('div'),
-    			back = document.createElement('div'),
-    			flipper = document.createElement('div');
-
-    	flipper.classList.add('fullscreenFlipper__flipper');
-      flipper.style.width = 100/n + '%';
-    	front.classList.add('fullscreenFlipper__flipperSide', 'fullscreenFlipper__flipperSide_front');
-      back.classList.add('fullscreenFlipper__flipperSide', 'fullscreenFlipper__flipperSide_back');
-    	frontFlipperInnerWrapper.classList.add('fullscreenFlipper__sideInnerWrapper');
-      frontFlipperInnerWrapper.style.width = 100*n +'%';
-      backFlipperInnerWrapper.classList.add('fullscreenFlipper__sideInnerWrapper');
-      backFlipperInnerWrapper.style.width = 100*n +'%';
-      frontFlipperInnerWrapper.style.transform = 'translateX(-' + 100/n * i + '%)';
-      backFlipperInnerWrapper.style.transform = 'translateX(-' + 100/n * i + '%)';
-
-    	frontFlipperInnerWrapper.appendChild(this.contentClone.cloneNode(true));
-    	backFlipperInnerWrapper.appendChild(this.menuClone.cloneNode(true));
-
-    	front.appendChild(frontFlipperInnerWrapper);
-      back.appendChild(backFlipperInnerWrapper);
-
-      flipper.appendChild(front);
-      flipper.appendChild(back);
-
-      flipperContainerFragment.appendChild(flipper);
-    }
-    this.flipper.appendChild(flipperContainerFragment);*/
-
-    ////
-    ///
-
-    this.flipper.classList.remove('hidden');
-    
-    if (!this.state.slide1IsActive) {
+    if (this.state.slide1IsActive) {
+    	this.flipper.classList.remove('opacity0');
+    	this.makeContentSlideHidden();
+    } else {
     	this.cloneCanvas();
     	this.ifScrollStopScrollFlipper();
-    } else {
-    	this.flipper.classList.remove('opacity0');
     }
 
-    
-    
-    ////
     this.drawFlipperDone = true;
-    this.contentClone = null;
-
+    this.contentClone = {};
 	}
+
 	ifScrollStopScrollFlipper () {
-		if (this.parallaxScrollStop) {
-  		this.scrollFlipperBeforeRotate(); ///311ms
-  		this.flipperRemoveOpacity0();
-  		//this.rAF(this.flipperRemoveOpacity0);
-  		//window.requestAnimationFrame(()=>{this.flipper.classList.remove('opacity0');});
-  		//window.requestAnimationFrame(this.makeContentSlideHidden.bind(this));
-  		//this.doItIn2ndRender(this.makeContentSlideHidden);
-  		this.makeContentSlideHidden();
-  	} else {
-  		window.requestAnimationFrame(this.ifScrollStopScrollFlipper.bind(this));
+		if (!this.parallaxScrollStop)
+			return window.requestAnimationFrame(this.ifScrollStopScrollFlipperBind);
+		this.scrollFlipperBeforeRotate();
+		this.flipperRemoveOpacity0();
+		this.makeContentSlideHidden();
+	}
+
+	prepareMenu () {
+		this.menuClone = this.menu.cloneNode(true);
+    this.menuClone.classList.remove('hidden');
+    this.menuClone.querySelector('.hero').remove();
+	}
+	prepareSlide1 () {
+		if (this.state.deviceIsTouchscreen) return;
+		for (let h = this.contentClone.querySelectorAll('.hiScreen__bg-image'), i = h.length - 1; i >= 0; i--) {
+			h[i].style.transform = `scale(1.2) translate(${this.state.hiBgImageTransform[0]}%, ${this.state.hiBgImageTransform[1]}%)`;
+		}
+	}
+	prepareSlide2 () {
+		this.state.deviceIsTouchscreen && 
+  		(this.transformNone(this.contentClone.querySelector('.parallax__group_1')),
+  		this.contentClone.querySelector('.certification__frame').style.filter = 'none');
+
+		this.removeSmoothScroll();
+  	this.deleteCube3dInContentClone();
+  	this.prepareHeaders();
+  	this.contentClone.classList.add('slide2_flipper');
+  	this.transformNone(this.contentClone.querySelector('.stackSection'));
+  	this.prepareAngle();
+  	this.contentClone.querySelector('.stackSection__gradientBG').style.transform = 'translateX(' + this.state.gradient + '%)';
+  	this.prepareStack();
+  	this.deleteVideoSoucesInContentClone();
+  	this.prepareCerts();
+  	this.contentClone.querySelector('.portfolio__Iframe').remove();
+  	this.contentClone.querySelector('.portfolio__deviceSlider').remove();
+  	this.prepareGroup4();
+  	this.prepareSwitch();
+  	this.prepareProjects();
+  	this.setFormValue();
+	}
+	willChangeRemove (element) {
+		element.classList.remove('will-change');
+		element = null;
+	}
+	transformNone (element) {
+		element.style.transform = 'none';
+		element = null;
+	}
+	prepareHeaders () {
+		let arr = [
+								['.aboutSection__header', 0],
+								['.header__text_certification'],
+								['.header__text_portfolio'],
+								['.header__text_contactWithMe']
+							];
+		for (let i = arr.length - 1; i >= 0; i--) {
+			let e = this.contentClone.querySelector(arr[i][0]);
+			this.willChangeRemove(e);
+			if (arr[i].length > 1) {
+				this.transformNone(e);
+			} else {
+				e.style.transform = 'translateY(-100%)';
+				this.transformNone(e.parentNode);
+			}
+			e = null;
+		}
+	}
+	prepareAngle () {
+		let a = this.contentClone.querySelector('.stackSection__angleContainer');
+  	a.style.transform = 'rotate(' + this.state.angle + 'deg)';
+  	this.willChangeRemove(a);
+  	a = null;
+	}
+	prepareStack () {
+		let s = this.contentClone.querySelector('.stackSection__stackDescriptionWrapper');
+  	this.willChangeRemove(s);
+  	s.classList.add('stackSection__stackDescriptionWrapper_flipper');
+  	this.transformNone(s);
+  	s = null;
+	}
+	prepareCerts () {
+		let c = this.contentClone.querySelector('.certification__certificates');
+  	this.willChangeRemove(c);
+  	c.style.transition = 'none';
+  	c.style['scroll-behavior'] = 'unset';
+  	c = null;
+	}
+	prepareGroup4 () {
+		let g = this.contentClone.querySelector('.parallax__group_4');
+  	g.style.position = 'static';
+  	g.style['z-index'] = 'auto';
+  	g = null;
+	}
+	prepareSwitch () {
+		for (let b = this.contentClone.querySelectorAll('.portfolio__switchButton'), i = b.length - 1; i >= 0; i--) {
+  		this.transformNone(b[i]);
+  	}
+	}
+	prepareProjects () {
+		for (let b = this.contentClone.querySelectorAll('.portfolio__project'), i = b.length - 1; i >= 0; i--) {
+			this.transformNone(b[i]);
+  		if (b[i].firstElementChild.classList.contains('portfolio__projectDescriptionContainer_projectChecked')) {
+  			this.transformNone(b[i].firstElementChild);
+  		} else {
+  			b[i].firstElementChild.classList.add('portfolio__projectDescriptionContainer_flipper');
+  		}
   	}
 	}
 
 	flipperRemoveOpacity0 () {
-		console.log('OPACITY',this.flipper.classList.contains('opacity0'));
 		this.flipper.classList.remove('opacity0');
 	}
 
 	removeSmoothScroll () {
-		this.contentClone.querySelector('.parallax__scrollable-container').classList.remove('parallax__scrollable-container_smoothScroll');
+		let p = this.contentClone.querySelector('.parallax__scrollable-container');
+		p.classList.remove('parallax__scrollable-container_smoothScroll');
+		this.state.deviceIsTouchscreen && (p.style.transform = 'translateZ(0)');
 	}
 	deleteVideoSoucesInContentClone () {
 		let allContentCloneVideo = this.contentClone.querySelectorAll('video');
@@ -313,8 +335,8 @@ class Menu {
 		});
 	}
 	deleteCube3dInContentClone () {
-		let contentCloneCube3d = this.contentClone.querySelector('.cube3d');
-		contentCloneCube3d.innerHTML = '';
+		let c = this.contentClone.querySelector('.cube3d');
+		c.innerHTML = '';
 	}
 	changeCertsScrollBehavior () {
 		this.contentClone.querySelector('.certification__certificates').style['scroll-behavior'] = 'unset';
@@ -330,248 +352,166 @@ class Menu {
   	formClone.phoneNumber.setAttribute("value", form.phoneNumber.value);
   	formClone.email.setAttribute("value", form.email.value);
   	formClone.info.textContent = form.info.value;
+  	formClone = null;
 	}
 	cloneCanvas () {
 		if (this.bubblesPause) return;
-		let allCanvasInFlipper = this.flipper.querySelectorAll('.bubbles__canvas'),
-		sourceCanvas = document.getElementById('canvas');
-		for (let i = 0; i < allCanvasInFlipper.length; i++) {
-    	
-    	allCanvasInFlipper[i].getContext('2d').drawImage(sourceCanvas, 0, 0);
+		for (let i = 0,
+						arr = this.flipper.querySelectorAll('.bubbles__canvas'),
+						c = document.getElementById('canvas'); i < arr.length; i++) {
+    	arr[i].getContext('2d').drawImage(c, 0, 0);
     }
 	}
 
 	scrollFlipperBeforeRotate () {
-		//this.TIMER.push('scrollFlipperBeforeRotate', Date.now(), '\n');
     for (let i = 0, p = this.flipper.querySelectorAll('.parallax__scrollable-container'); i < p.length; i++) {
     	p[i].scrollTop = this.parallaxScrollValue;
     }
-
     for (let i = 0, c = this.flipper.querySelectorAll('.certification__certificates'); i < c.length; i++) {
     	this.state.displayCurrentCertInFlipper(c[i]);
     }
-
-    this.setScrollFlipperBeforeRotateDone();
-	}
-	setScrollFlipperBeforeRotateDone () {
-		this.scrollFlipperBeforeRotateDone = true;
+    this.scrollFlipperBeforeRotateDone = true;
 	}
 
-	recParallaxScrollValue () {
-		this.parallaxScrollValue = this.slide2.querySelector('.parallax__scrollable-container').scrollTop;
-	}
 	startWaitParallaxScrollStop () {
 		this.parallaxScrollValue = this.parallaxContainer.scrollTop;
-		window.setTimeout(this.waitParallaxScrollStop.bind(this), this.menuButtonAnimationDuration);
+		window.setTimeout(this.waitParallaxScrollStopBind, this.menuButtonAnimationDuration);
 	}
 	waitParallaxScrollStop () {
 		let newParallaxScrollValue = this.parallaxContainer.scrollTop;
-		if (newParallaxScrollValue === this.parallaxScrollValue) {
-			this.parallaxScrollStop = true;
-			console.log("SCROLLSTOP");
-		} else {
-			this.parallaxScrollValue = newParallaxScrollValue;
-			this.doItIn1stRender(this.waitParallaxScrollStop);
-		}
+		if (newParallaxScrollValue === this.parallaxScrollValue)
+			return this.parallaxScrollStop = true;
+		this.parallaxScrollValue = newParallaxScrollValue;
+		this.rAF(this.waitParallaxScrollStop);
 	}
-
 
 	startWaitMenuButtonAnimationDone () {
-		// this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-  	window.setTimeout(this.waitMenuButtonAnimationDone.bind(this), this.menuButtonAnimationDuration);
+		if (this.state.transitionEventSupport) 
+			return this.menuButton.addEventListener('transitionend', this.menuButtonTransitionEndBind);
+  	window.setTimeout(this.waitMenuButtonAnimationDoneBind, this.menuButtonAnimationDuration);
+	}
+	menuButtonTransitionEnd (e) {
+		if (e.target.parentNode.id !== 'wrapperMenuButton') return;
+		this.menuButton.removeEventListener('transitionend', this.menuButtonTransitionEndBind);
+		this.waitMenuButtonAnimationDone();
 	}
 	waitMenuButtonAnimationDone () {
-		//this.TIMER.push('menuButtonAnimationDoneCheck', Date.now(), '\n');
-		if (this.parallaxScrollStop && this.scrollFlipperBeforeRotateDone) {
-			let newMenuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-	//console.log(this.menuButtonLeftPosition,'---', newMenuButtonLeftPosition, this.menuButtonLeftPosition === newMenuButtonLeftPosition);
-			if (this.menuButtonLeftPosition === newMenuButtonLeftPosition && this.drawFlipperDone) {
-				if (this.state.menuIsOpen) {
-					//this.rAF(this.startFlipperRotate);
-					this.doItIn1stRender(this.startFlipperRotate);
-				} else {
-					//this.rAF(this.flipperRotateBack);
-					this.doItIn1stRender(this.flipperRotateBack);
-				}
-			} else {
-				this.menuButtonLeftPosition = newMenuButtonLeftPosition;
-				//this.rAF(this.waitMenuButtonAnimationDone);
-				//this.doItIn1stRender(this.waitMenuButtonAnimationDone);
-				window.requestAnimationFrame(this.waitMenuButtonAnimationDone.bind(this));
-			}
+		if (!this.parallaxScrollStop || !this.scrollFlipperBeforeRotateDone)
+			return window.requestAnimationFrame(this.waitMenuButtonAnimationDoneBind);
+
+		if (this.state.transitionEventSupport) {
+			if (!this.drawFlipperDone)
+				return window.requestAnimationFrame(this.waitMenuButtonAnimationDoneBind);
 		} else {
-			window.requestAnimationFrame(this.waitMenuButtonAnimationDone.bind(this));
+			if (this.checkMenuButtonPosition())
+				return window.requestAnimationFrame(this.waitMenuButtonAnimationDoneBind);
 		}
+
+		this.state.menuIsOpen ? this.startFlipperRotate() : this.flipperRotateBack();
+	}
+
+	checkMenuButtonPosition () {
+		let newMenuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
+		if (this.menuButtonLeftPosition !== newMenuButtonLeftPosition || !this.drawFlipperDone)
+			return this.menuButtonLeftPosition = newMenuButtonLeftPosition, true;
 	}
 	
 	startWaitFlipperAnimationDone () {
-		/*this.flipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);*/
+		if (this.state.transitionEventSupport)
+			return this.flipper.firstElementChild.addEventListener('transitionend', this.flipperTransitionEndBind);
 		this.flipperFirstChildPosition = -999999;
-		window.setTimeout(this.waitFlipperAnimationDone.bind(this), this.flipperRotationAnimationDuration);
+		window.setTimeout(this.waitFlipperAnimationDoneBind, this.flipperRotationAnimationDuration);
 	}
-	waitFlipperAnimationDone () {//this.TIMER.push('flipperAnimationDoneCheck', Date.now(), '\n');
+	flipperTransitionEnd (e) {
+		if (e.target.parentNode.id !== 'flipper') return;
+		this.flipper.firstElementChild.removeEventListener('transitionend', this.flipperTransitionEndBind);
+		this.flipperRotateDone();
+	}
+	waitFlipperAnimationDone () {
 		let newFlipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);
-//console.log(this.flipperFirstChildPosition,'---', newFlipperFirstChildPosition, this.flipperFirstChildPosition === newFlipperFirstChildPosition);
-		if (this.flipperFirstChildPosition === newFlipperFirstChildPosition && newFlipperFirstChildPosition < 0.5) {
-			if (this.state.menuIsOpen) {
-				this.afterFlipperRotate();
-			} else {
-				//this.afterFlipperRotateBack();
-				window.requestAnimationFrame(this.afterFlipperRotateBack.bind(this));
-			}
-		} else {
-			this.flipperFirstChildPosition = newFlipperFirstChildPosition;
-			//this.rAF(this.waitFlipperAnimationDone);
-			this.doItIn1stRender(this.waitFlipperAnimationDone);
-		}
+		if (this.flipperFirstChildPosition === newFlipperFirstChildPosition && newFlipperFirstChildPosition < 0.5)
+			return this.flipperRotateDone();
+		this.flipperFirstChildPosition = newFlipperFirstChildPosition;
+		this.rAF(this.waitFlipperAnimationDone);
+	}
+	flipperRotateDone() {
+		this.state.menuIsOpen ? this.afterFlipperRotate() : this.afterFlipperRotateBack();
 	}
 
 	makeContentSlideHidden () {
-		//this.TIMER.push('flipper1Render', Date.now(), '\n');
-		/*this.flipper.classList.remove('hidden');
-		this.scrollFlipperBeforeRotate();
-		this.flipper.classList.remove('opacity0');//285ms*/
-
-		//this.content.classList.add('hidden');///343ms
 		this.content.classList.add('opacity0');
-
 	}
 	startFlipperRotate () {
-		//this.TIMER.push('flipper2Render', Date.now(), '\n');
 		this.menuButton.classList.add('opacity0');
 		this.flipper.classList.add('fullscreenFlipper_rotate');
-
+		this.startWaitFlipperAnimationDone();
+	}
+	flipperRotateBack () {
+		this.menuButton.classList.add('opacity0');
+		this.flipper.classList.remove('fullscreenFlipper_rotate');
 		this.startWaitFlipperAnimationDone();
 	}
 	afterFlipperRotate () {
-		//this.TIMER.push('flipper3Render', Date.now(), '\n');
 		this.menuTicking = false;
 		this.menu.classList.remove('hidden');
-		//this.flipper.classList.add('hidden');
 		this.flipper.classList.add('opacity0');
 		this.menuButton.classList.remove('opacity0');
-
 		this.enableMenuButton();
-		this.bodyEnableHover();
-
 		this.hero.classList.remove('hidden');
-
-		//alert(this.TIMER);
 	}
 
 
 	closeMenu () {
 		this.state.menuIsOpen = false;
-
-		//this.disableMenuButton();
-		window.requestAnimationFrame(this.disableMenuButton.bind(this));
-		//this.bodyDisableHover();
-		window.requestAnimationFrame(this.bodyDisableHover.bind(this));
-
+		this.disableMenuButton();
 		this.prepareForCloseMenu();
-
-		this.doItIn1stRender(this.beforeFlipperRotateBack);
-		//this.startWaitMenuButtonAnimationDone();
-		window.requestAnimationFrame(this.startWaitMenuButtonAnimationDone.bind(this));
-	}
-
-	closeMenuIfSlide2IsActive () {
-		this.prepareForCloseMenu();
-
-		this.doItIn1stRender(this.beforeFlipperRotateBack);
-		//this.rAF(this.beforeFlipperRotateBack);
-
+		this.beforeFlipperRotateBack();
 		this.startWaitMenuButtonAnimationDone();
-/*		this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-  	window.setTimeout(this.waitMenuButtonAnimationDone.bind(this), this.menuButtonAnimationDuration);*/
 	}
 
 	prepareForCloseMenu () {
 		this.hero.classList.add('hidden');
 	}
+
 	beforeFlipperRotateBack () {
 		this.menu.classList.add('hidden');
-		//this.flipper.classList.remove('hidden');
 		this.flipper.classList.remove('opacity0');
 	}
-	flipperRotateBack () {
-		this.menuButton.classList.add('opacity0');
-		this.flipper.classList.remove('fullscreenFlipper_rotate');
-
-		this.startWaitFlipperAnimationDone();
-		// this.flipperFirstChildPosition = this.state.roundTo(this.flipper.firstElementChild.getBoundingClientRect().x, 2);
-		// window.setTimeout(this.waitFlipperAnimationDone.bind(this), this.flipperRotationAnimationDuration);
-	}
+	
 	afterFlipperRotateBack () {
-		//this.content.classList.remove('hidden');
 		this.content.classList.remove('opacity0');
-		
-		//this.doItIn1stRender(this.afterFlipperRotateBack2Render);
-		window.requestAnimationFrame(this.afterFlipperRotateBack2Render.bind(this));
-	}
-	afterFlipperRotateBack2Render () {
-		this.flipper.classList.add('hidden');
+		this.flipper.classList.add('hidden', 'opacity0');
 		this.menuButton.classList.remove('opacity0');
-
 		this.enableMenuButton();
-		this.bodyEnableHover();
-
-		this.afterMenuClose();
+		this.rAF(this.afterMenuClose);
 	}
 	afterMenuClose () {
 		this.menuTicking = false;
-
 		this.state.fullscreenSliderON();
-
 		if (this.state.slide1IsActive) {
 			this.state.hiBgImageTransformON();
-
 		} else {
 			this.state.parallaxScrollUPDATE();
 			this.state.cube3dStart();
-			//this.state.angleGradientBGON();
 			this.playAndClearBGVideo();
 			this.state.certificatesResize();
 			this.state.portfolioResize();
 			this.state.bubblesPauseOFF();
-/*			if (this.state.deviceIsTouchscreen) {
-				this.bgVideoMobile.play();
-				this.bgVideoMobile.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
-			} else {
-				this.bgVideoDesktop.play();
-				this.bgVideoDesktop.classList.remove('parallax__bg-fullscreen-video_filter-contrast0');
-			}*/
 		}
-
 		this.cleanFlipper();
 	}
 
 	cleanFlipper () {
-		this.drawFlipperDone = false;
-		this.parallaxScrollStop = false;
-		this.scrollFlipperBeforeRotateDone = false;
+		this.drawFlipperDone = this.parallaxScrollStop = this.scrollFlipperBeforeRotateDone = false;
 		this.flipper.innerHTML = '';
-		this.flipper.classList.add('opacity0');
-
-    /*let childrens = this.sliderContainer.children;
-
-    for (let i = 0, childrens = this.sliderContainer.children; i < childrens.length; i++) {
-      let fullscreenSlider__side = childrens[i];
-      while (fullscreenSlider__side.firstChild) {
-        fullscreenSlider__side.firstChild.remove();
-      }
-      
-      fullscreenSlider__side = null;
-    }*/
   }
 
   resize () {
-  	window.requestAnimationFrame(this.setMenuButtonLeftPosition.bind(this));
+  	if (this.state.transitionEventSupport) return;
+  	window.requestAnimationFrame(this.setMenuButtonLeftPositionBind);
   }
   setMenuButtonLeftPosition () {
-  	if (this.menuButton) {
-  		this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2);
-  	}
+  	this.menuButton && (this.menuButtonLeftPosition = this.state.roundTo(this.menuButton.getBoundingClientRect().x, 2));
   }
 
   heroAnimationOn () {
@@ -581,13 +521,7 @@ class Menu {
 		this.hero.classList.remove('hero_animationON');
 	}
 	resizeHero () {
-		if (this.state.deviceIsTouchscreen) {
-			if (this.state.menuIsOpen) {
-				this.heroAnimationOff();
-				window.requestAnimationFrame(()=>{
-					this.heroAnimationOn();
-				});
-			}
-		}
+		this.state.deviceIsTouchscreen && this.state.menuIsOpen && (this.heroAnimationOff(),
+			window.requestAnimationFrame(this.heroAnimationOnBind));
 	}
 }
