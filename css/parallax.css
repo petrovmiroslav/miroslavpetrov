@@ -59,7 +59,7 @@
   max-height: 100vmax;
   width: auto;
   height: auto;
-  background: url('https://petrovmiroslav.github.io/static/videoBG-1280.jpg');
+  background: url('../img/videoBG-1280.jpg');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -89,12 +89,14 @@
 }
 .videoDescription__content {
   position: absolute;
-  padding: 0px 0 0 calc(8vw / 0.68);
+  margin-left: 8vw;
+  /*padding: 0px 0 0 calc(8vw / 0.68);*/
   transform: translateY(-50%);
 }
 .videoDescription__bg {
   position: absolute;
-  width: calc(100% - calc(8vw / 0.68));
+  width: 100%;
+  /*width: calc(100% - calc(8vw / 0.68));*/
   height: 100%;
   background-color: #F2F2F2;
   border-radius: 1vmin;
@@ -304,5 +306,18 @@ video {
   .parallax__bg-fullscreen-video_mobile-view {
     transform: none;
     height: 125vh;
+  }
+}
+@media (max-width: 414px) {
+  .videoDescription {
+    display: flex;
+    justify-content: center;
+  }
+  .videoDescription__content {
+    margin-left: 0;
+  }
+  .videoDescription__text {
+    max-width: 84vw;
+    font-size: 4.5vmin;
   }
 }

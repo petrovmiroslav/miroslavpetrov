@@ -49,6 +49,7 @@
 	background: #F24B59;
 	overflow: hidden;
 	overscroll-behavior-y: contain;
+	z-index: 1;
 }
 .menu__bg {
 	width: 100%;
@@ -186,7 +187,8 @@
 .links__text {
 	margin: 0 0 2vmin 0;
 	display: block;
-	font-size: 3vmin;
+	text-align: center;
+	font-size: 2.5vmin;
 }
 .menu__emailSection {
 	height: 32vh;
@@ -202,4 +204,13 @@
 	margin: 0 auto;
 	font-size: 4.9vw;
 	color: #F2F2F2;
+}
+@media (max-width: 414px) {
+	.links__link {
+		width: 34vmin;
+    height: 34vmin;
+	}
+	.links__text {
+    font-size: 3vmin;
+	}
 }

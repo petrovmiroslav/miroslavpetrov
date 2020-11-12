@@ -1,7 +1,7 @@
 .certification {
 	min-height: 80vh;
 	padding: 10% 0 15% 10%;
-	background: no-repeat center/cover url('../img/image-from-rawpixel-id-67136-jpeg.jpg') #e7e7e7;
+	background: no-repeat center/cover url('../img/certsBG.jpg') #e7e7e7;
 }
 .certification__framed-certificate {
 	width: 50%;
@@ -205,7 +205,43 @@
 	width: 24%;
 	margin: auto;
 	fill: #021226;
+	animation: 1s infinite alternate cubic-bezier(0.5, 0, 0.5, 1);
 }
 .userHint__icon_slash {
-	width: 20%;
+	width: 15%;
+}
+.userHint__icon_swipe {
+	transform: translateX(-30%);
+	animation-name: swipe;
+}
+.userHint__icon_zoom {
+	transform: scale(0.9);
+	animation-name: zoom;
+}
+@keyframes swipe {
+	from {
+		transform: translateX(-20%);
+	}
+	to {
+		transform: translateX(20%);
+	}
+}
+@keyframes zoom {
+	from {
+		transform: scale(0.9);
+	}
+	to {
+		transform: scale(1.1);
+	}
+}
+@media (max-width: 414px) {
+	.certification {
+		min-height: 100vh;
+		padding: 18vh 0;
+    box-sizing: border-box;
+	}
+	.certification__framed-certificate {
+    width: 86%;
+    margin: auto;
+	}
 }

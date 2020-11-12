@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { Portfolio };
 
 class Portfolio {
@@ -18,8 +15,13 @@ class Portfolio {
 		this.iphoneSVG = {};
 		this.portfolioIframe = {};
 		this.curProject = {};
-		this.iframePosition = {iMac: {}, iPhone: {}};
-
+		this.iframePosition = {iMac: {
+														origW: 1440, 
+														origH: 900
+													}, 
+													iPhone: {
+														origW: 414, 
+														origH: 736}};
 		this.imacIsActive = true;
 		
 		this.deviceSwitchHandlerBind = this.deviceSwitchHandler.bind(this);
@@ -105,15 +107,18 @@ class Portfolio {
 				iphoneDisplayRECT = this.iphoneDisplay.getBoundingClientRect(),
 				portfolioSectionRECT = this.portfolioSection.getBoundingClientRect(),
 				deviceSliderRECT = this.deviceSlider.getBoundingClientRect();
-		this.iframePosition.scrollTopPos = portfolioSectionRECT.top + this.parallax.scrollTop;
-
+		this.iframePosition.scrollTopPos = Math.round(portfolioSectionRECT.top + this.parallax.scrollTop);
+		this.iframePosition.iMac.wScale = imacDisplayRECT.width / this.iframePosition.iMac.origW;
+		this.iframePosition.iMac.hScale = imacDisplayRECT.height / this.iframePosition.iMac.origH;
 		this.iframePosition.iMac.top = imacDisplayRECT.top - portfolioSectionRECT.top + "px";
-		this.iframePosition.iMac.width = imacDisplayRECT.width * 2 + "px";
-		this.iframePosition.iMac.height = imacDisplayRECT.height * 2 + "px";
+		this.iframePosition.iMac.width = this.iframePosition.iMac.origW + "px";
+		this.iframePosition.iMac.height = this.iframePosition.iMac.origH + "px";
 
+		this.iframePosition.iPhone.wScale = iphoneDisplayRECT.width / this.iframePosition.iPhone.origW;
+		this.iframePosition.iPhone.hScale = iphoneDisplayRECT.height / this.iframePosition.iPhone.origH;
 		this.iframePosition.iPhone.top = iphoneDisplayRECT.top - portfolioSectionRECT.top + "px";
-		this.iframePosition.iPhone.width = iphoneDisplayRECT.width * 2 + "px";
-		this.iframePosition.iPhone.height = iphoneDisplayRECT.height * 2 + "px";
+		this.iframePosition.iPhone.width = this.iframePosition.iPhone.origW + "px";
+		this.iframePosition.iPhone.height = this.iframePosition.iPhone.origH + "px";
 
 		if (this.imacIsActive) {
 			this.iframePosition.iMac.left = imacDisplayRECT.left + "px";
@@ -135,12 +140,14 @@ class Portfolio {
 			return this.portfolioIframe.style.top = this.iframePosition.iMac.top,
 			this.portfolioIframe.style.left = this.iframePosition.iMac.left,
 			this.portfolioIframe.style.width = this.iframePosition.iMac.width,
-			this.portfolioIframe.style.height = this.iframePosition.iMac.height;
+			this.portfolioIframe.style.height = this.iframePosition.iMac.height,
+			this.portfolioIframe.style.transform = `scale(${this.iframePosition.iMac.wScale}, ${this.iframePosition.iMac.hScale}) translateZ(0)`;
 
 		this.portfolioIframe.style.top = this.iframePosition.iPhone.top;
 		this.portfolioIframe.style.left = this.iframePosition.iPhone.left;
 		this.portfolioIframe.style.width = this.iframePosition.iPhone.width;
 		this.portfolioIframe.style.height = this.iframePosition.iPhone.height;
+		this.portfolioIframe.style.transform = `scale(${this.iframePosition.iPhone.wScale}, ${this.iframePosition.iPhone.hScale}) translateZ(0)`;
 	}
 	iframeOn () {
 		this.portfolioIframe.classList.remove('opacity0');
@@ -163,7 +170,6 @@ class Portfolio {
 	}
 	waitDeviceSliderAnimationDone () {
 		let rect = this.deviceSlider.getBoundingClientRect();
-		console.log(Math.round(rect.left),'---', this.iframePosition.iMac.animDonePosIn,'---', this.iframePosition.iMac.animDonePosOut);
 		if (this.imacIsActive) {
 			if (Math.round(rect.left) !== this.iframePosition.iMac.animDonePosIn)
 				return this.rAF(this.waitDeviceSliderAnimationDone);

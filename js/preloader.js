@@ -1,10 +1,5 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
-export { Preloader };
-
-class Preloader {
+export class Preloader {
 	constructor (State) {
 		this.state = State;
 

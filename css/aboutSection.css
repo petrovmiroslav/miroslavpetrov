@@ -179,7 +179,6 @@
 .stackSection__stackDescription {
 	margin: 0;
 	padding: 4vmin;
-	/*background: #ff0060;*/
 	border-radius: 1vmin;
 	font-size: 3vmin;
 	background: #F2F2F2;
@@ -219,11 +218,19 @@
 }
 @media (max-width: 414px) and (min-height: 415px) {
 	.aboutSection__aboutText {
-    font-size: 4vmin;
+    font-size: 4.5vmin;
 	}
 }
 @media (min-width: 2560px) {
 	.stackSection__stackDescriptionWrapper {
 			padding: 8vh 6vw;
 		}
+}
+@media (max-width: 414px) {
+	.stackSection__stackIcons {
+    padding: 0 0 8vmin;
+	}
+	.stackSection__stackDescription {
+    font-size: 4.5vmin;
+	}
 }

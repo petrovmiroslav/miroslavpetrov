@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { LazyLoader };
 
 class LazyLoader {
@@ -39,6 +36,7 @@ class LazyLoader {
 		this.rAF(this.lazyLoadAndReplaceHiBgImage);
 		this.rAF(this.loadVideos);
 		this.rAF(this.addPlantsImgSourceRAF);
+		this.rAF(this.addProjectsImg);
 	}
 
 	lazyLoadAndReplaceHiBgImage () {
@@ -141,5 +139,13 @@ class LazyLoader {
 		b.classList.remove('hidden');
 		f.classList.remove('hidden');
 		b = f = null;
+	}
+	addProjectsImg () {
+		let i = document.querySelectorAll('.portfolio__project');
+		i[0].classList.add('portfolio__project_technical_documentation_page');
+		i[1].classList.add('portfolio__project_drum_machine');
+		i[2].classList.add('portfolio__project_calculator');
+		i[3].classList.add('portfolio__project_weather');
+		i[4].classList.add('portfolio__project_choropleth');
 	}
 }

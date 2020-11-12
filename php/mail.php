@@ -10,7 +10,6 @@
 
 	// require_once $_SERVER['DOCUMENT_ROOT']."\\cnf\\cnf.php";
 	require_once $_SERVER['DOCUMENT_ROOT']."/cnf/cnf.php";
-	//ИСПРАВИТЬ
 
 	$formData = [
 		'error' => [],
@@ -43,12 +42,6 @@
 		if (isset($_FILES['file'])) {
 			fileHandler($formData, $checkList);
 		}
-		/*убрать это*/
-		$formData['POST'] = $_POST;
-		$formData['FILES'] = $_FILES;
-		$formData['SCRIPT'] = $_SERVER;
-		$formData['PSWRD'] = $gml;
-		/*убрать это*/
 		
 		foreach ($checkList as &$ck) {
 			if ($ck == false) {
@@ -62,8 +55,6 @@
 		}
 		
 		sendJSON($formData);
-	} else { 
-		//echo 'HIDDEN-';
 	}
 
 	function sendJSON(&$formData) {
@@ -180,6 +171,128 @@
 	}
 
 	function sendEmail(&$formData, $gml) {
+		function mailBody(&$mailData, $forMe) {
+			$data = '';
+			if ($forMe) {
+				$data = '<tr>
+									<td>
+										<table style="border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px" width="100%" cellspacing="0" cellpadding="0" border="0">
+											<tbody>
+												<tr>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">name</td>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">'.$mailData['personName'].'</td>
+												</tr>
+												<tr>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">phone</td>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">'.$mailData['phoneNumber'].'</td>
+												</tr>
+												<tr>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">email</td>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">'.$mailData['email'].'</td>
+												</tr>
+												<tr>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">info</td>
+													<td style="font-size:18px;margin:0;padding:8px;border:1px solid black;">'.$mailData['info'].'</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>';
+			}
+			return '<table style="border-collapse:collapse" cellspacing="0" cellpadding="0" border="0" align="center">
+			<tbody>
+				<tr>
+					<td colspan="3" style="line-height:20px" height="20">&nbsp;</td>
+				</tr>
+				<tr>
+					<td style="width:16px" width="16"></td>
+					<td style="background:#F2F2F2;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif">
+						<table style="border-collapse:collapse" width="100%" cellspacing="0" cellpadding="0" border="0">
+							<tbody>
+
+
+								<tr>
+									<td>
+										<table style="background:#454C59;border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px;color:#F2F2F2;" width="100%" cellspacing="0" cellpadding="0" border="0">
+											<tbody>
+												<tr>
+													<td style="width:100px;padding:8px;">
+														<img src="cid:img" alt="Miroslav Petrov" border="0" width="100" height="100" style="display:block;border-radius:6px;"/>
+													</td>
+													<td style="padding:8px 0;vertical-align: bottom;">
+														<table style="border-collapse:collapse" width="100%" cellspacing="0" cellpadding="0" border="0">
+															<tbody>
+																<tr>
+																	<td style="padding:0 0 8px;font-size:16px;">Miroslav Petrov</td>
+																</tr>
+																<tr>
+																	<td><a href="https://miroslavpetrov.ru/" style="color:#F24B59;text-decoration:none;font-size:14px;" target="_blank" rel="noopener noreferrer">miroslavpetrov.ru</a></td>
+																</tr>
+																<tr>
+																	<td><a href="mailto:miroslavpetrov.collaboration@gmail.com" style="color:#F24B59;text-decoration:none;font-size:14px;" target="_blank" rel="noopener noreferrer">miroslavpetrov.collaboration@gmail.com</a></td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<table style="border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px" width="100%" cellspacing="0" cellpadding="0" border="0">
+											<tbody>
+												<tr>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:18px;margin:0;padding:64px 8px 0;text-align:center;width:300px">Здравствуйте, '.$mailData['personName'].'!</td>
+												</tr>
+												<tr>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:16px;margin:0;padding:24px 24px 0;width:300px">Спасибо за проявленный интерес!<br>Я постараюсь ответить на Ваше письмо как можно скорее.</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>'.$data.'
+								<tr>
+									<td>
+										<table style="border-collapse:collapse;margin:0 auto 0 auto;text-align:center;width:430px" width="430" cellspacing="0" cellpadding="0" border="0" align="center">
+											<tbody>
+												<tr>
+													<td style="line-height:48px" height="48">&nbsp;</td>
+												</tr>
+												<tr>
+													<td style="width:100%;border-top-color:#dbdbdb;border-top-style:solid;border-top-width:1px"></td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<table style="border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px" width="100%" cellspacing="0" cellpadding="0" border="0">
+											<tbody>
+												<tr>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:11px;margin:0;padding:8px;width:300px">Сообщение было отправлено т.к. адрес <a href="#" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">'.$mailData['email'].'</a> был указан при заполнении формы обратной связи на сайте <a href="https://miroslavpetrov.ru/" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">miroslavpetrov.ru</a>. Если форму заполняли не Вы, пожалуйста не обращайте внимание на это письмо. Приношу извинения за предоставленные неудобства.</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+					</td>
+					<td style="width:16px" width="16"></td>
+				</tr>
+				<tr>
+					<td colspan="3" style="line-height:20px" height="20">&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>';
+		}
 		
 		$mailData = [];
 		if ($formData['personName']) {
@@ -208,50 +321,41 @@
 			$mailData['info'] = false;
 		}
 		if (isset($formData['filePath'])) {
-
-			/*$file = "C:\\Users\\mir19\\AppData\\Local\\Temp\\uploadFiles\\".$formData['fileName'];*/
-			/*ОТНОСИТЕЛЬНЫЙ ПУТЬ В ПАПКУ СКРИПТА */
 			/*$file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];*/
 			$file = $_SERVER['DOCUMENT_ROOT']."/php/uploadFiles/".$formData['fileName'];
 
 			if (move_uploaded_file($formData['filePath'], $file)) {
 				$mailData['file'] = $file;
-				$formData['fileGDEEE'] = $file;
 			} else {
 				$mailData['file'] = false;
-				$formData['fileGDEEE'] = 'VPIZDE'.$file;
 			}
 		} else {
 			$mailData['file'] = false;
 		}
 
-
 		$mail = new PHPMailer;
-
 		$mail->isSMTP();
 		// SMTP::DEBUG_OFF = off (for production use)
 		// SMTP::DEBUG_CLIENT = client messages
 		// SMTP::DEBUG_SERVER = client and server messages
-		$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+		$mail->SMTPDebug = SMTP::DEBUG_OFF;
 		$mail->Host = 'smtp.gmail.com';
 		$mail->Port = 587;
-		//Set the encryption mechanism to use - STARTTLS or SMTPS
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 		$mail->SMTPAuth = true;
-		$mail->SMTPKeepAlive = true; // SMTP connection will not close after each email sent, reduces SMTP overhead
+		$mail->SMTPKeepAlive = true;
+		$mail->CharSet = "utf-8";
 		$mail->Username = 'petrovproweb.ultimatefreehost@gmail.com';
 		$mail->Password = $gml;
 
-
-		$mail->setFrom('from@example.com', 'First Last');//вставить настоящий gmail
-		$mail->addReplyTo('replyto@example.com', 'RepFirst RepLast');//вставить gmail куда отвечать!!!!!!!
-		$mail->addAddress('mir1991bg@yandex.ru', $mailData['personName']);
-		$mail->Subject = 'PHPMailer GMail SMTP test';
+		$mail->setFrom('no_reply@miroslavpetrov.ru', 'Miroslav Petrov');
+		$mail->addReplyTo('miroslavpetrov.collaboration@gmail.com', 'Miroslav Petrov');
+		$mail->addAddress($mailData['email'], $mailData['personName']);
+		$mail->Subject = 'Уважаемый '.$mailData['personName'].', Ваше сообщение получено.';
 		$mail->isHTML(true);
-		$mail->Body    = 'This is the HTML message body <b>in bold!</b> <img src="cid:my-photo" alt="my-photo">';
-		$mail->AltBody = 'This is a plain-text message body';
-		/*$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'\img\IMG_9951.JPG', 'my-photo');*/
-		$mail->addAttachment($mailData['file']);
+		$mail->Body = mailBody($mailData);
+		$mail->AltBody = "Здравствуйте, ".$mailData['personName']."!\r\nСпасибо за проявленный интерес! Я постараюсь ответить на Ваше письмо как можно скорее.\r\n\r\nMiroslav Petrov\r\n\r\nmiroslavpetrov.ru\r\nmiroslavpetrov.collaboration@gmail.com\r\n\r\n\r\nСообщение было отправлено т.к. адрес ".$mailData['email']." был указан при заполнении формы обратной связи на сайте miroslavpetrov.ru. Если форму заполняли не Вы, пожалуйста не обращайте внимание на это письмо. Приношу извинения за предоставленные неудобства.";
+		$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'/img/emailImg.jpg', 'img');
 
 		function tryToSendMail(&$mail, &$formData) {
 			try {
@@ -261,10 +365,7 @@
 					array_push($formData['error'], 'Mailer Error: '. $mail->ErrorInfo);
 					$formData['send'] = false;
 				}
-        /*$mail->send();
-        $formData['send'] = true;*/
 	    } catch (Exception $e) {
-	    	//echo 'Mailer Error: '. $mail->ErrorInfo;
 	    	array_push($formData['error'], 'mailIsNotSend');
 	    	array_push($formData['error'], 'Mailer Error: '. $mail->ErrorInfo);
 	    	$formData['send'] = false;
@@ -273,37 +374,9 @@
 		}
 		tryToSendMail($mail, $formData);
 		$mail->clearAddresses();
-  	$mail->addAddress($mail->Username, $mailData['personName']);
-  	tryToSendMail($mail, $formData);
-
 		
-		/*if (!$mail->send()) {
-		    echo 'Mailer Error: '. $mail->ErrorInfo;
-		} else {
-		    echo 'Message sent!';
-		}*/
-
-
+  	$mail->addAddress($mail->Username, $mailData['personName']);
+  	$mail->Body = mailBody($mailData, true);
+  	$mail->addAttachment($mailData['file']);
+  	tryToSendMail($mail, $formData);
 	}
-	
-	//echo json_encode($formData, JSON_UNESCAPED_UNICODE);
-/*
-?>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-	<title>Фильтрация пользовательского ввода</title>
-<meta charset='utf-8'>
-</head>
-<body>
-<form method="POST">
-	<?// изменить на EMAIL и вставить в JS validate; ?>
-<input type="text" name="email" value="<?= $email?>"><br />
-<input type="hidden" name="validate" value="validate">
-<input type="submit" name="submit" value="Фильтровать">
-</form>
-<?= $email; ?>
-</body>
-</html>
-*/
-

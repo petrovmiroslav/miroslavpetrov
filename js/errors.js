@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { Errors };
 
 class Errors {
@@ -13,9 +10,7 @@ class Errors {
 		this.slideInTimeouts = [];
 		this.slideOutTimeouts = [];
 		this.slideRemoveTimeouts = [];
-		this.toastsON = false;
-		this.toastsPAUSE = false;
-		this.slideInStop = false;
+		this.toastsON = this.toastsPAUSE = this.slideInStop = false;
 
 		this.currToastSlideInBind = this.currToastSlideIn.bind(this);
 		this.currToastSlideOutBind = this.currToastSlideOut.bind(this);
@@ -31,7 +26,7 @@ class Errors {
 
 	createToasts (e) {
 		let arrMsg = [e];
-		console.log(e);
+
 		if (e instanceof Error)
 			return this.reportAError(e);
 
@@ -67,12 +62,11 @@ class Errors {
 			}
 		}
 
-		if (!this.toastsON) {
-			this.slideInTimeouts.push(1);
-			this.toastSlideInTimer();
-			window.requestAnimationFrame(this.toastsLoopBind);
-			this.toastsON = true;
-		}
+		if (this.toastsON) return;
+		this.slideInTimeouts.push(1);
+		this.toastSlideInTimer();
+		window.requestAnimationFrame(this.toastsLoopBind);
+		this.toastsON = true;
 	}
 
 	toastsLoop () {
@@ -119,20 +113,6 @@ class Errors {
 		this.slideOutTimeouts.push(window.setTimeout(this.toastSlideOutTimer.bind(this), 5000));
 		this.addToastHoverListeners(i);
 		this.toastsList[i].in = true;
-
-		/*if (this.toastsList[i].inT) {
-			if (!this.toastsList[i].in) {
-				if (!this.slideInStop) {
-					this.slideInStop = false;
-					this.tryNextToastSlideIn(i, lng);
-
-					this.toastsList[i].ref.classList.add('toasts__toast_slideIn');
-					this.slideOutTimeouts.push(window.setTimeout(this.toastSlideOutTimer.bind(this), 5000));
-					this.addToastHoverListeners(i);
-					this.toastsList[i].in = true;
-				}
-			}
-		}*/
 	}
 	tryNextToastSlideIn (i, lng) {
 		if (i + 1 >= lng) return;
@@ -146,13 +126,6 @@ class Errors {
 		this.toastsList[i].ref.classList.add('toasts__toast_slideOut','toasts__toast_fast');
 		this.slideRemoveTimeouts.push(window.setTimeout(this.toastSlideRemoveTimer.bind(this), 100));
 		this.toastsList[i].out = true;
-		/*if (this.toastsList[i].outT) {
-			if (!this.toastsList[i].out) {
-				this.toastsList[i].ref.classList.add('toasts__toast_slideOut','toasts__toast_fast');
-				this.slideRemoveTimeouts.push(window.setTimeout(this.toastSlideRemoveTimer.bind(this), 100));
-				this.toastsList[i].out = true;
-			}
-		}*/
 	}
 	currToastRemove (i, remove) {
 		if (!this.toastsList[i].removeT || this.toastsList[i].remove) return remove;
@@ -165,21 +138,6 @@ class Errors {
 			this.slideInTimeouts.push(window.setTimeout(this.toastSlideInTimer.bind(this), 100));
 		}
 		return ++remove;
-
-		/*if (this.toastsList[i].removeT) {
-			if (!this.toastsList[i].remove) {
-				this.removeToastHoverListeners(i);
-				this.toastsList[i].ref.remove();
-				this.toastsList[i].ref = null;
-				this.toastsList[i].remove = true;
-				if (this.slideInStop || (this.slideInTimeouts.length === 0)) {
-					this.slideInStop = false;
-					this.slideInTimeouts.push(window.setTimeout(this.toastSlideInTimer.bind(this), 100));
-				}
-				return ++remove;
-			}
-		}
-		return remove;*/
 	}
 
 	addToastHoverListeners (i) {
@@ -235,6 +193,6 @@ class Errors {
 	}
 
 	reportAError (e) {
-		console.log("REPORT!!!---", e);
+		
 	}
 }

@@ -19,7 +19,7 @@
 .fullscreenSlider__side {
 	height: 50%;
 	overflow: hidden;
-	transition: 0.5s cubic-bezier(0.4, 0.0, 1, 1);
+	transition: 1s cubic-bezier(0.5, 0, 0.5, 1)/*cubic-bezier(0.4, 0.0, 1, 1)*/;
 	transform: translateY(0%) scale(1) translateZ(0);
 	will-change: transform;
 }
@@ -32,12 +32,17 @@
 .fullscreenSlider__side-bottom .hiScreen {
 	transform: translateY(-50%);
 }
+.fullscreenSlider__side_top {
+	transform-origin: 0% 100%;
+}
+.fullscreenSlider__side_bottom {
+	transform-origin: 100% 0%;
+}
 .fullscreenSlider.fullscreenSlider_ON .fullscreenSlider__side_top {
 	transform-origin: 0% 100%;
 	transform: translateY(-100%) rotate(-20deg) scale(1.35) translateZ(0);
 }
 .fullscreenSlider.fullscreenSlider_ON .fullscreenSlider__side_bottom {
-	transform-origin: 100% 0%;
 	transform: translateY(100%) rotate(-20deg) scale(1.35) translateZ(0);
 }
 .slide2 {

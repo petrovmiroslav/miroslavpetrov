@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { Form };
 
 class Form {
@@ -64,11 +61,6 @@ class Form {
 		this.addPhoneNumberInputFocusListener();
 		this.addPhoneNumberInputBlurListener();
 		this.addPhoneNumberInputListener();
-		this.addPhoneNumberInputClickListener();
-	}
-
-	addPhoneNumberInputClickListener () {
-		this.phoneNumInput.addEventListener('click', function(){console.log('CLICK')});
 	}
 
 	addPhoneNumberInputFocusListener () {
@@ -233,7 +225,6 @@ class Form {
 	}
 
 	catchErr (e) {
-		console.log(e);
 		this.state.errHandler(e);
 		try {
 			let json = /{"error":.*"}/.exec(this.result);
@@ -247,7 +238,6 @@ class Form {
 		if (!this.JSON)
 			return this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
 		if (this.JSON.send) {
-			console.log('ПИСЬМО ОТПРАВЛЕНО');
 			this.submitButtonSwitchSuccess();
 		} else {
 			this.state.errHandler('Сообщение не отправлено');
@@ -259,7 +249,6 @@ class Form {
 				this.errorMsgHandler(this.JSON.error[i]);
 			}
 		}
-		console.log(this.JSON);
 	}
 
 	cleanUp () {
@@ -271,56 +260,42 @@ class Form {
 	errorMsgHandler(errorMsg) {
 		switch (errorMsg) {
 			case 'Incorrect email':
-			  console.log('EMAILLLLL');
 			  this.state.errHandler('Введите корректный адрес эл. почты');
 				break;
 			case 'nameIsNull':
-			  console.log('nameIsNullLLLLL');
 			  this.state.errHandler('Поле "Имя" не заполнено');
 			  break;
 			case 'nameIsTooShort':
-			  console.log('nameIsTooShortLLLLL');
 			  this.state.errHandler('Имя должно содержать более одного знака');
 			  break;
 			case 'nameIsTooLong':
-			  console.log('nameIsTooLongLLLLL');
 			  this.state.errHandler('Имя должно содержать менее ста знаков');
 			  break;
 			case 'phoneNumberIsTooShort':
-			  console.log('phoneNumberIsTooShortLLLLL');
 			  this.state.errHandler('Номер телефона должен состоять из 11 цифр');
 			  break;
 			case 'phoneNumberIsTooLong':
-			  console.log('phoneNumberIsTooLongLLLLL');
 			  this.state.errHandler('Номер телефона должен содержать менее 20 цифр');
 			  break;
 			case 'Incorrect phoneNumber':
-			  console.log('Incorrect phoneNumberLLLLL');
 			  this.state.errHandler('Введите корректный номер телефона');
 			  break;
 			case 'infoIsNull':
-			  console.log('infoIsNullLLLLL');
 			  break;
 			case 'infoIsTooShort':
-			  console.log('infoIsTooShortLLLLL');
 			  break;
 			case 'infoIsTooLong':
-			  console.log('infoIsTooLongLLLLL');
 			  this.state.errHandler('Информация должна содержать менее двух тысяч знаков');
 			  break;
 			case 'fileIsExe':
-			  console.log('fileIsExeLLLLL');
 			  this.state.errHandler('Файл не может иметь расширение .exe');
 			  break;
 			case 'fileIsTooBig':
-			  console.log('fileIsTooBigLLLLL');
 			  this.state.errHandler('Размер файла не может превышать 10 MB');
 			  break;
 			case 'fileIsNotUploads':
-			  console.log('fileIsNotUploadsLLLLL');
 			  break;
 			case 'mailIsNotSend':
-			  console.log('mailIsNotSendLLLLL');
 			  break;
 
 			default:

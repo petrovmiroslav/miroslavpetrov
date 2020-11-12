@@ -3,14 +3,15 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>PetrovProWeb</title>
+	<title>miroslavpetrov.ru</title>
+	<link rel="icon" href="favicon.ico"/>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:black">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet"> 
 	<link href="css/photoswipe.css" type="text/css" rel="stylesheet">
 	<link href="default-skin/default-skin.css" type="text/css" rel="stylesheet">
 
-	<link href="css/petrovproweb.css" type="text/css" rel="stylesheet">	
+	<link href="css/index.css" type="text/css" rel="stylesheet">	
 	<link href="css/preloader.css" type="text/css" rel="stylesheet">
 	<link href="css/menuButton.css" type="text/css" rel="stylesheet">
 	<link href="css/menu.css" type="text/css" rel="stylesheet">
@@ -48,7 +49,7 @@
 	                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
 
 	                <div class="freeCodeCampLink pswp__button">
-	                	<a href="" target="_blank">
+	                	<a href="" target="_blank" rel="noopener noreferrer">
 	                		<span>Подтвердить на</span>
 	                		<img src="default-skin/freecodecamp-vector-logo.svg" alt="freecodecamp logo">
 	                	</a>
@@ -82,9 +83,6 @@
 			</div>
 		</div>
 		<div id="hiScreenWrapper" class="hiScreen slide1">
-			<!--Thanks Jose Rosario for the reference  -->
-			<!-- https://codepen.io/JoseRosario/pen/BWqMwK -->
-			
 			<div class="hiScreen__bg-image hiScreen__bg-image_mini hiScreen__bg-image_blurred">
 			</div>
 			<div class="hiScreen__bg-image hiScreen__bg-image_lazy hiScreen__bg-image_blurred">
@@ -135,9 +133,6 @@
 
 		<div class="slide2 opacity0">	
 			<div class="parallax">
-				<div class="debug hidden">
-    			<label><input type="checkbox"> Debug</label>
-  			</div>
 				<video class="parallax__bg-fullscreen-video parallax__bg-fullscreen-video_mobile-view hidden"  id="bgvid" disablePictureInPicture playsinline muted loop preload="auto">
 				</video>
 				<div id="parallax__scrollable-container" class="parallax__scrollable-container parallax__scrollable-container_smoothScroll">
@@ -149,7 +144,7 @@
 		        		<div class="aboutSection__sphereBG">
 		        		</div>
 		        	</div>
-							<p class="aboutSection__aboutText shadow_4">Я живу в России в городе Казань. Некоторое время назад начал изучать веб разработку. Прошел курсы на freecodecamp.org. Хочу поменять профессию.</p>
+							<p class="aboutSection__aboutText shadow_4">Я живу в городе Казань. Работаю ревизором-аналитиком в сети гипермаркетов. Некоторое время назад начал изучать веб разработку.</p>
 							<h2 class="aboutSection__header aboutSection__header_slideDown userSelect-None will-change">СТЕК ТЕХНОЛОГИЙ</h2>
 						</div>
 						<div class="stackSection">
@@ -222,7 +217,7 @@
     								<p class="stackSection__iconDesc">Node.js</p>
     							</div>
     						</div>
-  							<p class="stackSection__stackDescription shadow_2">На сегодняшний день я освоил небольшой стек технологий веб-разработки, который позволяет мне решать задачи средней сложости. Но я уверен - работа в ... команде над более сложными проектами, позволит мне существенно расширить свою компетенцию специалиста.</p>
+  							<p class="stackSection__stackDescription shadow_2">На сегодняшний день я освоил небольшой стек технологий веб-разработки, который позволяет мне решать задачи невысокой сложости. Но я уверен - работа в сильной команде над сложными проектами, позволит мне существенно расширить свою компетенцию специалиста и принести пользу компании.</p>
   						</div>
 						</div>
 			    </div>
@@ -233,7 +228,7 @@
 			    	<div class="videoDescription__content">
 	        		<div class="videoDescription__bg">
 	        		</div>
-	        		<p class="videoDescription__text">Я живу в России в городе Казань. Некоторое время назад начал изучать веб разработку. Прошел курсы на freecodecamp.org. Хочу поменять профессию.</p>
+	        		<p class="videoDescription__text">Я прошел обучение в некоммерческой организации из США "freeCodeCamp". После прохождения курсов (примерно 1 800 часов) и сдачи всех проектов, получил 6 сертификатов об успешном завершении.</p>
 	        	</div>
 			    </div>
 			    <div class="header userSelect-None">
@@ -247,25 +242,20 @@
 								<div class="certification__carousel userSelect-None">
 									<div class="certification__certificates will-change" itemscope="" itemtype="http://schema.org/ImageGallery">
 										<figure class="certification__certificate certification__certificate_left" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/Responsive-Web-Design.png" itemprop="contentUrl" data-size="1349x878">
+							        <a class="certification__a" href="img/Responsive-Web-Design.png" rel="noopener noreferrer" itemprop="contentUrl" data-size="1349x878">
 							            <img class="certification__certificateThumbnail" src="img/Responsive-Web-Design.png" itemprop="thumbnail" alt="Responsive Web Design Certifications">
 							        </a>
-
-							        <!-- optionally use this method to store image dimensions for PhotoSwipe -->
 							        <meta itemprop="width" content="1349">
 							        <meta itemprop="height" content="878">
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/responsive-web-design">
 
 							        <figcaption class="certification__certificate-description" itemprop="caption description">
 							            Responsive Web Design
-
-							            <!-- optionally define copyright -->
-							            <!--<span itemprop="copyrightHolder">Photo: AP</span>-->
 							        </figcaption>
 							    	</figure>
 
 							    	<figure class="certification__certificate" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/JavaScript-Algorithms-and-Data-Structures.png" itemprop="contentUrl" data-size="1349x899">
+							        <a class="certification__a" href="img/JavaScript-Algorithms-and-Data-Structures.png" rel="noopener noreferrer" itemprop="contentUrl" data-size="1349x899">
 							            <img class="certification__certificateThumbnail" src="img/JavaScript-Algorithms-and-Data-Structures.png" itemprop="thumbnail" alt="JavaScript Algorithms and Data Structures Certifications">
 							        </a>
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/javascript-algorithms-and-data-structures">
@@ -273,7 +263,7 @@
 							    	</figure>
 
 							    	<figure class="certification__certificate" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/Front-End-Libraries.png" itemprop="contentUrl" data-size="1349x878">
+							        <a class="certification__a" href="img/Front-End-Libraries.png" rel="noopener noreferrer" itemprop="contentUrl" data-size="1349x878">
 							            <img class="certification__certificateThumbnail" src="img/Front-End-Libraries.png" itemprop="thumbnail" alt="Front End Libraries Certifications">
 							        </a>
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/front-end-libraries">
@@ -281,7 +271,7 @@
 							    	</figure>
 
 							    	<figure class="certification__certificate" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/Data-Visualization.png" itemprop="contentUrl" data-size="1349x878">
+							        <a class="certification__a" href="img/Data-Visualization.png" itemprop="contentUrl" rel="noopener noreferrer" data-size="1349x878">
 							            <img class="certification__certificateThumbnail" src="img/Data-Visualization.png" itemprop="thumbnail" alt="Data Visualization Certifications">
 							        </a>
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/data-visualization">
@@ -289,7 +279,7 @@
 							    	</figure>
 
 							    	<figure class="certification__certificate" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/APIs-and-Microservices.png" itemprop="contentUrl" data-size="1349x878">
+							        <a class="certification__a" href="img/APIs-and-Microservices.png" rel="noopener noreferrer" itemprop="contentUrl" data-size="1349x878">
 							            <img class="certification__certificateThumbnail" src="img/APIs-and-Microservices.png" itemprop="thumbnail" alt="APIs and Microservices Certifications">
 							        </a>
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/apis-and-microservices">
@@ -297,7 +287,7 @@
 							    	</figure>
 
 							    	<figure class="certification__certificate certification__certificate_right" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">
-							        <a class="certification__a" href="img/Information-Security-and-Quality-Assurance.png" itemprop="contentUrl" data-size="1349x899">
+							        <a class="certification__a" href="img/Information-Security-and-Quality-Assurance.png" rel="noopener noreferrer" itemprop="contentUrl" data-size="1349x899">
 							            <img class="certification__certificateThumbnail" src="img/Information-Security-and-Quality-Assurance.png" itemprop="thumbnail" alt="Information Security and Quality Assurance Certifications">
 							        </a>
 							        <meta itemprop="isBasedOn" content="https://www.freecodecamp.org/certification/fccb2275616-d24b-47a2-8a5b-62755941fb0a/information-security-and-quality-assurance">
@@ -306,7 +296,7 @@
 									</div>
 									<div class="userHint userHint_cert hidden">
 										<div class="userHint__hintBG">
-											<svg class="userHint__icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.651 490.651">
+											<svg class="userHint__icon userHint__icon_swipe" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.651 490.651">
 												<g>
 													<g>
 														<path d="M437.328,42.651h-128c-5.888,0-10.667,4.779-10.667,10.667s4.779,10.667,10.667,10.667h128
@@ -359,7 +349,7 @@
 													</g>
 												</g>
 											</svg>
-											<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" class="userHint__icon userHint__icon_slash">
+											<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" class="userHint__icon userHint__icon_zoom">
 												<g>
 													<g>
 														<path d="M506.141,477.851L361.689,333.399c65.814-80.075,61.336-198.944-13.451-273.73c-79.559-79.559-209.01-79.559-288.569,0
@@ -562,7 +552,6 @@
 										</div>
 										<div class="portfolio__deviceContainer will-change">
 											<?xml version="1.0" encoding="UTF-8"?>
-											<!-- Created with Inkscape (http://www.inkscape.org/) -->
 											<svg id="iPhoneSVG" class="portfolio__device"  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 514.53 1040.7">
 												<defs>
 												<linearGradient id="linearGradient10750">
@@ -735,11 +724,11 @@
 										</label>
 										<div class="portfolio__iconsMakerAttribute">
 											<a>Icons made by </a>
-											<a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> 
+											<a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski" rel="noopener noreferrer">Zlatko Najdenovski</a> 
 											from 
-											<a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+											<a href="https://www.flaticon.com/" title="Flaticon" rel="noopener noreferrer"> www.flaticon.com</a>
 										</div>
-										<a href="" target="_blank" id="externalLinkView" class="portfolio__switchButton portfolio__switchButton_hoverEnable">
+										<a href="/projects/technical_documentation_page/" target="_blank" rel="noopener noreferrer" id="externalLinkView" class="portfolio__switchButton portfolio__switchButton_hoverEnable">
 											<div class="portfolio__switchButtonBG portfolio__switchButtonBG_hoverEnable">
 											</div>
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="portfolio__switchButtonIcon">
@@ -762,11 +751,11 @@
 										</label>
 										<div class="portfolio__iconsMakerAttribute">
 											Icons made by 
-											<a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">
+											<a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski" rel="noopener noreferrer">
 												Zlatko Najdenovski
 											</a> 
 											from 
-											<a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com
+											<a href="https://www.flaticon.com/" title="Flaticon" rel="noopener noreferrer"> www.flaticon.com
 											</a>
 										</div>
 									</fieldset>
@@ -778,65 +767,47 @@
 							</div>
 							<fieldset class="portfolio__projectGrid">
 								<legend class="visuallyhidden">Выберите проект для просмотра</legend>
-								<button value="http://miroslavpetrov.ml/ChoroplethMap/" class="portfolio__project shadow_4 portfolio__project_projectChecked">
+								<button class="portfolio__project shadow_4 portfolio__project_projectChecked" name="Страница технической документации" value="/projects/technical_documentation_page/">
 									<div class="portfolio__projectDescriptionContainer portfolio__projectDescriptionContainer_projectChecked">
 										<div class="portfolio__projectDescriptionGap">
 										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh.</span>
+										<span class="portfolio__projectDescription userSelect-None">Страница технической документации</span>
 										<div class="portfolio__projectDescriptionGap">
 										</div>
 									</div>
 								</button>
-								<button value="http://www.wikipediaviewer.gq" class="portfolio__project shadow_4">
+								<button class="portfolio__project shadow_4" name="Драм-машина" value="/projects/drum_machine/">
 									<div class="portfolio__projectDescriptionContainer">
 										<div class="portfolio__projectDescriptionGap">
 										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh.</span>
+										<span class="portfolio__projectDescription userSelect-None">Драм-машина</span>
 										<div class="portfolio__projectDescriptionGap">
 										</div>
 									</div>
 								</button>
-								<button class="portfolio__project shadow_4">
+								<button class="portfolio__project shadow_4" name="JavaScript Калькулятор" value="/projects/js_calculator/">
 									<div class="portfolio__projectDescriptionContainer">
 										<div class="portfolio__projectDescriptionGap">
 										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh. Dnjjg jgfd ndmd nnnvvff fghj fgdhhh. Dnjjg jgfd ndmd nnnvvff fghj fgdhhh.</span>
+										<span class="portfolio__projectDescription userSelect-None">JavaScript Калькулятор</span>
 										<div class="portfolio__projectDescriptionGap">
 										</div>
 									</div>
 								</button>
-								<button class="portfolio__project shadow_4">
+								<button class="portfolio__project shadow_4" name="Weather App" value="/projects/weather_app/">
 									<div class="portfolio__projectDescriptionContainer">
 										<div class="portfolio__projectDescriptionGap">
 										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh. Dnjjg jgfd ndmd nnnvvff fghj fgdhhh.</span>
+										<span class="portfolio__projectDescription userSelect-None">Weather App</span>
 										<div class="portfolio__projectDescriptionGap">
 										</div>
 									</div>
 								</button>
-								<button class="portfolio__project shadow_4">
+								<button class="portfolio__project shadow_4" name="Choropleth map" value="/projects/choropleth_map/">
 									<div class="portfolio__projectDescriptionContainer">
 										<div class="portfolio__projectDescriptionGap">
 										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh</span>
-										<div class="portfolio__projectDescriptionGap">
-										</div>
-									</div>
-								</button>
-								<button class="portfolio__project shadow_4">
-									<div class="portfolio__projectDescriptionContainer">
-										<div class="portfolio__projectDescriptionGap">
-										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh</span>
-										<div class="portfolio__projectDescriptionGap">
-										</div>
-									</div>
-								</button>
-								<button class="portfolio__project shadow_4">
-									<div class="portfolio__projectDescriptionContainer">
-										<div class="portfolio__projectDescriptionGap">
-										</div>
-										<span class="portfolio__projectDescription userSelect-None">Dnjjg jgfd ndmd nnnvvff fghj fgdhhh</span>
+										<span class="portfolio__projectDescription userSelect-None">Фоновая картограмма (хороплет)</span>
 										<div class="portfolio__projectDescriptionGap">
 										</div>
 									</div>
@@ -845,7 +816,7 @@
 							<div class="portfolio__projectGridGap portfolio__projectGridGap_bottom">
 							</div>
 						</section>
-						<iframe id="portfolioIframe" class="portfolio__Iframe" src="http://miroslavpetrov.ml/ChoroplethMap/" loading=lazy>
+						<iframe id="portfolioIframe" class="portfolio__Iframe" src="/projects/technical_documentation_page/" loading="lazy" allow="geolocation" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox">
 							Ваш браузер не поддерживает плавающие фреймы!
 						</iframe>
 						<div class="header userSelect-None">
@@ -859,18 +830,14 @@
        				<legend class="visuallyhidden">Заполните контактную информацию</legend>
        				<div class="form__gap_top">
        				</div>
-							<!--<input type="text" name="personName" value="<?= $name?>" required><br />-->
 							<input class="form__input" type="text" name="personName" value="" placeholder="Имя" required>
 							<input class="form__input" type="tel" name="phoneNumber" placeholder="Телефон" minlength="18" maxlength="27" value="" aria-label="Мобильный телефон" tabindex="0" inputmode="tel">
-							<!--// изменить на EMAIL и вставить в JS validate; -->
 							<input class="form__input" type="text" name="email" value="" placeholder="Электронная почта" required>
 							<textarea class="form__input form__input_textarea" name="info" maxlength="2000" placeholder="Информация"></textarea>
-							<!-- <button class="form__input form__input_fileButton opacity0" name="resetFileInput" disabled>Удалить файл</button> -->
 							<input class="form__fileInput visuallyhidden" id="fileInput" type="file" name="file">
 							<label class="form__input form__button form__button_hoverEnable" id="fileLabel" for="fileInput">Прикрепить файл</label>
 							<p class="form__filePreview">
 					  	</p>
-							<!--<input type="hidden" name="hidden" value="submit">-->
 							<input class="form__input form__button form__button_hoverEnable submit submit_hoverEnable" type="submit" name="submit" value="Отправить">
 						</form>
       			<div class="bubbles">
@@ -965,7 +932,7 @@
 			</div>
 			<div class="menu__contentContainer">
 				<div class="links">
-					<a class="links__link" href="#">
+					<a class="links__link" href="https://zoom.us/j/5362695166" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -973,10 +940,10 @@
 								<path d="M 8.34375 3 C 5.404247 3 3 5.404247 3 8.34375 L 3 15.65625 C 3 18.595753 5.404247 21 8.34375 21 L 15.65625 21 C 18.595753 21 21 18.595753 21 15.65625 L 21 8.34375 C 21 5.404247 18.595753 3 15.65625 3 L 8.34375 3 z M 8.34375 5 L 15.65625 5 C 17.514747 5 19 6.485253 19 8.34375 L 19 15.65625 C 19 17.514747 17.514747 19 15.65625 19 L 8.34375 19 C 6.485253 19 5 17.514747 5 15.65625 L 5 8.34375 C 5 6.485253 6.485253 5 8.34375 5 z M 7.6992188 9 C 7.3132187 9 7 9.3132188 7 9.6992188 L 7 12.8125 C 7 14.0205 7.9795 15 9.1875 15 L 13.300781 15 C 13.686781 15 14 14.686781 14 14.300781 L 14 11.1875 C 14 9.9795 13.0205 9 11.8125 9 L 7.6992188 9 z M 17 9 L 15 11 L 15 13 L 17 15 L 17 9 z"></path>
 							</svg>
 							<h2 class="links__header">Zoom</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">Miroslav Petrov</p>
 						</div>
 					</a>
-					<a class="links__link" href="#">
+					<a class="links__link" href="skype:live:.cid.e73def43875bb372?chat" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -984,10 +951,10 @@
 								<path d="M 7.5 2 C 4.462 2 2 4.462 2 7.5 C 2 8.731 2.4087969 9.8622969 3.0917969 10.779297 C 3.0377969 11.179297 3 11.585 3 12 C 3 16.971 7.029 21 12 21 C 12.415 21 12.820703 20.962203 13.220703 20.908203 C 14.137703 21.591203 15.269 22 16.5 22 C 19.538 22 22 19.538 22 16.5 C 22 15.269 21.591203 14.137703 20.908203 13.220703 C 20.962203 12.820703 21 12.415 21 12 C 21 7.029 16.971 3 12 3 C 11.585 3 11.179297 3.0377969 10.779297 3.0917969 C 9.8622969 2.4087969 8.731 2 7.5 2 z M 7.5 4 C 8.253 4 8.9749375 4.2403125 9.5859375 4.6953125 L 10.238281 5.1835938 L 11.046875 5.0742188 C 11.420875 5.0232187 11.724 5 12 5 C 15.86 5 19 8.14 19 12 C 19 12.276 18.976781 12.578125 18.925781 12.953125 L 18.816406 13.761719 L 19.304688 14.414062 C 19.759688 15.025063 20 15.747 20 16.5 C 20 18.43 18.43 20 16.5 20 C 15.747 20 15.025062 19.759687 14.414062 19.304688 L 13.761719 18.816406 L 12.953125 18.925781 C 12.578125 18.975781 12.276 19 12 19 C 8.14 19 5 15.86 5 12 C 5 11.724 5.0232187 11.421875 5.0742188 11.046875 L 5.1835938 10.238281 L 4.6953125 9.5859375 C 4.2403125 8.9749375 4 8.253 4 7.5 C 4 5.57 5.57 4 7.5 4 z M 11.849609 7 C 8.0896094 7 7.8125 9.2089062 7.8125 9.7539062 C 7.8125 10.837906 8.4340938 11.679891 9.4960938 12.087891 C 10.625094 12.521891 11.995437 12.782141 12.773438 12.994141 C 13.990438 13.327141 13.835938 13.997703 13.835938 14.095703 C 13.835937 15.125703 12.425219 15.390984 11.824219 15.333984 C 11.144219 15.269984 10.455281 15.464281 9.7382812 13.988281 C 9.6102812 13.724281 9.3749688 13.146484 8.6679688 13.146484 C 8.3619687 13.146484 7.5976562 13.379375 7.5976562 14.109375 C 7.5976562 15.541375 9.1965156 17 11.978516 17 C 13.432516 17 16.144484 16.496672 16.146484 13.888672 C 16.146484 11.617672 13.855875 11.219156 12.171875 10.785156 C 11.710875 10.666156 9.9921875 10.476172 9.9921875 9.5761719 C 9.9921875 9.3091719 10.365891 8.6679688 11.712891 8.6679688 C 13.099891 8.6679688 13.401938 9.3172969 13.585938 9.6542969 C 13.739938 9.9212969 13.866484 10.127562 14.021484 10.226562 C 14.636484 10.619562 15.197484 10.318328 15.396484 10.111328 C 15.595484 9.9043281 15.695312 9.6760156 15.695312 9.4160156 C 15.695312 8.2850156 14.357609 7 11.849609 7 z"></path>
 							</svg>
 							<h2 class="links__header">Skype</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">Miroslav Petrov</p>
 						</div>
 					</a>
-					<a class="links__link" href="#">
+					<a class="links__link" href="https://wa.me/79874144926?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C%21%20" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -995,10 +962,10 @@
 								<path d="M 12.011719 2 C 6.5057187 2 2.0234844 6.478375 2.0214844 11.984375 C 2.0204844 13.744375 2.4814687 15.462563 3.3554688 16.976562 L 2 22 L 7.2324219 20.763672 C 8.6914219 21.559672 10.333859 21.977516 12.005859 21.978516 L 12.009766 21.978516 C 17.514766 21.978516 21.995047 17.499141 21.998047 11.994141 C 22.000047 9.3251406 20.962172 6.8157344 19.076172 4.9277344 C 17.190172 3.0407344 14.683719 2.001 12.011719 2 z M 12.009766 4 C 14.145766 4.001 16.153109 4.8337969 17.662109 6.3417969 C 19.171109 7.8517969 20.000047 9.8581875 19.998047 11.992188 C 19.996047 16.396187 16.413812 19.978516 12.007812 19.978516 C 10.674812 19.977516 9.3544062 19.642812 8.1914062 19.007812 L 7.5175781 18.640625 L 6.7734375 18.816406 L 4.8046875 19.28125 L 5.2851562 17.496094 L 5.5019531 16.695312 L 5.0878906 15.976562 C 4.3898906 14.768562 4.0204844 13.387375 4.0214844 11.984375 C 4.0234844 7.582375 7.6067656 4 12.009766 4 z M 8.4765625 7.375 C 8.3095625 7.375 8.0395469 7.4375 7.8105469 7.6875 C 7.5815469 7.9365 6.9355469 8.5395781 6.9355469 9.7675781 C 6.9355469 10.995578 7.8300781 12.182609 7.9550781 12.349609 C 8.0790781 12.515609 9.68175 15.115234 12.21875 16.115234 C 14.32675 16.946234 14.754891 16.782234 15.212891 16.740234 C 15.670891 16.699234 16.690438 16.137687 16.898438 15.554688 C 17.106437 14.971687 17.106922 14.470187 17.044922 14.367188 C 16.982922 14.263188 16.816406 14.201172 16.566406 14.076172 C 16.317406 13.951172 15.090328 13.348625 14.861328 13.265625 C 14.632328 13.182625 14.464828 13.140625 14.298828 13.390625 C 14.132828 13.640625 13.655766 14.201187 13.509766 14.367188 C 13.363766 14.534188 13.21875 14.556641 12.96875 14.431641 C 12.71875 14.305641 11.914938 14.041406 10.960938 13.191406 C 10.218937 12.530406 9.7182656 11.714844 9.5722656 11.464844 C 9.4272656 11.215844 9.5585938 11.079078 9.6835938 10.955078 C 9.7955938 10.843078 9.9316406 10.663578 10.056641 10.517578 C 10.180641 10.371578 10.223641 10.267562 10.306641 10.101562 C 10.389641 9.9355625 10.347156 9.7890625 10.285156 9.6640625 C 10.223156 9.5390625 9.737625 8.3065 9.515625 7.8125 C 9.328625 7.3975 9.131125 7.3878594 8.953125 7.3808594 C 8.808125 7.3748594 8.6425625 7.375 8.4765625 7.375 z"></path>
 							</svg>
 							<h2 class="links__header">WhatsApp</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">+7 (987) 414-49-26</p>
 						</div>
 					</a>
-					<a class="links__link" href="#">
+					<a class="links__link" href="https://www.linkedin.com/in/miroslav-petrov?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BzC7Hs811RgOC6zai%2Fa3VPQ%3D%3D" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -1006,10 +973,10 @@
 								<path d="M 5 3 C 3.895 3 3 3.895 3 5 L 3 19 C 3 20.105 3.895 21 5 21 L 19 21 C 20.105 21 21 20.105 21 19 L 21 5 C 21 3.895 20.105 3 19 3 L 5 3 z M 5 5 L 19 5 L 19 19 L 5 19 L 5 5 z M 7.7792969 6.3164062 C 6.9222969 6.3164062 6.4082031 6.8315781 6.4082031 7.5175781 C 6.4082031 8.2035781 6.9223594 8.7167969 7.6933594 8.7167969 C 8.5503594 8.7167969 9.0644531 8.2035781 9.0644531 7.5175781 C 9.0644531 6.8315781 8.5502969 6.3164062 7.7792969 6.3164062 z M 6.4765625 10 L 6.4765625 17 L 9 17 L 9 10 L 6.4765625 10 z M 11.082031 10 L 11.082031 17 L 13.605469 17 L 13.605469 13.173828 C 13.605469 12.034828 14.418109 11.871094 14.662109 11.871094 C 14.906109 11.871094 15.558594 12.115828 15.558594 13.173828 L 15.558594 17 L 18 17 L 18 13.173828 C 18 10.976828 17.023734 10 15.802734 10 C 14.581734 10 13.930469 10.406562 13.605469 10.976562 L 13.605469 10 L 11.082031 10 z"></path>
 							</svg>
 							<h2 class="links__header">LinkedIn</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">Miroslav Petrov</p>
 						</div>
 					</a>
-					<a class="links__link" href="#">
+					<a class="links__link" href="https://www.instagram.com/miroslavpetrov_/" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -1017,10 +984,10 @@
 								<path d="M 8 3 C 5.243 3 3 5.243 3 8 L 3 16 C 3 18.757 5.243 21 8 21 L 16 21 C 18.757 21 21 18.757 21 16 L 21 8 C 21 5.243 18.757 3 16 3 L 8 3 z M 8 5 L 16 5 C 17.654 5 19 6.346 19 8 L 19 16 C 19 17.654 17.654 19 16 19 L 8 19 C 6.346 19 5 17.654 5 16 L 5 8 C 5 6.346 6.346 5 8 5 z M 17 6 A 1 1 0 0 0 16 7 A 1 1 0 0 0 17 8 A 1 1 0 0 0 18 7 A 1 1 0 0 0 17 6 z M 12 7 C 9.243 7 7 9.243 7 12 C 7 14.757 9.243 17 12 17 C 14.757 17 17 14.757 17 12 C 17 9.243 14.757 7 12 7 z M 12 9 C 13.654 9 15 10.346 15 12 C 15 13.654 13.654 15 12 15 C 10.346 15 9 13.654 9 12 C 9 10.346 10.346 9 12 9 z"></path>
 							</svg>
 							<h2 class="links__header">Instagram</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">@miroslavpetrov_</p>
 						</div>
 					</a>
-					<a class="links__link" href="#">
+					<a class="links__link" href="https://github.com/petrovmiroslav" target="_blank" rel="noopener noreferrer">
 						<div class="links__linkBG">
 						</div>
 						<div class="links__linkContentContainer">
@@ -1028,7 +995,7 @@
 								<path d="M10.9,2.1c-4.6,0.5-8.3,4.2-8.8,8.7c-0.5,4.7,2.2,8.9,6.3,10.5C8.7,21.4,9,21.2,9,20.8v-1.6c0,0-0.4,0.1-0.9,0.1 c-1.4,0-2-1.2-2.1-1.9c-0.1-0.4-0.3-0.7-0.6-1C5.1,16.3,5,16.3,5,16.2C5,16,5.3,16,5.4,16c0.6,0,1.1,0.7,1.3,1c0.5,0.8,1.1,1,1.4,1 c0.4,0,0.7-0.1,0.9-0.2c0.1-0.7,0.4-1.4,1-1.8c-2.3-0.5-4-1.8-4-4c0-1.1,0.5-2.2,1.2-3C7.1,8.8,7,8.3,7,7.6C7,7.2,7,6.6,7.3,6 c0,0,1.4,0,2.8,1.3C10.6,7.1,11.3,7,12,7s1.4,0.1,2,0.3C15.3,6,16.8,6,16.8,6C17,6.6,17,7.2,17,7.6c0,0.8-0.1,1.2-0.2,1.4 c0.7,0.8,1.2,1.8,1.2,3c0,2.2-1.7,3.5-4,4c0.6,0.5,1,1.4,1,2.3v2.6c0,0.3,0.3,0.6,0.7,0.5c3.7-1.5,6.3-5.1,6.3-9.3 C22,6.1,16.9,1.4,10.9,2.1z"></path>
 							</svg>
 							<h2 class="links__header">GitHub</h2>
-							<p class="links__text">@dsdadasdasda</p>
+							<p class="links__text">petrovmiroslav</p>
 						</div>
 					</a>
 				</div>
@@ -1134,66 +1101,6 @@
 	</div>
 	<div class="toasts toasts_out will-change">
 	</div>
-	<!-- <div class="loading userSelect-None hidden">
-				<div class="loading__scene">
-					<div class="loading__Y loading__Y0">
-						<div class="loading__Z loading__Z_gradientColor1">
-							<div class="loading__BG loading__BG_color1">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y0 loading__1_2">
-						<div class="loading__Z loading__Z_gradientColor1 loading__1_2">
-							<div class="loading__BG loading__BG_color1 loading__1_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y-45 loading__3">
-						<div class="loading__Z loading__Z_gradientColor3 loading__3">
-							<div class="loading__BG loading__BG_color3 loading__3">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y-45 loading__3_2">
-						<div class="loading__Z loading__Z_gradientColor2 loading__3_2">
-							<div class="loading__BG loading__BG_color2 loading__3_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y45 loading__4">
-						<div class="loading__Z loading__Z_gradientColor2 loading__4">
-							<div class="loading__BG loading__BG_color2 loading__4">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y45 loading__4_2">
-						<div class="loading__Z loading__Z_gradientColor3 loading__4_2">
-							<div class="loading__BG loading__BG_color3 loading__4_2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y90 loading__2">
-						<div class="loading__Z loading__Z_gradientColor3 loading__2">
-							<div class="loading__BG loading__BG_color3 loading__2">
-							</div>
-						</div>
-					</div>
-					<div class="loading__Y loading__Y90 loading__2_2">
-						<div class="loading__Z loading__Z_gradientColor2 loading__2_2">
-							<div class="loading__BG loading__BG_color2 loading__2_2">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> -->
-<script>
-    var debugInput = document.querySelector(".debug");
-    function updateDebugState() {
-        document.body.classList.toggle('debug-on', debugInput.checked);
-    }
-    debugInput.addEventListener("click", updateDebugState);
-    //updateDebugState();
-  </script>
   <script src="module/photoswipe.js" type="text/javascript"></script> 
 	<script src="module/photoswipe-ui-default.js" type="text/javascript"></script>
 	<script src="module/matter.js" type="text/javascript"></script>
@@ -1214,6 +1121,4 @@
 	<script src="js/bubbles.js" type="module"></script>
 	<script src="js/index.js" type="module"></script>
 </body>
-	
-
 </html>

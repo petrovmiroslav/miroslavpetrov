@@ -1,5 +1,5 @@
 'use strict';
-console.log('%c Хотите чтобы я стал частью вашей команды? Пожалуйста, напишите – @.ru \n Обнаружили ошибку? \n English MotherFucker! ', 'background-color: #65ff2d; color: #2f2f2f; font-family: arial; font-weight: 900; font-size: 3vmin; padding: 1px 0px;');
+console.log('%c Хотите чтобы я стал частью вашей команды или обнаружили ошибку? Пожалуйста, напишите – miroslavpetrov.collaboration@gmail.com','background-color: #65ff2d; color: #2f2f2f; font-family: helvetica; font-weight: 700; font-size: 18px; padding: 1px 10px;');
 import { State as StateModule } from "./state.js";
 import { Errors as ErrorsModule } from "./errors.js";
 import { ClientDevice as ClientDeviceModule } from "./clientDevice.js";
@@ -31,8 +31,6 @@ let Kraken = new ReleaseTheKraken(),
     Portfolio = new PortfolioModule(State),
     Form = new FormModule(State),
     Bubbles = new BubblesModule(State, ClientDevice);
-
-
 
 const DOMContentLoaded = function (state) {
   document.removeEventListener('DOMContentLoaded', DOMContentLoaded);

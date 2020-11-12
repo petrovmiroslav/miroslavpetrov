@@ -61,7 +61,7 @@
   height: 100%;
   min-height: 20px;
   max-height: 40px;
-  min-width: 200px;
+  min-width: 240px;
   max-width: 400px;
   border-radius: 1vmin;
   display: flex;
@@ -116,7 +116,7 @@
 }
 .portfolio__switchButtonIcon {
 	width: 34%;
-  height: 66%;
+  height: 64%;
   grid-area: a;
   fill: #021226;
   pointer-events: none;
@@ -141,7 +141,7 @@
 .portfolio__Iframe {
 	position: absolute;
 	border: none;
-	transform: scale(.5);
+	transform: scale(.5) translateZ(0);
 	transform-origin: 0% 0%;
 }
 .portfolio__Iframe_opacityTransition {
@@ -175,7 +175,6 @@
   flex-grow: 1;
   overflow: hidden;
   border: none;
-  background-image: url(https://html5book.ru/wp-content/uploads/2019/03/post-img-3.jpg);
   background-position: center center;
   background-size: cover;
   text-decoration: none;
@@ -187,6 +186,24 @@
   text-align: start;
   font-family: 'Rubik', sans-serif;
   font-size: unset;
+}
+.portfolio__project_technical_documentation_page {
+  background-image: url('/img/technical_documentation_page_mini.png');
+  background-position: 0%;
+}
+.portfolio__project_drum_machine {
+  background-image: url('/img/drum_machine.png');
+}
+.portfolio__project_calculator {
+  background-image: url('/img/js_calculator.png');
+}
+.portfolio__project_weather {
+  background-image: url('/img/weather_app.png');
+  background-position: 50% 0%;
+}
+.portfolio__project_choropleth {
+  background-image: url('/img/choropleth_map.png');
+  background-position: 50% 0%;
 }
 .portfolio__project:focus {
   outline: none;
@@ -208,7 +225,7 @@
   box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.2), 0px -2px 2px 0px rgba(0, 0, 0, 0.14), 0px -3px 1px -2px rgba(0, 0, 0, 0.12);
   pointer-events: none;
   overflow: hidden;
-  transform: translate3d(0, calc(100% - 31px), 0);
+  transform: translate3d(0, calc(100% - 35px), 0);
   opacity: .8;
 }
 .portfolio__projectDescriptionContainer_flipper {

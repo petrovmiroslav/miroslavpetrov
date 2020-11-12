@@ -1,6 +1,4 @@
-export { State };
-
-class State {
+export class State {
 	constructor () {
 		this.windowWidth = document.documentElement.clientWidth;
   	this.windowHeight = document.documentElement.clientHeight;
@@ -38,10 +36,10 @@ class State {
 				max: '../img/hiScreenBg.jpg'
 			},
 			bGVideo: [	
-				{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.webm',
+				{ src: '../img/videoBG-1280.webm',
 				  type: 'video/webm'
 				},
-				{ src: 'https://petrovmiroslav.github.io/static/videoBG-1920.mp4',
+				{ src: '../img/videoBG-1280.mp4',
 				  type: 'video/mp4'
 				}
 			],

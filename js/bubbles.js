@@ -1,7 +1,4 @@
 'use strict'
-import { ReleaseTheKraken } from '../test/ReleaseTheKraken.js';
-let Kraken = new ReleaseTheKraken;
-
 export { Bubbles };
 
 class Bubbles {
@@ -242,11 +239,10 @@ class Bubbles {
 		this.mouse.element.removeEventListener('touchmove', this.mouse.mousemove);
   	this.mouse.element.removeEventListener('touchstart', this.mouse.mousedown);
   	this.mouse.element.removeEventListener('touchend', this.mouse.mouseup);
-  	if (this.state.deviceIsTouchscreen) {
-  		this.mouse.element.addEventListener('touchmove', this.mousemoveBind, this.state.passiveListener);
-  		this.mouse.element.addEventListener('touchstart', this.mousedownBind, this.state.passiveListener);
-  		this.mouse.element.addEventListener('touchend', this.mouseupBind, this.state.passiveListener);
-  	}
+  	if (!this.state.deviceIsTouchscreen) return;
+		this.mouse.element.addEventListener('touchmove', this.mousemoveBind, this.state.passiveListener);
+		this.mouse.element.addEventListener('touchstart', this.mousedownBind, this.state.passiveListener);
+		this.mouse.element.addEventListener('touchend', this.mouseupBind, this.state.passiveListener);
   }
   mousemove (event) {
 		var position = Matter.Mouse._getRelativeMousePosition(event, this.mouse.element, this.mouse.pixelRatio),

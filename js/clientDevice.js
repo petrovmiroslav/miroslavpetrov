@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { ClientDevice };
 
 class ClientDevice {
@@ -56,7 +53,6 @@ class ClientDevice {
 		    }
 			}
 		}
-		console.log('TOUCHSCEEN?---',hasTouchScreen);
 		return hasTouchScreen;
 	}
 	detectSupportsPassive () {

@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { Cube3d };
 
 class Cube3d {
@@ -298,12 +295,12 @@ class Cube3d {
     if (d) return this.cube3dPauseON();
   	this.cube3dPauseTimeout = window.setTimeout(this.waitCube3dStopRotationBind, 2000);
   }
-  cube3dPauseON () {console.log('cube3dPauseON');
+  cube3dPauseON () {
   	this.cube3dPause = true;
   	this.removeCube3dMoveAndUpListeners();
     this.userStartPlay || this.rAF(this.displayUserHint);
   }
-  cube3dPauseOFF () {console.log('cube3dPauseOFF');
+  cube3dPauseOFF () {
   	this.cube3dPause = false;
   	this.addCube3dMoveAndUpListeners();
   	this.loop();
@@ -318,16 +315,9 @@ class Cube3d {
   }
 
   cube3dStop () {
-  	if (!this.cube3dPause) {console.log('CUBESTOP');
+  	if (!this.cube3dPause) {
   		window.clearTimeout(this.cube3dPauseTimeout);
 	  	this.cube3dPauseON();
-	  	/*this.gap = 0;
-	  	for (let i = 0; i < this.lev + 2; i++) {
-	  		this.vx[i] = 0;
-	      this.px[i] = -20;//this.px[0];
-	    }
-	    this.render();*/
-
   	}
   	this.cube3d.classList.add('opacity0');
   }

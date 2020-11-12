@@ -1,7 +1,4 @@
 'use strict';
-import { ReleaseTheKraken } from "../test/ReleaseTheKraken.js";
-let Kraken = new ReleaseTheKraken;
-
 export { Certification };
 
 class Certification {
@@ -121,8 +118,6 @@ class Certification {
 		this.startMousePosition = this.oldMousePosition;
 		this.oldScrollLeft = this.lastScrollStep;
 		this.certificates.classList.remove('certification__certificates_ease');
-
-		this.hideUserHint();
 	}
 	certificatesOnMouseMove (e) {
 		if(!this.md) return;
@@ -142,6 +137,7 @@ class Certification {
 			this.ticking = false;
 		}
 		this.mm = true;
+		this.hideUserHint();
 	}
 	certificatesOnMouseUp (e) {
 		this.removeCertificatesSwipeListeners();
@@ -232,13 +228,12 @@ class Certification {
 	}
 
 	certificatesOnScroll () {
-		this.m && !this.md && (this.currentCert = Math.round(this.certificates.scrollLeft / this.scrollStepValue), this.m = false, console.log(this.currentCert));
+		this.m && !this.md && (this.currentCert = Math.round(this.certificates.scrollLeft / this.scrollStepValue), this.m = false);
 	}
 
 	displayCurrentCert (index) {
 		if (this.state.deviceIsTouchscreen)
-			return this.certificates.scrollLeft = this.scrollStepValue * index,
-			console.log('displayCurrentCert', this.scrollStepValue * index);
+			return this.certificates.scrollLeft = this.scrollStepValue * index;
 		this.currentCert = index;
 		this.lastScrollStep = this.getCurrentScrollStepPX();
 		this.certificates.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%) translateZ(0)';
@@ -266,8 +261,7 @@ class Certification {
 
 	displayCurrentCertInFlipper (el) {
 		if (this.state.deviceIsTouchscreen)
-			return el.scrollLeft = this.scrollStepValue * this.currentCert,
-			console.log('displayCurrentCert', this.scrollStepValue * this.currentCert);
+			return el.scrollLeft = this.scrollStepValue * this.currentCert;
 		el.style.transform = 'translateX(-' + (100 / this.certsLength) * this.currentCert + '%)';
 	}
 
