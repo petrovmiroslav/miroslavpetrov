@@ -74,7 +74,6 @@
 	margin: 0;
 	color: #73434F;
 	font-size: 29vw;
-	/*transition: .35s cubic-bezier(0.4, 0.0, 0.2, 1);*/
 }
 .menu__letter_transX {
 	transform: translateX(7.5%);
@@ -123,9 +122,6 @@
 	}
 }
 @keyframes hero_animTransX {
-	/*0% {
-		transform: translate3d(-20vw, 0, 0);
-	}*/
 	0% {
 		transform: translate3d(-20vw, -2vw, 0);
 	}

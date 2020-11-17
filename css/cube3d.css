@@ -16,17 +16,15 @@
 	position: relative;
 	transform-style: preserve-3d;
 	transform: rotateY(-90deg) translate3d(-50%, 0, 0) rotateY(90deg) rotateY(0deg);
-	/*will-change: transform;*/
 }
 .cube3d__side {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	/*background: linear-gradient(to right, #468057 0%, #468057 30%, #A67E6F 30%, #A67E6F 70%, #dfc812 70%, #dfc812 100%);*/
 	background: linear-gradient(to right, #F24B59 0%, #F24B59 38%, #F2F2F2 38%, #F2F2F2 100%);
 	overflow: hidden;
 	backface-visibility: hidden;
-	/*will-change: transform;*/
+	-webkit-backface-visibility: hidden;
 }
 .cube3d__side_front {
 	transform: rotateY(-90deg) translate3d(50%, 0, 0) rotateY(90deg);
@@ -58,19 +56,15 @@
 	white-space: nowrap;
 }
 .cube3d__text_shift_up {
-	/*transform: translate3d(0%, -55%, 0);*/
 	transform: translateY(-55%);
 }
 .cube3d__text_shift_down {
-	/*transform: translate3d(0%, 55%, 0);*/
 	transform: translateY(55%);
 }
 .cube3d__text_shift_up-left {
-	/*transform: translate3d(-50%, -55%, 0);*/
 	transform: translateX(-50%) translateY(-55%);
 }
 .cube3d__text_shift_down-left {
-	/*transform: translate3d(-50%, 55%, 0);*/
 	transform: translateX(-50%) translateY(55%);
 }
 .cube3d__clickTarget {

@@ -1,5 +1,4 @@
 .toasts {
-	/*width: 50%;*/
 	min-width: 200px;
 	position: absolute;
 	top: 0;
@@ -60,7 +59,6 @@
 	opacity: 1;
   box-shadow: inset 0px 0px 0px 3px #021226;
 }
-
 @media (max-width: 768px) {
   .toasts__toast {
 		max-width: 85%;

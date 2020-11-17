@@ -327,9 +327,6 @@ class Menu {
 			});
 		}
 		allContentCloneVideo = null;
-		this.contentClone.querySelectorAll('#group2 .parallax__layer--back').forEach(function (el) {
-			el.classList.remove('parallax__layer--back_desktop-view');
-		});
 	}
 	deleteCube3dInContentClone () {
 		let c = this.contentClone.querySelector('.cube3d');

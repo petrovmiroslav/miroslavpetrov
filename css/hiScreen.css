@@ -44,7 +44,6 @@
 	font-size: 5vmin;
 }
 .hiScreen__shadow {
-	/*background: #ff405b82;*/
 	background-color: rgba(242, 75, 89, 0.6);
 }
 .hiScreen__shadow_top-right {

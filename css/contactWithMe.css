@@ -43,10 +43,6 @@
   position: absolute;
   transform: translateZ(0);
 }
-.form__form {
-  /*height: 0;
-  border-top: 1px solid transparent;*/
-}
 .form__gap_top {
   height: 20vh;
   pointer-events: none;
@@ -73,14 +69,6 @@
   outline: none;
   box-shadow: 0 0 0 4px #F2F2F2;
 }
-/*form {
-	text-align: center;
-}*/
-/*form * {
-	width: 50%;
-	font-size: 5vmin;
-	margin: auto;
-}*/
 .form__input_top {
   margin-top: 20vh;
 }
@@ -118,9 +106,6 @@
 .submit_success {
   background: #4BF273;
   opacity: 1;
-}
-.form__fileInput {
-
 }
 .form__fileInput:focus + .form__input {
   background-color: #F24B59;

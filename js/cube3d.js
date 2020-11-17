@@ -111,7 +111,9 @@ class Cube3d {
 	      	'height: ' + sideHeight + 'px; ' +
 	      	'z-index: ' + levelZIndex  + '; ' + 
 	    '">' +
-    		(i < Math.ceil(this.lev / 2) ? top+bottom : bottom+top) +
+    		(this.state.deviceIsTouchscreen 
+          ? (i < Math.ceil(this.lev / 2) ? top+bottom : bottom+top)
+          : '') +
         '<div class="cube3d__side cube3d__side_back" style="transform: rotateY(180deg) translateZ(' + this.translateZValue + 'px);">'+
 					'<p class="cube3d__text cube3d__text_shift_up" ' + fontSize +'>' + this.text + '</p>' +
 					'<p class="cube3d__text cube3d__text_shift_down" ' + fontSize +'>' + this.text + '</p>' +
