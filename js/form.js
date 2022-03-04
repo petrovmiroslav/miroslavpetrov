@@ -4,7 +4,7 @@ export { Form };
 class Form {
 	constructor (State) {
 		this.state = State;
-		
+
 		this.form = {};
 		this.phoneNumInput = {};
 		this.phoneNumber = [];
@@ -22,7 +22,7 @@ class Form {
 		this.XMLHttpRequestOnloadHandlerBind = this.XMLHttpRequestOnloadHandler.bind(this);
 		this.catchErrBind = this.catchErr.bind(this);
 		this.formInputHandlerBind = this.formInputHandler.bind(this);
-		
+
 		this.inputTickTimeout = 0;
 		this.formData = {};
 		this.req = {};
@@ -74,7 +74,7 @@ class Form {
 	}
 	phoneNumberInputBlurHandler (e) {
 		if (this.phoneNumInput.value.length < 5 ) return this.phoneNumInput.value = '';
-		this.phoneNumInput.value.length < 18 && this.state.errHandler('Номер телефона должен состоять из 11 цифр');
+		this.phoneNumInput.value.length < 18 && this.state.errHandler('Phone number must be 11 digits');
 	}
 	addPhoneNumberInputListener () {
 		this.phoneNumInput.addEventListener('input', this.phoneNumberInputHandlerBind);
@@ -83,7 +83,7 @@ class Form {
 		window.clearTimeout(this.inputTickTimeout);
 		this.inputTickTimeout = window.setTimeout(this.inputValidPhoneNumberBind, 250);
 	}
-	
+
 	inputValidPhoneNumber () {
 		if (this.phoneNumInput.value === "") return;
 		this.phoneNumber = this.phoneNumInput.value.split("").filter(this.phoneNumberFilterFunc);
@@ -107,7 +107,7 @@ class Form {
 		arr.splice(16);
 		return arr;
 	}
-	
+
 	addFileInputListeners () {
 		this.fileInput.addEventListener('change', this.fileInputChangeHandlerBind);
 		this.fileInput.addEventListener('click', this.resetFileInputButtonClickBind);
@@ -118,23 +118,23 @@ class Form {
 			return this.filePreview.textContent = this.fileInput.files[0].name,
 			this.enableResetFileInputButton();
 		this.fileInput.value = '';
-		this.filePreview.textContent = 'Файл не выбран. Размер файла не может превышать 10 MB';
+		this.filePreview.textContent = 'File not selected. File size cannot exceed 10 MB';
 		this.disableResetFileInputButton();
 	}
 
 	enableResetFileInputButton () {
-		this.fileInputButton.textContent = 'Удалить файл';
+		this.fileInputButton.textContent = 'Delete a file';
 	}
 	disableResetFileInputButton () {
-		this.fileInputButton.textContent = 'Прикрепить файл';
+		this.fileInputButton.textContent = 'Attach file';
 	}
 	submitButtonSwitchSuccess () {
 		this.submitButton.classList.add('submit_success');
-		this.submitButton.value = 'Отправлено!';
+		this.submitButton.value = 'Sent!';
 	}
 	enableSubmitButton () {
 		this.submitButton.disabled = false;
-		this.submitButton.value = 'Отправить';
+		this.submitButton.value = 'Submit';
 		this.submitButton.classList.add('submit_hoverEnable');
 	}
 	disableSubmitButton () {
@@ -171,15 +171,15 @@ class Form {
 
 		this.formData = new FormData(this.form);
 		this.formData.set('hidden', 'submit');
-		
+
 		await this.sendFormData().catch(this.catchErrBind);
 
 		this.handleResponse();
-		this.cleanUp();	
+		this.cleanUp();
 	}
 
 	async sendFormData () {
-		if (self.fetch) 
+		if (self.fetch)
 			return await this.fetchReq();
 		await this.XMLHttpReq();
 	}
@@ -192,7 +192,7 @@ class Form {
 	  if (!this.req) return;
 
   	if (!this.req.ok) {
-  		this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
+  		this.state.errHandler('Message not sent. Service is temporarily unavailable');
 	  	throw new Error('Status is not OK');
 	  }
 
@@ -230,17 +230,17 @@ class Form {
 			let json = /{"error":.*"}/.exec(this.result);
 			json === null || (this.JSON = JSON.parse(json));
 		} catch (e) {
-			return this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
+			return this.state.errHandler('Message not sent. Service is temporarily unavailable');
 		}
 	}
 
 	handleResponse () {
 		if (!this.JSON)
-			return this.state.errHandler('Сообщение не отправлено. Сервис временно не доступен');
+			return this.state.errHandler('Message not sent. Service is temporarily unavailable');
 		if (this.JSON.send) {
 			this.submitButtonSwitchSuccess();
 		} else {
-			this.state.errHandler('Сообщение не отправлено');
+			this.state.errHandler('Message not sent.');
 		}
 		this.addFormInputListener();
 
@@ -260,38 +260,38 @@ class Form {
 	errorMsgHandler(errorMsg) {
 		switch (errorMsg) {
 			case 'Incorrect email':
-			  this.state.errHandler('Введите корректный адрес эл. почты');
+			  this.state.errHandler('Please enter a valid email address');
 				break;
 			case 'nameIsNull':
-			  this.state.errHandler('Поле "Имя" не заполнено');
+			  this.state.errHandler('Field "Name" is not filled');
 			  break;
 			case 'nameIsTooShort':
-			  this.state.errHandler('Имя должно содержать более одного знака');
+			  this.state.errHandler('Name must contain more than one character');
 			  break;
 			case 'nameIsTooLong':
-			  this.state.errHandler('Имя должно содержать менее ста знаков');
+			  this.state.errHandler('Name must be less than 100 characters');
 			  break;
 			case 'phoneNumberIsTooShort':
-			  this.state.errHandler('Номер телефона должен состоять из 11 цифр');
+			  this.state.errHandler('Phone number must be 11 digits');
 			  break;
 			case 'phoneNumberIsTooLong':
-			  this.state.errHandler('Номер телефона должен содержать менее 20 цифр');
+			  this.state.errHandler('Phone number must be less than 20 digits');
 			  break;
 			case 'Incorrect phoneNumber':
-			  this.state.errHandler('Введите корректный номер телефона');
+			  this.state.errHandler('Please enter a valid phone number');
 			  break;
 			case 'infoIsNull':
 			  break;
 			case 'infoIsTooShort':
 			  break;
 			case 'infoIsTooLong':
-			  this.state.errHandler('Информация должна содержать менее двух тысяч знаков');
+			  this.state.errHandler('Information must contain less than two thousand characters');
 			  break;
 			case 'fileIsExe':
-			  this.state.errHandler('Файл не может иметь расширение .exe');
+			  this.state.errHandler('The file cannot have an .exe extension');
 			  break;
 			case 'fileIsTooBig':
-			  this.state.errHandler('Размер файла не может превышать 10 MB');
+			  this.state.errHandler('File size cannot exceed 10 MB');
 			  break;
 			case 'fileIsNotUploads':
 			  break;
@@ -300,7 +300,7 @@ class Form {
 
 			default:
 				this.serverErr || (this.serverErr = true,
-					this.state.errHandler('Сервис временно не доступен'));
+					this.state.errHandler('Service is temporarily unavailable'));
 				let err = /^Mailer Error:.*$/.exec(errorMsg);
 				err === null || this.state.errHandler(new Error(err + '---' + this.result));
 			  break;

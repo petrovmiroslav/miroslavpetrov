@@ -1,5 +1,5 @@
 'use strict';
-console.log('%c Хотите чтобы я стал частью вашей команды или обнаружили ошибку? Пожалуйста, напишите – miroslavpetrov.collaboration@gmail.com','background-color: #65ff2d; color: #2f2f2f; font-family: helvetica; font-weight: 700; font-size: 18px; padding: 1px 10px;');
+console.log('%c If you want me to be part of your team or find a bug? Please write to – miroslavpetrov.collaboration@gmail.com','background-color: #65ff2d; color: #2f2f2f; font-family: helvetica; font-weight: 700; font-size: 18px; padding: 1px 10px;');
 import { State as StateModule } from "./state.js";
 import { Errors as ErrorsModule } from "./errors.js";
 import { ClientDevice as ClientDeviceModule } from "./clientDevice.js";
@@ -34,7 +34,7 @@ let Kraken = new ReleaseTheKraken(),
 
 const DOMContentLoaded = function (state) {
   document.removeEventListener('DOMContentLoaded', DOMContentLoaded);
-  
+
   let Preloader = new PreloaderModule(State);
   Preloader.init();
   Preloader = null;
@@ -44,7 +44,7 @@ const WindowLoaded = function () {
 
   let LazyLoader = new LazyLoaderModule(State);
   LazyLoader.init();
-  
+
   HiBgImageTransform.init();
   FullscreenSlider.init();
   Menu.init();

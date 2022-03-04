@@ -152,7 +152,7 @@
   min-height: 16px;
 }
 .portfolio__projectGridGap_bottom {
-  min-height: 7.8vw;
+  min-height: 10.8vw;
 }
 .portfolio__projectGrid {
 	width: 84%;
@@ -247,6 +247,6 @@
   height: 16px;
 }
 .header__text_portfolio {
-	font-size: 14.3vw;
+	font-size: 17.8vw;
 	line-height: .68;
 }
