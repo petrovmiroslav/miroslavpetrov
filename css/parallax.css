@@ -1,6 +1,6 @@
 .parallax__scrollable-container {
   width: 100vw;
-  min-width: 240px; 
+  min-width: 240px;
   height: 100vh;
   position: absolute;
   overflow-x: hidden;
@@ -121,7 +121,7 @@
   z-index: 1;
   overflow: hidden;
 }
-@media (max-width: 812px) and (max-height: 414px) { 
+@media (max-width: 812px) and (max-height: 414px) {
   .parallax__bg-fullscreen-video_mobile-view {
     transform: none;
     height: 125vh;

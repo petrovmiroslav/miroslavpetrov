@@ -88,7 +88,7 @@
 	filter: blur(20px);
 }
 .hiScreen__bg-image_mini {
-	background-image: url(../img/hiScreenBgMini.png);
+	background-image: url('../img/hiScreenBgMini.png');
 }
 .hiScreen__bg-image_lazy {
 
