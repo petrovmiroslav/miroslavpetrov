@@ -9,7 +9,7 @@
 	require 'PHPMailer/src/SMTP.php';
 
 	// require_once $_SERVER['DOCUMENT_ROOT']."\\cnf\\cnf.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/cnf/cnf.php";
+	require_once "../cnf/cnf.php";
 
 	$formData = [
 		'error' => [],
@@ -245,10 +245,10 @@
 										<table style="border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px" width="100%" cellspacing="0" cellpadding="0" border="0">
 											<tbody>
 												<tr>
-													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:18px;margin:0;padding:64px 8px 0;text-align:center;width:300px">Здравствуйте, '.$mailData['personName'].'!</td>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:18px;margin:0;padding:64px 8px 0;text-align:center;width:300px">Hello '.$mailData['personName'].'!</td>
 												</tr>
 												<tr>
-													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:16px;margin:0;padding:24px 24px 0;width:300px">Спасибо за проявленный интерес!<br>Я постараюсь ответить на Ваше письмо как можно скорее.</td>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:16px;margin:0;padding:24px 24px 0;width:300px">Thank you for your email!<br>I will try to answer your letter as soon as possible.</td>
 												</tr>
 											</tbody>
 										</table>
@@ -274,7 +274,7 @@
 										<table style="border-collapse:collapse;margin:0 auto 5px auto;padding:3px 0 3px 0;width:430px" width="100%" cellspacing="0" cellpadding="0" border="0">
 											<tbody>
 												<tr>
-													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:11px;margin:0;padding:8px;width:300px">Сообщение было отправлено т.к. адрес <a href="#" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">'.$mailData['email'].'</a> был указан при заполнении формы обратной связи на сайте <a href="https://miroslavpetrov.ru/" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">miroslavpetrov.ru</a>. Если форму заполняли не Вы, пожалуйста не обращайте внимание на это письмо. Приношу извинения за предоставленные неудобства.</td>
+													<td style="color:#454C59;font-family:\'helvetica neue\' , \'helvetica\' , \'roboto\' , \'arial\' , sans-serif;font-size:11px;margin:0;padding:8px;width:300px">The message was sent because email <a href="#" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">'.$mailData['email'].'</a> was indicated when filling out the feedback form on the website <a href="https://miroslavpetrov.ru/" style="color:#F24B59;text-decoration:none;font-size:11px;" target="_blank" rel="noopener noreferrer">miroslavpetrov.ru</a>. If you did not fill out the form, please disregard this letter. I apologize for the inconvenience caused.</td>
 												</tr>
 											</tbody>
 										</table>
@@ -322,7 +322,7 @@
 		}
 		if (isset($formData['filePath'])) {
 			/*$file = $_SERVER['DOCUMENT_ROOT']."\\php\\uploadFiles\\".$formData['fileName'];*/
-			$file = $_SERVER['DOCUMENT_ROOT']."/php/uploadFiles/".$formData['fileName'];
+			$file = "uploadFiles/".$formData['fileName'];
 
 			if (move_uploaded_file($formData['filePath'], $file)) {
 				$mailData['file'] = $file;
@@ -351,11 +351,11 @@
 		$mail->setFrom('no_reply@miroslavpetrov.ru', 'Miroslav Petrov');
 		$mail->addReplyTo('miroslavpetrov.collaboration@gmail.com', 'Miroslav Petrov');
 		$mail->addAddress($mailData['email'], $mailData['personName']);
-		$mail->Subject = 'Уважаемый '.$mailData['personName'].', Ваше сообщение получено.';
+		$mail->Subject = 'Dear '.$mailData['personName'].', your message has been received.';
 		$mail->isHTML(true);
-		$mail->Body = mailBody($mailData);
-		$mail->AltBody = "Здравствуйте, ".$mailData['personName']."!\r\nСпасибо за проявленный интерес! Я постараюсь ответить на Ваше письмо как можно скорее.\r\n\r\nMiroslav Petrov\r\n\r\nmiroslavpetrov.ru\r\nmiroslavpetrov.collaboration@gmail.com\r\n\r\n\r\nСообщение было отправлено т.к. адрес ".$mailData['email']." был указан при заполнении формы обратной связи на сайте miroslavpetrov.ru. Если форму заполняли не Вы, пожалуйста не обращайте внимание на это письмо. Приношу извинения за предоставленные неудобства.";
-		$mail->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'/img/emailImg.jpg', 'img');
+		$mail->Body = mailBody($mailData, false);
+		$mail->AltBody = "Hello ".$mailData['personName']."!\r\nThank you for your email! I will try to answer your letter as soon as possible.\r\n\r\nMiroslav Petrov\r\n\r\nmiroslavpetrov.ru\r\nmiroslavpetrov.collaboration@gmail.com\r\n\r\n\r\nThe message was sent because email ".$mailData['email']." was indicated when filling out the feedback form on the website miroslavpetrov.ru. If you did not fill out the form, please disregard this letter. I apologize for the inconvenience caused.";
+		$mail->addEmbeddedImage('../img/emailImg.jpg', 'img');
 
 		function tryToSendMail(&$mail, &$formData) {
 			try {
